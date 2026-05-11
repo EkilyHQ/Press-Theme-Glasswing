@@ -118,6 +118,95 @@ a {
   min-height: 50vh;
 }
 
+@keyframes glasswing-view-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes glasswing-rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes glasswing-row-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.glasswing-main > .glasswing-front,
+.glasswing-main > .glasswing-list-page,
+.glasswing-main > .glasswing-article,
+.glasswing-main > .glasswing-notice {
+  animation: glasswing-view-in .42s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.glasswing-front .glasswing-hero,
+.glasswing-front .glasswing-secondary-card,
+.glasswing-front .glasswing-after,
+.glasswing-list-page__header,
+.glasswing-list-page .glasswing-list,
+.glasswing-article__header,
+.glasswing-article__body,
+.glasswing-article__nav {
+  animation: glasswing-rise-in .52s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.glasswing-front .glasswing-hero,
+.glasswing-list-page__header,
+.glasswing-article__header {
+  animation-delay: .02s;
+}
+
+.glasswing-front .glasswing-secondary-card:nth-child(1),
+.glasswing-list-page .glasswing-list,
+.glasswing-article__body {
+  animation-delay: .08s;
+}
+
+.glasswing-front .glasswing-secondary-card:nth-child(2) {
+  animation-delay: .12s;
+}
+
+.glasswing-front .glasswing-secondary-card:nth-child(3),
+.glasswing-article__nav {
+  animation-delay: .16s;
+}
+
+.glasswing-front .glasswing-after {
+  animation-delay: .2s;
+}
+
+.glasswing-row {
+  animation: glasswing-row-in .42s cubic-bezier(.16, 1, .3, 1) both;
+}
+
+.glasswing-row:nth-child(1) { animation-delay: .04s; }
+.glasswing-row:nth-child(2) { animation-delay: .07s; }
+.glasswing-row:nth-child(3) { animation-delay: .1s; }
+.glasswing-row:nth-child(4) { animation-delay: .13s; }
+.glasswing-row:nth-child(5) { animation-delay: .16s; }
+.glasswing-row:nth-child(6) { animation-delay: .19s; }
+.glasswing-row:nth-child(7) { animation-delay: .22s; }
+.glasswing-row:nth-child(8) { animation-delay: .25s; }
+
 .glasswing-hero {
   margin-bottom: clamp(1rem, 3vw, 2rem);
 }
@@ -132,6 +221,12 @@ a {
   border-radius: var(--press-radius-card);
   overflow: hidden;
   text-decoration: none;
+  transition: transform .22s cubic-bezier(.16, 1, .3, 1), box-shadow .22s ease;
+}
+
+.glasswing-hero__link:hover,
+.glasswing-hero__link:focus-visible {
+  transform: translateY(-3px);
 }
 
 .glasswing-hero__copy {
@@ -170,6 +265,12 @@ a {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform .5s cubic-bezier(.16, 1, .3, 1);
+}
+
+.glasswing-hero__link:hover .glasswing-hero__media img,
+.glasswing-hero__link:focus-visible .glasswing-hero__media img {
+  transform: scale(1.025);
 }
 
 .glasswing-hero__media--empty {
@@ -207,6 +308,7 @@ a {
   border-radius: 8px;
   font-weight: 700;
   text-decoration: none;
+  transition: background-color .18s ease, color .18s ease, transform .18s ease;
 }
 
 .glasswing-action::after {
@@ -240,6 +342,13 @@ a {
   border-radius: var(--press-radius-card);
   text-decoration: none;
   overflow: hidden;
+  transition: background-color .2s ease, color .2s ease, transform .22s cubic-bezier(.16, 1, .3, 1);
+}
+
+.glasswing-secondary-card a:hover,
+.glasswing-secondary-card a:focus-visible {
+  transform: translateY(-4px);
+  outline: 0;
 }
 
 [data-theme="dark"] .glasswing-secondary-card a {
@@ -298,6 +407,13 @@ a {
   color: var(--press-color-text);
   border-bottom: 1px solid var(--press-color-border);
   text-decoration: none;
+  transition: color .18s ease, transform .18s cubic-bezier(.16, 1, .3, 1), border-color .18s ease;
+}
+
+.glasswing-row a:hover,
+.glasswing-row a:focus-visible {
+  transform: translateX(4px);
+  outline: 0;
 }
 
 .glasswing-row h2 {
@@ -762,6 +878,7 @@ a {
   border: 1px solid transparent;
   border-radius: var(--press-radius-card);
   text-decoration: none;
+  transition: background-color .2s ease, color .2s ease, transform .22s cubic-bezier(.16, 1, .3, 1), border-color .2s ease;
 }
 
 [data-theme="dark"] .glasswing-article__nav .post-nav > a,
@@ -774,6 +891,7 @@ a {
 .glasswing-article__nav .post-nav > a:focus-visible {
   color: #f7f2e9;
   background: #111;
+  transform: translateY(-3px);
   outline: 0;
 }
 
@@ -927,12 +1045,14 @@ a {
   text-decoration: none;
   line-height: 1.3;
   overflow-wrap: anywhere;
+  transition: background-color .18s ease, color .18s ease, transform .18s cubic-bezier(.16, 1, .3, 1);
 }
 
 .glasswing-toc .toc-row > a:hover,
 .glasswing-toc .toc-row > a:focus-visible {
   color: #f6f1e8;
   background: rgba(246, 241, 232, .08);
+  transform: translateX(3px);
   outline: 0;
 }
 
@@ -1137,6 +1257,7 @@ a {
   justify-content: center;
   gap: .5rem;
   cursor: pointer;
+  transition: border-color .18s ease, background-color .18s ease, color .18s ease, transform .18s ease;
 }
 
 .glasswing-footer press-theme-controls .btn:hover,
@@ -1145,6 +1266,11 @@ a {
 .glasswing-footer press-theme-controls select:focus-visible {
   border-color: #f6f1e8;
   outline: 0;
+}
+
+.glasswing-footer press-theme-controls .btn:hover,
+.glasswing-footer press-theme-controls .btn:focus-visible {
+  transform: translateY(-1px);
 }
 
 .glasswing-footer__meta {
@@ -1163,6 +1289,36 @@ a {
   border: 0;
   font: inherit;
   cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glasswing-main > .glasswing-front,
+  .glasswing-main > .glasswing-list-page,
+  .glasswing-main > .glasswing-article,
+  .glasswing-main > .glasswing-notice,
+  .glasswing-front .glasswing-hero,
+  .glasswing-front .glasswing-secondary-card,
+  .glasswing-front .glasswing-after,
+  .glasswing-list-page__header,
+  .glasswing-list-page .glasswing-list,
+  .glasswing-article__header,
+  .glasswing-article__body,
+  .glasswing-article__nav,
+  .glasswing-row {
+    animation: none !important;
+  }
+
+  .glasswing-hero__link,
+  .glasswing-hero__media img,
+  .glasswing-article__cover img,
+  .glasswing-secondary-card a,
+  .glasswing-row a,
+  .glasswing-article__nav .post-nav > a,
+  .glasswing-toc .toc-row > a,
+  .glasswing-footer press-theme-controls .btn {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 @media (max-width: 920px) {
