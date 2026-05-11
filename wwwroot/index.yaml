@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=../assets/schema/index.json
+
+front-page-at-sunrise:
+  en: post/front-page-at-sunrise/en.md
+butterfly-plate-index:
+  en: post/butterfly-plate-index/en.md
+under-glass-column:
+  en: post/under-glass-column/en.md
+metamorphosis-review:
+  en: post/metamorphosis-review/en.md

@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=../assets/schema/tabs.json
+
+About:
+  en:
+    title: "About Jun Ives Review"
+    location: tab/about/en.md
+Sources:
+  en:
+    title: "Sources"
+    location: tab/sources/en.md

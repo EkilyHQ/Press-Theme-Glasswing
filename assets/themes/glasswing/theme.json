@@ -1,0 +1,75 @@
+{
+  "$schema": "../../schema/theme.json",
+  "name": "Glasswing",
+  "version": "0.1.9",
+  "contractVersion": 1,
+  "styles": [
+    "theme.css"
+  ],
+  "modules": [
+    "modules/glasswing.js"
+  ],
+  "views": {
+    "post": {
+      "module": "modules/glasswing.js",
+      "handler": "post"
+    },
+    "posts": {
+      "module": "modules/glasswing.js",
+      "handler": "posts"
+    },
+    "search": {
+      "module": "modules/glasswing.js",
+      "handler": "search"
+    },
+    "tab": {
+      "module": "modules/glasswing.js",
+      "handler": "tab"
+    },
+    "error": {
+      "module": "modules/glasswing.js",
+      "handler": "error"
+    },
+    "loading": {
+      "module": "modules/glasswing.js",
+      "handler": "loading"
+    }
+  },
+  "regions": {
+    "main": {
+      "required": true
+    },
+    "toc": {},
+    "search": {},
+    "nav": {},
+    "tags": {},
+    "footer": {
+      "required": true
+    },
+    "container": {},
+    "content": {},
+    "tools": {}
+  },
+  "components": [
+    "press-search",
+    "press-toc",
+    "press-post-card"
+  ],
+  "scrollContainer": false,
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": true
+  },
+  "content": {
+    "shapes": [
+      "rawMarkdown",
+      "html",
+      "blocks",
+      "tocTree",
+      "headings",
+      "metadata",
+      "assets",
+      "links"
+    ]
+  }
+}

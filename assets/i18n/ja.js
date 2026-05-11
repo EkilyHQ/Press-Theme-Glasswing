@@ -1,0 +1,1027 @@
+export const languageMeta = { label: '日本語' };
+
+const translations = {
+    ui: {
+      allPosts: 'すべての記事',
+      searchTab: '検索',
+      postTab: '記事',
+      prev: '前へ',
+      next: '次へ',
+      contents: '目次',
+      loading: '読み込み中…',
+      top: 'トップ',
+      minRead: '分で読めます',
+      close: '閉じる',
+      copyLink: 'リンクをコピー',
+      linkCopied: 'リンクをコピーしました',
+      versionLabel: 'バージョン',
+      versionsCount: (n) => `${n} 個のバージョン`,
+      latestSuffix: '（最新）',
+      outdatedWarning: '注意：公開から時間が経っているため、内容が古くなっている可能性があります。',
+      notFound: '見つかりません',
+      pageUnavailable: 'ページを表示できません',
+      indexUnavailable: 'インデックスを読み込めません',
+      backToAllPosts: 'すべての記事へ戻る',
+      backToHome: 'ホームに戻る',
+      noResultsTitle: '結果なし',
+      noResultsBody: (q) => `「${q}」に一致する記事は見つかりませんでした。`,
+      tags: 'タグ',
+      tagSearch: (tag) => `タグ: ${tag}`,
+      allTags: 'すべてのタグ',
+      more: 'もっと見る',
+      less: '折りたたむ',
+      details: '詳細',
+      copyDetails: '詳細をコピー',
+      reportIssue: '問題を報告',
+      warning: '警告',
+      error: 'エラー',
+      aiFlagLabel: 'AI 参加',
+      aiFlagTooltip: 'AI 参加：本記事は生成系LLMで生成・編集されています',
+      draftBadge: '下書き',
+      draftNotice: 'この記事は執筆中・編集中です。内容は変更される場合があります。',
+      protectedBadge: '保護済み',
+      protectedExcerpt: '保護された記事',
+      protectedPostBody: 'この記事は暗号化されています。読むにはパスワードを入力してください。',
+      protectedPostPasswordLabel: 'パスワード',
+      protectedPostUnlock: '解除',
+      protectedPostUnlocking: '解除中…',
+      protectedPostWrongPassword: 'このパスワードでは記事を解除できません。'
+    },
+    code: {
+      copy: 'コピー',
+      copied: 'コピーしました',
+      failed: 'コピー失敗',
+      copyAria: 'コードをコピー'
+    },
+    errors: {
+      postNotFoundTitle: '記事が見つかりません',
+      postNotFoundBody: '要求された記事を読み込めませんでした。',
+      protectedPostInvalidTitle: '保護された記事を表示できません',
+      protectedPostInvalidBody: 'この保護された記事の暗号化メタデータが無効です。',
+      pageUnavailableTitle: 'ページを表示できません',
+      pageUnavailableBody: 'このページを読み込めませんでした。',
+      indexUnavailableBody: '記事インデックスを読み込めませんでした。ネットワークやリポジトリ内容を確認してください。'
+    },
+    sidebar: {
+      searchPlaceholder: '記事を検索…',
+      siteTitle: 'Phyllali のブログ',
+      siteSubtitle: 'ゲームを遊んでくれてありがとう。',
+      socialGithub: 'GitHub'
+    },
+    tools: {
+      sectionTitle: 'ツール',
+      toggleTheme: 'テーマ切替',
+      postEditor: '記事エディター',
+      themePack: 'テーマパック',
+      language: '言語',
+      resetLanguage: '言語をリセット'
+    },
+    toc: {
+      toggleAria: 'セクションの切替',
+      copied: 'コピーしました！'
+    },
+    titles: {
+      allPosts: 'すべての記事',
+      search: (q) => `検索: ${q}`
+    },
+    editor: {
+      pageTitle: 'Markdown エディター - Press',
+      languageLabel: '言語',
+      verifying: '検証中…',
+      verify: '検証',
+      nav: {
+        modeSwitchAria: 'モード切り替え',
+        dynamicTabsAria: 'エディタータブを開く'
+      },
+      modes: {
+        composer: 'サイト設定',
+        editor: 'エディター',
+        updates: 'システム更新'
+      },
+      tree: {
+        aria: 'コンテンツファイル',
+        title: 'コンテンツ',
+        subtitle: '記事とページ',
+        addArticle: '+ 新規記事',
+        addPage: 'ページ',
+        treeAria: 'コンテンツファイルツリー',
+        kicker: 'コンテンツ構造',
+        emptyTitle: 'ノードを選択',
+        emptyMeta: 'ツリーから項目を選んで構造を管理するか、Markdown ファイルを編集します。',
+        welcome: 'ようこそ',
+        articles: '記事',
+        pages: 'ページ',
+        toggle: '開閉',
+        rootKicker: 'コレクション',
+        rootMeta: ({ count }) => `${count} 件`,
+        status: {
+          added: '追加',
+          modified: '変更',
+          deleted: '削除',
+          issue: '要確認',
+          checking: '確認中',
+          changedCount: ({ count }) => `${count} 件の変更`,
+          changedSummary: ({ total, added, modified, deleted }) => {
+            const parts = [];
+            if (added) parts.push(`${added} 追加`);
+            if (modified) parts.push(`${modified} 変更`);
+            if (deleted) parts.push(`${deleted} 削除`);
+            return parts.length ? `${total} 件の変更: ${parts.join(', ')}` : `${total} 件の変更`;
+          },
+          orderChanged: '順序が変更されました',
+          deletedSummary: '削除された項目'
+        },
+        system: 'システム',
+        siteSettings: 'サイト設定',
+        pressUpdates: 'Press 更新',
+        sync: '公開',
+        siteSettingsMeta: 'site.yaml 設定を編集します。',
+        systemUpdatesMeta: 'Press 更新を確認して適用します。',
+        syncMeta: 'ローカルの変更を GitHub に公開します。',
+        editorLanguage: 'エディター言語',
+        editorLanguageMeta: 'エディター UI の言語を変更します。',
+        languages: '言語',
+        versions: 'バージョン',
+        select: '選択',
+        article: '記事',
+        page: 'ページ',
+        articleEntry: '記事',
+        pageEntry: 'ページ',
+        articleEntryMeta: '記事の言語とバージョンを管理します。',
+        pageEntryMeta: 'ページの言語、タイトル、ファイルを管理します。',
+        languageKicker: '記事の言語',
+        languageMeta: ({ count }) => `${count} バージョン`,
+        deletedKicker: '削除された項目',
+        deletedMeta: 'この項目は現在の下書きから削除されています。残す場合は公開前に復元してください。',
+        deletedEntryMeta: 'この項目は現在の下書きから削除されています。残す場合は公開前に復元してください。',
+        deletedLanguageMeta: 'この言語は現在の下書きから削除されています。残す場合は公開前に復元してください。',
+        deletedFileMeta: 'このファイルは現在の下書きから削除されています。残す場合は公開前に復元してください。',
+        deletedPageLanguageMeta: 'このページ言語ファイルは現在の下書きから削除されています。残す場合は公開前に復元してください。',
+        deletedRestoreHint: '復元すると、この削除項目に最後に読み込まれたベースライン値を書き戻します。',
+        restoreDeleted: '復元',
+        articleFile: '記事ファイル',
+        pageFile: 'ページファイル',
+        addLanguage: '言語を追加',
+        addVersion: 'バージョンを追加',
+        removeLanguage: '言語を削除',
+        reorderArticle: '記事を並べ替え',
+        reorderPage: 'ページを並べ替え',
+        reorderVersion: 'バージョンを並べ替え',
+        key: 'キー',
+        language: '言語',
+        fieldTitle: 'タイトル',
+        location: 'パス',
+        open: '開く',
+        remove: '削除',
+        delete: '削除',
+        version: 'バージョン',
+        duplicateKey: 'このキーは既に存在します。',
+        deleteEntryConfirm: ({ label }) => `${label} を削除しますか？`,
+        deleteLanguageConfirm: ({ lang }) => `${lang} を削除しますか？`
+      },
+      welcome: {
+        kicker: 'はじめに',
+        title: 'Press へようこそ',
+        meta: 'Where knowledge becomes pages.',
+        stepsTitle: 'この 3 ステップから始める',
+        step1Number: 'Step 1',
+        step1Title: 'サイトを設定する',
+        step1Detail: '内容を編集する前に、サイト名、言語、テーマ、GitHub リポジトリを確認します。',
+        step1Button: 'サイト設定を開く',
+        step2Number: 'Step 2',
+        step2Title: '内容を追加する',
+        step2Detail: 'Articles は投稿、メモ、チュートリアル向けです。Pages は About や History などの固定ナビゲーション向けです。',
+        step2ArticlesButton: 'Articles を開く',
+        step2PagesButton: 'Pages を開く',
+        step3Number: 'Step 3',
+        step3Title: '準備ができたら公開する',
+        step3Detail: '保存すると下書きはローカルに残ります。Publish は選択した変更を GitHub に送ります。',
+        step3Button: 'Publish を開く',
+        updatesTitle: 'Press 更新',
+        updatesBody: '記事、ページ、サイト設定を変更せずに、エディターと実行時の更新を確認します。',
+        updatesButton: '更新を確認',
+        faqTitle: '知らない言葉が出てきたら',
+        faqIntro: '今すべて読む必要はありません。必要になったときだけ開いて確認してください。',
+        faqPressQuestion: 'Press とは？',
+        faqPressAnswer: 'Where knowledge becomes pages.',
+        faqMarkdownQuestion: 'Markdown とは？',
+        faqMarkdownAnswer: 'Markdown は、見出し、リンク、リスト、画像、段落を普通のテキストで書ける軽量な書き方です。',
+        faqArticlesPagesQuestion: 'Articles と Pages の違いは？',
+        faqArticlesPagesAnswer: 'Articles はブログ、メモ、チュートリアル向けの投稿一覧です。Pages は About や History などの固定ナビゲーション向けです。',
+        faqFrontMatterQuestion: '前置メタデータとは？',
+        faqFrontMatterAnswer: '前置メタデータは記事やページの小さな設定欄です。タイトル、日付、タグ、抜粋、カバー画像などを保存します。',
+        faqPublishQuestion: 'ローカル編集と Publish はどう動きますか？',
+        faqPublishAnswer: '保存すると下書きはこのコンピューターに残ります。Publish は選択したローカル変更を GitHub に送ります。',
+        faqUpdatesQuestion: 'Press 更新は何を変更しますか？',
+        faqUpdatesAnswer: 'System Updates はエディターと実行時ファイルだけを更新します。記事、ページ、サイト設定は上書きしません。'
+      },
+      status: {
+        localLabel: 'ローカル',
+        checkingDrafts: '下書きを確認中…',
+        synced: '同期済み',
+        upload: 'アップロード',
+        remoteLabel: 'GitHub',
+        loadingRepo: 'GitHub 設定を読み込み中…',
+        checkingConnection: '接続を確認中…',
+        clean: 'ローカルの変更はありません'
+      },
+      systemUpdates: {
+        tabLabel: 'Press 更新',
+        title: 'Press 更新',
+        openDownload: 'リリース ZIP をダウンロード',
+        downloadAssetLink: ({ name }) => `${name} をダウンロード`,
+        openReleasePage: 'GitHub でリリースを開く',
+        downloadAndCheck: 'ダウンロードして確認',
+        selectArchive: 'ダウンロードした ZIP を選択',
+        filesHeading: '更新待ちのシステムファイル',
+        releaseNotes: 'リリースノート',
+        noNotes: 'このリリースには追加の説明がありません。',
+        latestLabel: ({ name, tag }) => `最新リリース：${name}${tag ? `（${tag}）` : ''}`,
+        publishedLabel: ({ date }) => `公開日：${date}`,
+        assetLabel: ({ name, size }) => `アセット：${name}（${size}）`,
+        assetWithHash: ({ name, size, hash }) => `アセット：${name}（${size}） — SHA-256 ${hash}`,
+        noAsset: 'このリリースにはダウンロード可能な Press システム更新パッケージがありません。',
+        status: {
+          idle: '最新リリースをダウンロードして確認するか、ダウンロード済み ZIP を選択してください。',
+          downloading: '最新リリース ZIP をダウンロードしています…',
+          reading: 'アーカイブを読み込み中…',
+          verifying: 'アーカイブを検証しています…',
+          noChanges: 'システムファイルは最新です。',
+          comparing: 'ダウンロードしたファイルを比較しています…',
+          changes: ({ count }) => `更新が必要なシステムファイルが ${count} 件あります。`
+        },
+        errors: {
+          releaseFetch: '最新リリース情報を取得できませんでした。',
+          releaseRateLimited: 'GitHub API のレート制限に達しました。しばらくしてから再試行するか、ダウンロード済み ZIP を手動で選択してください。',
+          emptyFile: '選択したファイルは空です。',
+          invalidArchive: '選択した ZIP を Press リリースとして読み込めませんでした。',
+          downloadFailed: '最新のシステム更新パッケージをダウンロードできませんでした。ダウンロード済み ZIP を選択してください。',
+          sizeMismatch: ({ expected, actual }) => `選択したアーカイブのサイズ（${actual}）がリリースアセット（${expected}）と一致しません。`,
+          digestMismatch: '選択したアーカイブの SHA-256 がリリースアセットと一致しません。',
+          generic: 'システム更新に失敗しました。再試行してください。'
+        },
+        fileStatus: {
+          added: '新規',
+          modified: '更新済み'
+        },
+        summary: {
+          added: '新しいシステムファイル',
+          modified: '更新されたシステムファイル'
+        }
+      },
+      currentFile: {
+        status: {
+          checking: 'ファイルを確認しています…',
+          existing: '既存のファイル',
+          missing: '新しいファイル',
+          error: 'ファイルを読み込めませんでした'
+        },
+        meta: {
+          checking: '確認中…',
+          checkingStarted: ({ time }) => `確認中…（開始: ${time}）`,
+          lastChecked: ({ time }) => `最終確認: ${time}`
+        },
+        draft: {
+          justNow: 'たった今',
+          savedHtml: ({ time }) => `保存しました（${time}）`,
+          saved: '保存しました',
+          savedConflictHtml: ({ time }) => `保存しました（${time}、リモート更新あり）`,
+          conflict: '保存しました（リモート更新あり）',
+          available: '保存しました'
+        }
+      },
+      frontMatter: {
+        heading: 'Front matter メタデータ',
+        summaryDefault: 'この記事のメタデータ',
+        summary: ({ count }) => (count ? `${count} 件のフィールドを使用中` : 'メタデータはまだありません'),
+        help: '下のフォームで front matter を編集します。空欄の項目は保存されません。',
+        empty: 'メタデータはまだ設定されていません。入力すると自動的にファイルへ追加されます。',
+        commonTitle: 'よく使う項目',
+        commonDescription: 'カード、SEO、記事一覧で使う基本メタデータ。',
+        advancedTitle: '詳細項目',
+        advancedDescription: '共有画像、バージョンバッジ、AI ラベル用の補足メタデータ。',
+        booleanLabel: '有効',
+        listHint: '1 行につき 1 件入力してください',
+        clear: 'クリア',
+        fields: {
+          title: 'タイトル',
+          excerpt: '抜粋',
+          author: '著者',
+          date: '公開日',
+          tags: 'タグ',
+          image: 'メイン画像',
+          draft: '下書き',
+          version: 'バージョン',
+          ai: 'AI 生成'
+        },
+        hints: {
+          title: 'カードやブラウザのタイトルに表示されます。',
+          excerpt: 'カードと SEO 用の短い概要です。',
+          date: '公開日。ISO 形式（例: 2024-03-18）を推奨します。',
+          tags: '1 行につき 1 つのタグを入力してください。',
+          image: 'ソーシャル共有時のデフォルト画像です。',
+          draft: '下書きにすると一覧に表示されません。',
+          version: '設定するとバージョンバッジを表示します。',
+          ai: 'AI が生成または編集に関与した場合にチェックしてください。'
+        }
+      },
+      toolbar: {
+        wrap: '折り返し:',
+        wrapOn: 'オン',
+        wrapOff: 'オフ',
+        view: '表示:',
+        viewEdit: '編集',
+        viewBlocks: 'ブロック',
+        viewPreview: 'プレビュー',
+        protection: '保護',
+        save: '保存',
+        discard: '破棄',
+        wrapAria: '折り返し設定',
+        viewAria: '表示の切り替え'
+      },
+      toast: {
+        openAction: '開く',
+        closeAria: '通知を閉じる'
+      },
+      toasts: {
+        remoteMarkdownMismatch: 'リモートの Markdown がローカルの下書きと異なります。続行する前に差分を確認してください。',
+        markdownSynced: 'Markdown を GitHub と同期しました。',
+        remoteCheckCanceledUseRefresh: 'リモートチェックをキャンセルしました。コミットの準備ができたら「更新」をクリックしてください。',
+        yamlParseFailed: ({ label }) => `${label} を取得しましたが、YAML を解析できませんでした。`,
+        yamlUpdatedDifferently: ({ label }) => `${label} は GitHub 上で異なる更新が行われています。ハイライトされた差分を確認してください。`,
+        yamlSynced: ({ label }) => `${label} を GitHub と同期しました。`,
+        remoteCheckCanceledClickRefresh: 'リモートチェックをキャンセルしました。コミットの準備ができたら「更新」をクリックしてください。',
+        popupBlocked: 'ブラウザが GitHub ウィンドウをブロックしました。このサイトのポップアップを許可してから再試行してください。',
+        openGithubAction: 'GitHub を開く',
+        markdownOpenBeforeInsert: '画像を挿入する前に Markdown ファイルを開いてください。',
+        assetAttached: ({ label }) => `${label} を添付しました`,
+        imageReplaceTargetMissing: '画像ブロックはもう存在しません。画像ブロックを選択してからやり直してください。',
+        imageDeleteTargetMissing: '画像ブロックはもう存在しません。画像ブロックを選択してからやり直してください。',
+        assetDeleteUnsupported: '現在の Markdown ファイルの隣にあるローカルアセットだけを削除できます。',
+        assetDeleteShared: 'この画像リソースは、別の既知の Markdown 文書または別の画像ブロックからまだ参照されています。',
+        assetDeleteRejected: 'この画像リソースはまだ削除できません。',
+        assetPendingRemoved: ({ label }) => `保留中の画像アセット ${label} を削除しました。`,
+        assetDeleteStaged: ({ label }) => `${label} を削除対象としてステージしました。`,
+        repositoryDeletionDraftsPending: 'ローカル下書きが残っている間はファイルを削除できません。',
+        repositoryDeletionDraftsBlocked: ({ sample, remaining }) => {
+          const suffix = remaining ? `、ほか ${remaining} 件` : '';
+          return `削除対象のファイルにローカル下書きが残っているため、公開をブロックしました: ${sample}${suffix}。ファイルを削除する前に、下書きを復元、公開、または破棄してください。`;
+        },
+        noPendingChanges: 'コミットする変更はありません。',
+        siteWaitStopped: 'ライブサイトの更新待機を停止しました。コミットは GitHub にありますが、反映まで数分かかる場合があります。',
+        siteWaitTimedOut: 'GitHub にファイルをコミットしましたが、ライブサイトが時間内に更新されませんでした。デプロイ状況を手動で確認してください。',
+        commitSuccess: ({ count }) => `${count} 件のファイルを GitHub にコミットしました。`,
+        githubCommitFailed: 'GitHub へのコミットに失敗しました。',
+        githubTokenRejected: 'GitHub がアクセストークンを拒否しました。新しい細分化されたパーソナルアクセストークンを入力してください。',
+        repoOwnerMissing: 'GitHub 同期を有効にするには site.yaml の repo.owner と repo.name を設定してください。',
+        markdownOpenBeforePush: 'GitHub にプッシュする前に Markdown ファイルを開いてください。',
+        repoConfigMissing: 'GitHub プッシュを有効にするには site.yaml にリポジトリ情報を設定してください。',
+        invalidMarkdownPath: '無効な Markdown パスです。',
+        unableLoadLatestMarkdown: 'プッシュ前に最新の Markdown を読み込めませんでした。',
+        markdownNotReady: 'Markdown ファイルはまだプッシュできる状態ではありません。',
+        unableResolveGithubFile: 'このファイルの GitHub URL を解決できません。',
+        markdownOpenBeforeDiscard: 'ローカル変更を破棄する前に Markdown ファイルを開いてください。',
+        noLocalMarkdownChanges: '破棄できる Markdown のローカル変更はありません。',
+        discardSuccess: ({ label }) => `${label} のローカル変更を破棄しました。`,
+        discardFailed: 'Markdown のローカル変更を破棄できませんでした。',
+        unableResolveYamlSync: 'YAML 同期用の GitHub URL を解決できません。',
+        yamlUpToDate: ({ name }) => `${name} は最新です。`,
+        yamlCopiedNoRepo: 'YAML をコピーしました。GitHub を開くには site.yaml でリポジトリを設定してください。'
+      },
+      blocks: {
+        toolbarAria: 'ブロックツール',
+        listAria: 'Markdown ブロック',
+        virtualBlockAria: '新しいブロック',
+        virtualBlockPlaceholder: '/ を入力してブロックを選択',
+        commandMenuAria: 'ブロック選択',
+        paragraph: '段落',
+        heading: '見出し',
+        image: '画像',
+        list: 'リスト',
+        quote: '引用',
+        code: 'コード',
+        source: 'Markdown',
+        articleCard: '記事カード',
+        uploadImage: '画像をアップロード',
+        cardSearch: '記事を検索...',
+        cardEmpty: '該当する記事はありません',
+        empty: 'ブロックはまだありません。',
+        actions: 'その他の操作',
+        moveUp: '上へ移動',
+        moveDown: '下へ移動',
+        addBefore: '前に追加',
+        addAfter: '後に追加',
+        delete: '削除',
+        imageAlt: '代替テキスト',
+        imagePath: '画像パス',
+        replaceImage: '画像を置換',
+        deleteImageResource: 'リソースを削除',
+        unordered: '箇条書き',
+        ordered: '番号付き',
+        task: 'チェックリスト',
+        codeLanguage: '言語',
+        cardLabel: 'カードラベル',
+        cardLocation: 'post/path/file.md',
+        inlineToolbarAria: 'インライン書式',
+        inlineBold: '太字',
+        inlineItalic: '斜体',
+        inlineStrike: '取り消し線',
+        inlineCode: 'インラインコード',
+        inlineLink: 'リンク',
+        inlineMore: 'その他の書式',
+        linkPrompt: 'リンク URL',
+        linkText: 'リンクテキスト',
+        linkHref: 'リンク URL',
+        linkTitle: 'リンクタイトル',
+        unlink: 'リンク解除',
+        listAddItem: '項目を追加',
+        listRemoveItem: '項目を削除',
+        imageTitle: '画像タイトル',
+        sourceReason: {
+          blank: 'この空の Markdown 断片はソースとして保持されます。',
+          frontMatter: 'Front matter は文書メタデータを壊さないように、元の Markdown のまま保持されます。',
+          unclosedFence: 'このフェンス付きコードブロックは閉じられていないため、Markdown ソースとして保持されます。',
+          callout: 'このブロックは callout 形式の Markdown を使っており、ビジュアルブロックエディターではまだ直接編集できません。',
+          table: 'この表形式の Markdown は、ビジュアルブロックエディターがまだ表編集に対応していないためソースとして保持されます。',
+          indentedList: 'このリストはインデントから始まっています。ネストしたリストなのかコード風の Markdown なのかを変えないよう、ソースとして保持されます。',
+          mixedList: 'このリストは未対応の混在インデントから始まるため、Markdown ソースとして保持されます。',
+          image: 'この段落にはインライン画像 Markdown が含まれるため、混在した内容構造を変えないようソースとして保持されます。',
+          rawHtml: 'この段落にはインラインコード外の生 HTML が含まれるため、Markdown ソースとして保持されます。',
+          unsupported: 'この Markdown は元の構造を変えずに安全にビジュアルブロックへ変換できないため、ソースとして保持されます。'
+        },
+        sourceAutofix: {
+          label: '自動修正',
+          indentedList: '自動修正：このリストで共通しているインデントを取り除き、ビジュアルリストブロックに変換します。',
+          unsupported: '自動修正'
+        }
+      },
+      editorTools: {
+        aria: 'エディターのツール',
+        formatGroupAria: '書式ショートカット',
+        bold: '太字',
+        italic: '斜体',
+        strike: '取り消し線',
+        heading: '見出し',
+        quote: '引用',
+        code: 'インラインコード',
+        codeBlock: 'コードブロック',
+        articleCard: '記事カード',
+        insertCardTitle: '記事カードを挿入',
+        insertImage: '画像を挿入',
+        insertImageShort: '画像',
+        cardDialogAria: '記事カードを挿入',
+        cardSearch: '記事を検索…',
+        cardEmpty: '該当する記事はありません',
+        hints: {
+          bold: 'テキストが選択されていません。先にテキストを選択してから「太字」をクリックし、** ** で囲んでください。',
+          italic: 'テキストが選択されていません。先にテキストを選択してから「斜体」をクリックし、* * で囲んでください。',
+          strike: 'テキストが選択されていません。先にテキストを選択してから「取り消し線」をクリックし、~~ ~~ で囲んでください。',
+          heading: '行を選択するか、キャレットを空行に置いてから「見出し」をクリックし、先頭に「# 」を追加します。',
+          quote: '行を選択するか、キャレットを空行に置いてから「引用」をクリックし、先頭に「> 」を追加します。',
+          code: 'テキストが選択されていません。先にテキストを選択してから「コード」をクリックし、バッククォートで囲んでください。',
+          codeBlock: '行を選択するか、キャレットを空行に置いてから「コードブロック」をクリックし、``` で囲みます。',
+          insertCard: 'キャレットを空行に置いてからクリックして記事カードを挿入します。記事が表示されない場合は、インデックスの読み込みを待つか index.yaml に項目を追加してください。'
+        }
+      },
+      editorPlaceholder: '# こんにちは、Press\n\nMarkdown の入力を始めましょう…',
+      editorTextareaAria: 'Markdown ソース',
+      empty: {
+        title: '現在開いているエディターはありません',
+        body: 'ツリーから Markdown ファイルを選択して編集を開始してください。'
+      },
+      composer: {
+        fileSwitchAria: 'ファイル切り替え',
+        fileLabel: 'ファイル:',
+        fileArticles: '記事',
+        filePages: 'ページ',
+        fileSite: 'サイト',
+        addPost: '記事エントリーを追加',
+        addTab: 'タブ項目を追加',
+        refresh: '更新',
+        refreshTitle: '最新のリモートスナップショットを取得',
+        refreshing: '更新中…',
+        discard: '破棄',
+        discardTitle: 'ローカルの下書きを破棄してリモートを再読み込み',
+        changeSummary: '変更の概要',
+        reviewChanges: '変更を確認',
+        inlineEmpty: '比較できるエントリーはまだありません。',
+        indexInlineAria: 'index.yaml の旧順序',
+        indexEditorAria: 'index.yaml エディター',
+        tabsInlineAria: 'tabs.yaml の旧順序',
+        tabsEditorAria: 'tabs.yaml エディター',
+        siteEditorAria: 'site.yaml エディター',
+        noLocalChangesToCommit: 'コミットするローカルの変更はありません。',
+        noLocalChangesYet: 'ローカルの変更はまだありません。',
+        dialogs: {
+          cancel: 'キャンセル',
+          confirm: '確認',
+          close: '閉じる'
+        },
+        statusMessages: {
+          loadingConfig: '設定を読み込み中…',
+          restoredDraft: ({ label }) => `${label} のローカル下書きを復元しました`,
+          refreshSuccess: ({ name }) => `${name} をリモートから更新しました`,
+          remoteUpdated: 'リモートスナップショットが更新されました。ハイライトにリモートの差分が含まれます。',
+          remoteUnchanged: 'リモートスナップショットは変更されていません。',
+          refreshFailed: 'リモートスナップショットの更新に失敗しました'
+        },
+        site: {
+          addLanguage: '言語を追加',
+          removeLanguage: '削除',
+          noLanguages: '言語はまだ設定されていません。',
+          promptLanguage: '言語コードを入力してください（例: en, chs, ja）：',
+          languageExists: 'その言語はすでに存在します。',
+          languageDefault: 'デフォルト',
+          languageAutoOption: '自動検出（ブラウザー言語）',
+          reset: '上書きをリセット',
+          addLink: 'リンクを追加',
+          removeLink: '削除',
+          reorderLink: 'ドラッグしてリンクの順序を変更します。Alt+上下キーで移動できます。',
+          noLinks: 'リンクはまだありません。',
+          linkLabelTitle: 'ラベル',
+          linkLabelPlaceholder: 'ラベル',
+          linkHrefTitle: 'URL',
+          linkHrefPlaceholder: 'https://example.com',
+          toggleEnabled: '有効にする',
+          optionShow: '表示する',
+          optionHide: '非表示にする',
+          repoOwner: 'ユーザー名',
+          repoName: 'リポジトリ',
+          repoBranch: 'ブランチ',
+          repoOwnerPrefix: '@',
+          repoNamePrefix: 'repo：',
+          repoBranchPrefix: 'ブランチ：',
+          sections: {
+            identity: {
+              title: 'サイト情報',
+              description: 'ナビゲーションに表示されるサイト名・サブタイトル・アバターを設定します。'
+            },
+            seo: {
+              title: 'SEO / 共有',
+              description: '検索エンジンやリンクプレビューで利用されるメタ情報を設定します。'
+            },
+            configuration: {
+              title: 'サイト設定',
+              description: 'サイトの動作、既定のテーマ、編集時の警告をまとめて設定します。'
+            },
+            behavior: {
+              title: '動作',
+              description: 'ページネーション、初期表示タブ、All Posts の表示を制御します。'
+            },
+            theme: {
+              title: 'テーマ',
+              description: '訪問者に適用される既定のテーマ設定です。'
+            },
+            comments: {
+              title: 'コメント',
+              description: 'Ekily Connect による Press Annotate コメントを設定します。'
+            },
+            repo: {
+              title: 'リポジトリ',
+              description: 'GitHub へのコミットや「問題を報告」リンクに必要な情報です。'
+            },
+            assets: {
+              title: 'アセット警告',
+              description: '大きな画像を挿入するときの警告を設定します。'
+            },
+            extras: {
+              title: 'その他のキー',
+              description: 'site.yaml に存在するものの、この画面では編集できないキーです。'
+            }
+          },
+          fields: {
+            siteTitle: 'サイトタイトル',
+            siteTitleHelp: 'ナビゲーションとメタ情報に表示されます。',
+            siteSubtitle: 'サイトサブタイトル',
+            siteSubtitleHelp: 'ナビゲーションのタイトル下に表示されます。',
+            avatar: 'アバター',
+            avatarHelp: 'アバター画像への相対パスまたは URL。',
+            resourceURL: 'リソース URL',
+            resourceURLHelp: '公開済み wwwroot フォルダーへの絶対 URL（任意）。',
+            contentRoot: 'コンテンツルート',
+            contentRootHelp: 'index.yaml と tabs.yaml を配置しているフォルダー。',
+            siteDescription: 'サイト説明',
+            siteDescriptionHelp: 'SEO やリンクプレビュー用の任意の説明文。',
+            siteKeywords: 'サイトキーワード',
+            siteKeywordsHelp: 'SEO 用のカンマ区切りキーワード（任意）。',
+            profileLinks: 'プロフィールリンク',
+            profileLinksHelp: 'アバター付近に表示されるプロフィール / ソーシャルリンク。',
+            defaultLanguage: '既定の言語',
+            defaultLanguageHelp: 'ブラウザー設定が一致しない場合に使用する言語コード。',
+            contentOutdatedDays: '古い記事のしきい値（日）',
+            contentOutdatedDaysHelp: '指定日数を超えた記事を古い可能性ありとして表示します。空欄で無効。',
+            pageSize: '1 ページの投稿数',
+            pageSizeHelp: 'All Posts ページに表示する最大投稿数。',
+            showAllPosts: 'All Posts タブ',
+            showAllPostsHelp: 'ナビゲーションに All Posts タブを表示します。',
+            landingTab: '初期表示タブ',
+            landingTabHelp: 'サイト読み込み時に最初に開くタブを選択します。',
+            landingTabAllPostsOption: 'All Posts タブ',
+            cardCoverFallback: 'カードの代替カバー',
+            cardCoverFallbackHelp: '投稿にカバー画像がない場合に自動生成します。',
+            errorOverlay: 'エラーオーバーレイ',
+            errorOverlayHelp: '実行時エラーが起きたときにオーバーレイを表示します。',
+            themeMode: 'テーマモード',
+            themeModeHelp: '既定のテーマモード（user / system / light / dark）。',
+            themePack: 'テーマパック',
+            themePackHelp: '既定で読み込むテーマパックフォルダー名。',
+            themeOverride: 'テーマを固定する',
+            themeOverrideHelp: '訪問者が変更しても選択したテーマを強制します。',
+            repo: 'GitHub リポジトリ',
+            repoHelp: 'コミット、GitHub へのプッシュ、問題報告リンクに必要です。',
+            annotateEnabled: '記事コメント',
+            annotateEnabledHelp: '記事ページの末尾にコメント欄を表示します。',
+            annotateConnectBaseUrl: 'Connect URL',
+            annotateConnectBaseUrlHelp: 'コメント API を提供する Ekily Connect デプロイのベース URL。',
+            annotateDiscussionCategory: 'Discussion カテゴリ',
+            annotateDiscussionCategoryHelp: '記事コメントのスレッドに使う GitHub Discussions カテゴリ。',
+            assetLargeImage: '大きな画像の警告',
+            assetLargeImageHelp: '添付画像がしきい値を超えた際に警告します。',
+            assetLargeImageThreshold: '画像のしきい値 (KB)',
+            assetLargeImageThresholdHelp: '警告を表示するサイズ（KB）。空欄で既定値を使用。',
+            extras: '保持しているキー',
+            extrasHelp: 'site.yaml に残しつつ、ここでは編集できないキーです。'
+          }
+        },
+        entryRow: {
+          gripHint: 'ドラッグして並び替え',
+          details: '詳細',
+          delete: '削除'
+        },
+        languages: {
+          count: ({ count }) => `${count} 言語`,
+          addVersion: '+ バージョン',
+          removeLanguage: '言語を削除',
+          addLanguage: '+ 言語を追加',
+          removedVersions: ({ versions }) => `削除済み: ${versions}`,
+          placeholders: {
+            indexPath: 'post/.../file.md',
+            tabPath: 'tab/.../file.md'
+          },
+          fields: {
+            title: 'タイトル',
+            location: '場所'
+          },
+          actions: {
+            edit: '編集',
+            open: 'エディターで開く',
+            moveUp: '上へ移動',
+            moveDown: '下へ移動',
+            remove: '削除'
+          }
+        },
+        entryKinds: {
+          post: {
+            label: '投稿',
+            confirm: '投稿エントリを追加',
+            placeholder: '投稿キー',
+            message: '新しい投稿キーを入力してください（英数字のみ）：'
+          },
+          tab: {
+            label: 'タブ',
+            confirm: 'タブエントリを追加',
+            placeholder: 'タブキー',
+            message: '新しいタブキーを入力してください（英数字のみ）：'
+          }
+        },
+        diff: {
+          heading: '変更',
+          title: ({ label }) => `変更 — ${label}`,
+          close: '閉じる',
+          subtitle: {
+            default: 'リモートのベースラインとの差分を確認します。',
+            overview: '未同期の変更内容をざっと確認します。',
+            entries: '追加・削除・変更されたエントリを確認します。',
+            order: 'リモートの基準（左）・現在の順序（右）'
+          },
+          tabs: {
+            overview: '概要',
+            entries: 'エントリ',
+            order: '順序'
+          },
+          order: {
+            remoteTitle: 'リモート',
+            currentTitle: '現在',
+            empty: '比較できる項目がありません。',
+            inlineAllNew: '現在の項目はすべて基準と比べて新規のものです。',
+            emptyKey: '（空）',
+            badges: {
+              to: ({ index }) => `→ #${index}`,
+              from: ({ index }) => `#${index} から`,
+              removed: '削除済み',
+              added: '新規'
+            }
+          },
+          orderStats: {
+            empty: '直接の移動はありません（追加または削除による変更）',
+            moved: ({ count }) => `${count} 件移動`,
+            added: ({ count }) => `+${count} 件追加`,
+            removed: ({ count }) => `-${count} 件削除`
+          },
+          lists: {
+            more: ({ count }) => `他 ${count} 件`
+          },
+          inlineChips: {
+            added: ({ count }) => `+${count} 件追加`,
+            removed: ({ count }) => `-${count} 件削除`,
+            modified: ({ count }) => `~${count} 件変更`,
+            orderChanged: '順序が変更されました',
+            orderParts: {
+              moved: ({ count }) => `${count} 件移動`,
+              added: ({ count }) => `+${count} 件追加`,
+              removed: ({ count }) => `-${count} 件削除`
+            },
+            orderSummary: ({ parts }) => `順序: ${parts}`,
+            langs: ({ summary }) => `言語: ${summary}`,
+            none: '変更が検出されました。'
+          },
+          inline: {
+            title: '変更サマリー',
+            ariaOrder: ({ label }) => `${label} の旧順序`,
+            openAria: ({ label }) => `${label} の変更概要を開く`
+          },
+          overview: {
+            empty: 'このファイルには変更が見つかりませんでした。',
+            stats: {
+              added: '追加',
+              removed: '削除',
+              modified: '変更',
+              order: '順序',
+              changed: '変更あり',
+              unchanged: '変更なし'
+            },
+            blocks: {
+              added: '追加されたエントリ',
+              removed: '削除されたエントリ',
+              modified: '変更されたエントリ'
+            },
+            languagesImpacted: ({ languages }) => `影響を受けた言語: ${languages}`
+          },
+          entries: {
+            noLanguageContent: '言語別の内容は記録されていません。',
+            snapshot: {
+              indexValue: ({ count }) => `${count} 件の値`,
+              emptyEntry: '空のエントリ',
+              tabTitle: ({ title }) => `タイトル「${title}」`,
+              tabLocation: ({ location }) => `場所 ${location}`
+            },
+            summary: ({ lang, summary }) => `${lang}: ${summary}`,
+            state: {
+              added: ({ lang }) => `${lang}: 追加済み`,
+              removed: ({ lang }) => `${lang}: 削除済み`,
+              updatedFields: ({ lang, fields }) => `${lang}: ${fields} を更新`
+            },
+            parts: {
+              typeChanged: '種類が変更されました',
+              addedCount: ({ count }) => `+${count} 件追加`,
+              removedCount: ({ count }) => `-${count} 件削除`,
+              updatedCount: ({ count }) => `${count} 件更新`,
+              reordered: '並び替え済み',
+              contentUpdated: '内容を更新'
+            },
+            join: {
+              comma: '、',
+              and: ' と '
+            },
+            fields: {
+              title: 'タイトル',
+              location: '場所',
+              content: '内容'
+            },
+            empty: '内容の差分は見つかりませんでした。',
+            sections: {
+              added: '追加されたエントリ',
+              removed: '削除されたエントリ',
+              modified: '変更されたエントリ'
+            },
+            orderOnly: 'このファイルでは順序のみが変更されました。'
+          }
+        },
+        github: {
+          modal: {
+            title: 'GitHub と同期',
+            subtitle: 'リポジトリの内容にアクセスできるファイングレインド Personal Access Token を入力してください。',
+            connectTitle: 'Ekily Connect 公開',
+            connectHelp: ({ baseUrl }) => `GitHub App による公開は ${baseUrl} で設定されています。`,
+            connectReady: '公開時に GitHub でサインインします。Personal Access Token は不要です。',
+            connectConnected: 'このブラウザセッションで GitHub サインインを使用できます。',
+            publishMethodConnect: 'Connect',
+            publishMethodPat: 'Personal Token',
+            connectBaseUrlLabel: 'Connect URL',
+            connectBaseUrlHelp: '組み込みの Connect リモートを選ぶか、互換性のあるデプロイ URL を入力します。この設定はこのブラウザにのみ保存されます。',
+            connectInvalidUrl: '有効な Connect URL を入力してください。localhost 以外では HTTPS が必要です。',
+            connectFallback: '代わりにファイングレインド Personal Access Token を使用',
+            connectFallbackActive: 'この公開ではファイングレインドトークンのフォールバックが有効です。',
+            connectMissing: 'このサイトでは Connect 公開が設定されていません。',
+            connectAuthorizing: 'Connect で認可しています…',
+            connectPublishing: 'Connect 経由でコミットを作成しています…',
+            connectNetworkError: 'Connect に接続できません。接続状態を確認してください。',
+            connectPublishFailed: 'Connect 公開に失敗しました。',
+            connectAuthorizationFailed: 'Connect 認可に失敗しました。',
+            connectAuthorizationCanceled: 'Connect 認可がキャンセルされました。',
+            connectAuthorizationTimedOut: 'Connect 認可がタイムアウトしました。もう一度サインインしてください。',
+            summaryTitle: '以下のファイルがコミットされます:',
+            summaryTextFilesTitle: 'コンテンツファイル',
+            summarySystemFilesTitle: 'システムファイル',
+            summarySeoFilesTitle: 'SEO ファイル',
+            summaryAssetFilesTitle: 'アセットファイル',
+            summaryEmpty: 'コミット予定のファイルはありません。',
+            tokenLabel: 'ファイングレインド Personal Access Token',
+            helpHtml: '<a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> でリポジトリ内容にアクセスできるトークンを作成してください。このトークンはこのブラウザセッションにのみ保存されます。',
+            forget: 'トークンを削除',
+            submit: '変更をコミット',
+            errorRequired: '続行するにはファイングレインド Personal Access Token を入力してください。'
+          },
+          preview: {
+            subtitle: 'GitHub にアップロードする前にファイルを確認できます。',
+            unavailable: 'このファイルはプレビューできません。',
+            untitled: '無題のファイル'
+          }
+        },
+        dialogs: {
+          cancel: 'キャンセル',
+          confirm: '確認',
+          close: '閉じる'
+        },
+        addEntryPrompt: {
+          hint: '英数字のみを使用してください。',
+          confirm: 'エントリーを追加',
+          defaultType: 'エントリー',
+          placeholder: 'エントリーキー',
+          message: ({ label }) => `新しい ${label} のキーを入力してください：`,
+          errorEmpty: 'キーは必須です。',
+          errorInvalid: 'キーには英数字、アンダースコア、ハイフンのみ使用できます。',
+          errorDuplicate: 'そのキーは既に存在します。別のキーを選んでください。'
+        },
+        versionPrompt: {
+          label: 'バージョン',
+          confirm: 'バージョンを追加',
+          placeholder: 'v2.0.0',
+          message: ({ key, lang }) => `${key} / ${lang} のバージョンを入力してください：`,
+          hint: 'v2.0.0 のように v で始まる形式を使用してください。',
+          errorEmpty: 'バージョンは必須です。',
+          errorInvalid: 'バージョンは v で始めてください。例: v2.0.0。',
+          errorDuplicate: ({ version }) => `${version} は既に存在します。`
+        },
+        discardConfirm: {
+          messageReload: ({ label }) => `${label} のローカル変更を破棄してリモートファイルを再読み込みしますか？この操作は取り消せません。`,
+          messageSimple: ({ label }) => `${label} のローカル変更を破棄しますか？この操作は取り消せません。`,
+          closeTabMessage: ({ label }) => `${label} を閉じますか？このタブを閉じるとローカルの Markdown 変更が失われます。`,
+          closeTabFallback: 'このタブ',
+          discard: '破棄',
+          discarding: '破棄中…',
+          successFresh: ({ label }) => `ローカル変更を破棄し、最新の ${label} を読み込みました`,
+          successCached: ({ label }) => `ローカル変更を破棄し、キャッシュの ${label} を復元しました`,
+          failed: 'ローカル変更を破棄できませんでした。'
+        },
+        markdown: {
+          push: {
+            labelDefault: '同期',
+            labelCreate: 'GitHub で作成',
+            labelUpdate: '同期',
+            tooltips: {
+              default: 'ドラフトを GitHub にコピーします。',
+              noRepo: 'GitHub プッシュを有効にするには site.yaml でリポジトリを設定してください。',
+              noFile: 'GitHub にプッシュする前に Markdown ファイルを開いてください。',
+              error: 'プッシュする前にファイル読み込みエラーを解決してください。',
+              checking: 'リモート版を確認中…',
+              loading: 'リモートスナップショットを読み込み中…',
+              create: 'ドラフトをコピーして GitHub でこのファイルを作成します。',
+              update: 'ドラフトをコピーして GitHub でこのファイルを更新します。'
+            }
+          },
+          save: {
+            label: '保存',
+            busy: '保存中…',
+            tooltips: {
+              default: 'ローカルの Markdown 下書きをブラウザーに保存します。',
+              noFile: '保存するには Markdown ファイルを開いてください。',
+              empty: 'Markdown の内容を入力してから保存してください。',
+              clean: '保存する Markdown の変更はありません。'
+            },
+            toastSuccess: 'ローカル下書きを保存しました。',
+            toastError: 'ローカル下書きの保存に失敗しました。'
+          },
+          discard: {
+            label: '破棄',
+            busy: '破棄中…',
+            tooltips: {
+              default: 'Markdown のローカル変更を破棄し、最後に読み込んだ版を復元します。',
+              noFile: 'ローカル変更を破棄する前に Markdown ファイルを開いてください。',
+              reload: 'Markdown のローカル変更を破棄し（リモートスナップショットを再読み込みします）。'
+            }
+          },
+          protection: {
+            label: '保護',
+            labelProtected: '保護中',
+            labelUnprotected: '保護',
+            tooltipNoFile: '保護設定を変更する前に Markdown ファイルを開いてください。',
+            tooltipProtected: 'この記事は暗号化されています。パスワードを変更するか保護を解除できます。',
+            tooltipUnprotected: '記事ごとのパスワードで本文を暗号化します。',
+            dialogTitle: '記事のパスワード',
+            dialogMessage: '続行するには記事のパスワードを入力してください。',
+            passwordLabel: 'パスワード',
+            confirmPasswordLabel: 'パスワードの確認',
+            passwordRequired: 'この記事を暗号化するにはパスワードが必要です。',
+            passwordRequiredOpen: '保護された記事を開くにはパスワードが必要です。',
+            passwordMismatch: 'パスワードが一致しません。',
+            openTitle: '保護された記事を解除',
+            openMessage: 'エディターに読み込む前に記事のパスワードを入力してください。',
+            draftTitle: '保護された下書きを解除',
+            draftMessage: '暗号化されたローカル下書きを復元するには記事のパスワードを入力してください。',
+            passwordTitle: '記事を暗号化したままにする',
+            passwordMessage: '下書きを暗号化して保存するため、記事のパスワードを入力してください。',
+            enableTitle: '記事を保護',
+            enableMessage: 'パスワードを設定します。Press は保存または公開前に記事本文を暗号化します。',
+            changeTitle: '記事のパスワードを変更',
+            changeMessage: '新しいパスワードを設定します。現在の平文はこの開いているページのメモリ内だけに残ります。',
+            changePrompt: 'この記事は保護されています。パスワードを変更しますか？',
+            disableConfirm: '保護を解除し、この記事を平文で公開しますか？',
+            enable: '保護を有効化',
+            unlock: '解除',
+            keepEncrypted: '暗号化を維持',
+            changePassword: 'パスワードを変更',
+            keepProtection: '保護を維持',
+            disable: '保護を解除',
+            enabledToast: '記事の保護を有効にしました。',
+            disabledToast: '記事の保護を解除しました。',
+            passwordChangedToast: '記事のパスワードを変更しました。',
+            unlockFailed: 'そのパスワードでは解除できません。',
+            invalidEnvelope: '保護された記事の envelope が無効です。',
+            prepareFailed: '暗号化 Markdown の準備に失敗しました。'
+          },
+          draftIndicator: {
+            conflict: 'ローカルの下書きがリモートファイルと競合しています。',
+            dirty: 'エディターに未保存の変更があります。',
+            saved: 'ローカルの下書きはブラウザーに保存されています。'
+          },
+          currentFile: '現在のファイル',
+          fileFallback: 'Markdown ファイル',
+          openBeforeEditor: 'エディターを開く前に Markdown の場所を入力してください。',
+          toastCopiedCreate: 'Markdown をコピーしました。GitHub が開いてこのファイルを作成します。',
+          toastCopiedUpdate: 'Markdown をコピーしました。GitHub が開いてこのファイルを更新します。',
+          blockedCreate: 'Markdown をコピーしました。新しいタブが表示されない場合は「GitHub を開く」をクリックして作成してください。',
+          blockedUpdate: 'Markdown をコピーしました。新しいタブが表示されない場合は「GitHub を開く」をクリックして更新してください。'
+        },
+        yaml: {
+          toastCopiedUpdate: ({ name }) => `${name} をコピーしました。GitHub が開いて更新内容を貼り付けられます。`,
+          toastCopiedCreate: ({ name }) => `${name} をコピーしました。GitHub が開いてファイルを作成できます。`,
+          blocked: ({ name }) => `${name} をコピーしました。新しいタブが表示されない場合は「GitHub を開く」をクリックしてください。`
+        },
+        remoteWatcher: {
+          waitingForCreate: ({ label }) => `GitHub で ${label} が作成されるのを待機しています`,
+          waitingForUpdate: ({ label }) => `GitHub で ${label} が更新されるのを待機しています`,
+          waitingForCommitStatus: 'GitHub のコミットを待機中…',
+          checkingRemoteChanges: 'リモートの変更を確認中…',
+          waitingForCommit: 'コミットを待機中…',
+          stopWaiting: '待機を停止',
+          waitingForRemoteResponse: 'リモートの応答を待機しています…',
+          remoteCheckFailedRetry: 'リモートチェックに失敗しました。再試行します…',
+          remoteFileNotFoundYet: 'リモートファイルがまだ見つかりません…',
+          remoteFileStillMissing: 'リモートファイルがまだ存在しません…',
+          updateDetectedRefreshing: '更新を検出しました。再読み込みしています…',
+          remoteFileDiffersWaiting: 'リモートファイルがローカル内容とまだ一致しません。待機中…',
+          remoteFileExistsDiffersWaiting: 'リモートファイルは存在しますが内容が異なります。待機中…',
+          mismatchAdvice: 'GitHub のコミットが意図的に異なる場合はキャンセルし、「更新」で内容を確認してください。',
+          remoteCheckCanceled: 'リモートチェックをキャンセルしました',
+          errorWithDetail: ({ message }) => `エラー: ${message}`,
+          networkError: 'ネットワークエラー',
+          fileNotFoundOnServer: 'サーバーでファイルが見つかりません',
+          remoteSnapshotUpdated: 'リモートスナップショットを更新しました',
+          waitingForGitHub: 'GitHub を待機中…',
+          preparing: '準備中…',
+          waitingForLabel: ({ label }) => `GitHub で ${label} の更新を待機しています…`,
+          waitingForRemote: 'リモートを待機中…',
+          yamlNotFoundYet: ({ label }) => `リモートで ${label} がまだ見つかりません…`,
+          remoteYamlDiffersWaiting: 'リモート YAML がローカルのスナップショットとまだ一致しません。待機中…',
+          remoteYamlExistsDiffersWaiting: 'リモート YAML は更新されていますが内容が異なります。待機中…',
+          yamlMismatchAdvice: 'コミット内容が下書きと異なる場合はキャンセルし、「更新」をクリックして取得してください。'
+        },
+      },
+      github: {
+        status: {
+          arrowWarn: 'リポジトリを確認',
+          arrowDefault: 'ステータス',
+          loadingRepo: 'GitHub 設定を読み込み中…',
+          readingConfig: 'site.yaml から GitHub 接続設定を読み込んでいます…',
+          repoNotConfigured: 'GitHub リポジトリが設定されていません',
+          repoConfigHint: 'site.yaml に repo.owner と repo.name を設定し、下書きのプッシュを有効にしてください。',
+          checkingRepo: 'リポジトリへのアクセスを確認しています…',
+          rateLimited: 'GitHub のレート制限に達しました。しばらくしてから再試行してください。',
+          repoNotFound: 'GitHub にリポジトリが見つかりませんでした。',
+          networkError: 'GitHub に接続できません。ネットワークを確認してください。',
+          repoCheckFailed: 'リポジトリの確認に失敗しました。',
+          repoConnectedDefault: ({ branch }) => `リポジトリに接続しました · 既定ブランチ「${branch}」`,
+          checkingBranch: 'ブランチへのアクセスを確認しています…',
+          branchNotFound: 'GitHub にブランチが見つかりませんでした。',
+          branchCheckFailed: 'ブランチの確認に失敗しました。',
+          repoConnected: 'リポジトリに接続しました',
+          configUnavailable: 'GitHub 設定を取得できません',
+          readFailed: 'site.yaml の読み込みに失敗しました。'
+        }
+      },
+      footerNote: '❤️ で作られた <a href="https://ekilyhq.github.io/Press/" target="_blank" rel="noopener">Press</a> を使って創作を楽しみましょう。'
+    },
+  }
+
+export default translations;

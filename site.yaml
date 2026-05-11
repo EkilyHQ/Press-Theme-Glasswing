@@ -1,0 +1,14 @@
+siteTitle: "Jun Ives Review"
+siteDescription:
+  en: "A fictional public-domain culture review for showing Glasswing's editorial front page."
+contentRoot: wwwroot
+defaultLanguage: en
+themeMode: auto
+themePack: "glasswing"
+annotate:
+  enabled: false
+repo:
+  provider: github
+  owner: EkilyHQ
+  name: "Press-Theme-Glasswing"
+  branch: demo

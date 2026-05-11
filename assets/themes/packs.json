@@ -1,0 +1,56 @@
+[
+  {
+    "value": "native",
+    "label": "Native",
+    "version": "3.4.0",
+    "contractVersion": 1,
+    "builtIn": true,
+    "removable": false,
+    "source": {
+      "type": "builtin"
+    },
+    "release": {
+      "tag": "v3.3.64"
+    },
+    "files": [
+      "base.css",
+      "modules/footer.js",
+      "modules/interactions.js",
+      "modules/layout.js",
+      "modules/mainview.js",
+      "modules/nav-tabs.js",
+      "modules/search-box.js",
+      "modules/site-card.js",
+      "modules/tag-filter.js",
+      "modules/toc.js",
+      "theme.css",
+      "theme.json"
+    ]
+  },
+  {
+    "value": "glasswing",
+    "label": "Glasswing",
+    "version": "0.1.9",
+    "contractVersion": 1,
+    "builtIn": false,
+    "removable": true,
+    "source": {
+      "type": "official",
+      "repo": "EkilyHQ/Press-Theme-Glasswing",
+      "manifestUrl": "https://raw.githubusercontent.com/EkilyHQ/Press-Theme-Glasswing/main/theme-release.json"
+    },
+    "release": {
+      "tag": "v0.1.9",
+      "htmlUrl": "https://github.com/EkilyHQ/Press-Theme-Glasswing/releases/tag/v0.1.9",
+      "publishedAt": "2026-05-11T06:32:49Z",
+      "assetName": "press-theme-glasswing-v0.1.9.zip",
+      "size": 14681,
+      "digest": "sha256:500b0920bf0859aad9f3e5dc736f35ba45db0da37e19dab6a8402d977369d9d8"
+    },
+    "files": [
+      "modules/glasswing.js",
+      "theme.css",
+      "theme.json"
+    ]
+  }
+]

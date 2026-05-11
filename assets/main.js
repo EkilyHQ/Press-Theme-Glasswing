@@ -1,0 +1,2325 @@
+import { configureFetchCachePolicy } from './js/cache-control.js';
+import './js/components.js';
+import { createContentModel } from './js/content-model.js';
+import {
+  decryptMarkdownDocument,
+  parseEncryptedMarkdownEnvelope,
+  stripEncryptedBodyForPublicUse
+} from './js/encrypted-content.js?v=encrypted-demo-20260508';
+import { mdParse } from './js/markdown.js?v=katex-math-20260510';
+import { setupAnchors, setupTOC } from './js/toc.js?v=annotate-i18n-20260510';
+import { applySavedTheme, bindThemeToggle, bindThemePackPicker, mountThemeControls, refreshLanguageSelector, applyThemeConfig, bindPostEditor } from './js/theme.js?v=local-theme-overlays-20260510';
+import { createThemeI18nContext, ensureThemeLayout, getThemeApiHandler, getThemeLayoutContext, getThemeRegion } from './js/theme-layout.js?v=theme-layout-generation-20260510';
+import { setupSearch } from './js/search.js';
+import { extractExcerpt, computeReadTime, parseFrontMatter } from './js/content.js';
+import { getContentRoot, setSafeHtml } from './js/safe-html.js?v=katex-math-20260510';
+import { getQueryVariable, setDocTitle, setBaseSiteTitle, slugifyTab, isModifiedClick } from './js/utils.js';
+import {
+  initI18n,
+  t,
+  withLangParam,
+  loadLangJson,
+  loadContentJsonWithRaw,
+  loadTabsJson,
+  getCurrentLang,
+  normalizeLangKey,
+  POSTS_METADATA_READY_EVENT
+} from './js/i18n.js?v=annotate-i18n-20260510';
+import { updateSEO, extractSEOFromMarkdown } from './js/seo.js?v=annotate-i18n-20260510';
+import { initErrorReporter, setReporterContext, showErrorOverlay } from './js/errors.js?v=annotate-i18n-20260510';
+import { initSyntaxHighlighting } from './js/syntax-highlight.js?v=highlightjs-common-20260510';
+import { renderPressMath } from './js/math-render.js?v=katex-math-20260510';
+import { fetchConfigWithYamlFallback } from './js/yaml.js';
+import { applyMasonry, updateMasonryItem, calcAndSetSpan, toPx, debounce } from './js/masonry.js';
+import { aggregateTags, renderTagSidebar, setupTagTooltips } from './js/tags.js?v=annotate-i18n-20260510';
+import { renderPostNav } from './js/post-nav.js?v=annotate-i18n-20260510';
+import { getArticleTitleFromMain } from './js/dom-utils.js';
+import { applyLangHints } from './js/typography.js';
+import { mountAnnotateComments, resolveAnnotateArticleContext } from './js/annotate.js?v=katex-math-20260510';
+
+import { applyLazyLoadingIn, hydratePostImages, hydratePostVideos, hydrateCardCovers } from './js/post-render.js';
+import { hydrateInternalLinkCards } from './js/link-cards.js?v=encrypted-demo-20260508';
+
+// Lightweight content fetch helper; cache mode is normalized by cache-control.js.
+const getFile = (filename) => fetch(String(filename || ''), { cache: 'no-store' })
+  .then(resp => { if (!resp.ok) throw new Error(`HTTP ${resp.status}`); return resp.text(); });
+
+let postsByLocationTitle = {};
+let tabsBySlug = {};
+// Map a stable base slug (language-agnostic) -> current language slug
+let stableToCurrentTabSlug = {};
+let postsIndexCache = {};
+let allowedLocations = new Set();
+// Cross-language location aliases: any known variant -> preferred for current lang
+let locationAliasMap = new Map();
+// Raw unified index.yaml object (for preserving author-defined order across async updates)
+let rawIndexCache = null;
+let postsMetadataListenerBound = false;
+// Default page size; can be overridden by site.yaml (pageSize/postsPerPage)
+let PAGE_SIZE = 8;
+// Guard against overlapping post loads (rapid version switches/back-forward)
+let __activePostRequestId = 0;
+// Track last route to harmonize scroll behavior on back/forward
+let __lastRouteKey = '';
+const SITE_VIEW_STATE_KEY = 'press_site_view_state_v1';
+const SITE_VIEW_STATE_VERSION = 1;
+const SITE_SCROLL_SAVE_DELAY = 140;
+let siteScrollSaveTimer = 0;
+let siteViewStateBound = false;
+const protectedPostUnlockCache = new Map();
+
+// Compute a simple route key to help unify scroll behavior across navigations
+function getRouteKeyFromUrl(urlLike) {
+  try {
+    const url = urlLike ? new URL(urlLike, window.location.href) : new URL(window.location.href);
+    const sp = url.searchParams;
+    const id = sp.get('id');
+    if (id) return `post:${id}`;
+    const tab = (sp.get('tab') || 'posts').toLowerCase();
+    if (tab === 'search') {
+      const q = sp.get('q') || '';
+      const tag = sp.get('tag') || '';
+      const page = sp.get('page') || '1';
+      return `search:q=${q}:tag=${tag}:page=${page}`;
+    }
+    const page = sp.get('page') || '1';
+    return tab === 'posts' ? `tab:posts:page=${page}` : `tab:${tab}`;
+  } catch (_) { return ''; }
+}
+
+function getCurrentRouteKey() {
+  return getRouteKeyFromUrl();
+}
+
+function hasExplicitSiteRouteParams(urlLike) {
+  try {
+    const url = urlLike ? new URL(urlLike, window.location.href) : new URL(window.location.href);
+    const sp = url.searchParams;
+    return ['id', 'tab', 'page', 'q', 'tag'].some(key => sp.has(key));
+  } catch (_) {
+    return false;
+  }
+}
+
+function hasExplicitSiteEntryQuery(urlLike) {
+  try {
+    const url = urlLike ? new URL(urlLike, window.location.href) : new URL(window.location.href);
+    for (const [key, value] of url.searchParams.entries()) {
+      if (String(key || '').trim() || String(value || '').trim()) return true;
+    }
+    return false;
+  } catch (_) {
+    return false;
+  }
+}
+
+function readSiteViewState() {
+  try {
+    const raw = window.localStorage.getItem(SITE_VIEW_STATE_KEY);
+    if (!raw) return { v: SITE_VIEW_STATE_VERSION, routes: {} };
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return { v: SITE_VIEW_STATE_VERSION, routes: {} };
+    const routes = data.routes && typeof data.routes === 'object' && !Array.isArray(data.routes) ? data.routes : {};
+    return {
+      v: SITE_VIEW_STATE_VERSION,
+      lastUrl: typeof data.lastUrl === 'string' ? data.lastUrl : '',
+      lastRouteKey: typeof data.lastRouteKey === 'string' ? data.lastRouteKey : '',
+      routes
+    };
+  } catch (_) {
+    return { v: SITE_VIEW_STATE_VERSION, routes: {} };
+  }
+}
+
+function getFallbackScrollState() {
+  try {
+    return {
+      top: Math.max(0, Math.round(window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0)),
+      left: Math.max(0, Math.round(window.scrollX || document.documentElement.scrollLeft || document.body.scrollLeft || 0))
+    };
+  } catch (_) {
+    return { top: 0, left: 0 };
+  }
+}
+
+function getSiteScrollState() {
+  const fromEffect = callThemeEffect('getScrollState', { document, window });
+  if (fromEffect && typeof fromEffect === 'object') {
+    return {
+      top: Math.max(0, Math.round(Number(fromEffect.top) || 0)),
+      left: Math.max(0, Math.round(Number(fromEffect.left) || 0))
+    };
+  }
+  return getFallbackScrollState();
+}
+
+function restoreSiteScrollState(state) {
+  if (!state || typeof state !== 'object') return false;
+  const top = Math.max(0, Math.round(Number(state.top) || 0));
+  const left = Math.max(0, Math.round(Number(state.left) || 0));
+  const handled = callThemeEffect('restoreScrollState', { top, left, document, window });
+  if (handled !== undefined) return !!handled;
+  try {
+    if (typeof window.scrollTo === 'function') {
+      window.scrollTo({ top, left, behavior: 'auto' });
+      return true;
+    }
+  } catch (_) {}
+  try {
+    window.scrollTo(left, top);
+    return true;
+  } catch (_) {}
+  try {
+    if (document.documentElement) {
+      document.documentElement.scrollTop = top;
+      document.documentElement.scrollLeft = left;
+    }
+    if (document.body) {
+      document.body.scrollTop = top;
+      document.body.scrollLeft = left;
+    }
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function persistSiteViewState(options = {}) {
+  try {
+    const opts = options && typeof options === 'object' ? options : {};
+    const routeKey = getCurrentRouteKey();
+    if (!routeKey) return;
+    const state = readSiteViewState();
+    state.v = SITE_VIEW_STATE_VERSION;
+    state.lastUrl = window.location.href;
+    state.lastRouteKey = routeKey;
+    state.routes = state.routes && typeof state.routes === 'object' ? state.routes : {};
+    if (opts.updateScroll !== false) {
+      const scroll = getSiteScrollState();
+      state.routes[routeKey] = {
+        top: scroll.top,
+        left: scroll.left,
+        updatedAt: Date.now()
+      };
+    } else if (!state.routes[routeKey]) {
+      state.routes[routeKey] = { top: 0, left: 0, updatedAt: Date.now() };
+    }
+    window.localStorage.setItem(SITE_VIEW_STATE_KEY, JSON.stringify(state));
+  } catch (_) {}
+}
+
+function scheduleSiteViewStatePersist() {
+  try {
+    if (siteScrollSaveTimer) window.clearTimeout(siteScrollSaveTimer);
+    siteScrollSaveTimer = window.setTimeout(() => {
+      siteScrollSaveTimer = 0;
+      persistSiteViewState();
+    }, SITE_SCROLL_SAVE_DELAY);
+  } catch (_) {
+    persistSiteViewState();
+  }
+}
+
+function restoreLastSiteRouteIfEntry() {
+  try {
+    if (hasExplicitSiteEntryQuery(window.location.href)) return false;
+    const state = readSiteViewState();
+    if (!state.lastUrl) return false;
+    const current = new URL(window.location.href);
+    const target = new URL(state.lastUrl, window.location.href);
+    if (target.origin !== current.origin || target.pathname !== current.pathname) return false;
+    if (!hasExplicitSiteRouteParams(target.href)) return false;
+    history.replaceState(history.state || {}, document.title, target.toString());
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function restoreSavedSiteScrollForCurrentRoute() {
+  const routeKey = getCurrentRouteKey();
+  if (!routeKey) return false;
+  const saved = readSiteViewState().routes?.[routeKey];
+  if (!saved || typeof saved !== 'object') return false;
+  const apply = () => restoreSiteScrollState(saved);
+  try {
+    requestAnimationFrame(() => requestAnimationFrame(apply));
+  } catch (_) {
+    setTimeout(apply, 0);
+  }
+  return true;
+}
+
+function bindSiteViewStatePersistence() {
+  if (siteViewStateBound) return;
+  siteViewStateBound = true;
+  try { window.addEventListener('scroll', scheduleSiteViewStatePersist, { passive: true }); } catch (_) {}
+  try { document.addEventListener('scroll', scheduleSiteViewStatePersist, true); } catch (_) {}
+  try { window.addEventListener('pagehide', () => persistSiteViewState()); } catch (_) {}
+  try {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') persistSiteViewState();
+    });
+  } catch (_) {}
+}
+
+function getThemeEffectHandler(name) {
+  try {
+    const apiHandler = getThemeApiHandler(name);
+    if (typeof apiHandler === 'function') return apiHandler;
+    return null;
+  } catch (_) { return null; }
+}
+
+function isThemeDevMode() {
+  try {
+    const params = new URLSearchParams(window.location.search || '');
+    if (params.get('themeDev') === '1' || params.has('themeDev')) return true;
+  } catch (_) {}
+  try {
+    if (window.__press_themeDevMode === true) return true;
+  } catch (_) {}
+  try {
+    return window.localStorage && window.localStorage.getItem('press_theme_dev_mode') === '1';
+  } catch (_) {
+    return false;
+  }
+}
+
+function callThemeEffect(name, ...args) {
+  const fn = getThemeEffectHandler(name);
+  if (!fn) return undefined;
+  try {
+    return fn(...args);
+  } catch (err) {
+    if (isThemeDevMode()) {
+      try { console.error(`[theme-dev] Theme effect "${name}" failed`, err); } catch (_) {}
+    }
+    return undefined;
+  }
+}
+
+function handlePostsMetadataReady(event) {
+  const detail = event && event.detail;
+  const entries = (detail && typeof detail === 'object') ? detail.entries : null;
+  if (!entries || typeof entries !== 'object') return;
+
+  try {
+    const current = normalizeLangKey(getCurrentLang && getCurrentLang());
+    const eventLang = detail && typeof detail.lang === 'string' ? normalizeLangKey(detail.lang) : '';
+    if (eventLang && current && eventLang !== current) {
+      return;
+    }
+  } catch (_) {
+    // If language comparison fails, continue and apply the update
+  }
+
+  postsIndexCache = entries;
+
+  const newAllowed = new Set();
+  const byLocation = {};
+
+  for (const [title, meta] of Object.entries(entries)) {
+    if (!meta || typeof meta !== 'object') continue;
+    const canonical = (meta.location != null ? String(meta.location) : '').trim();
+    if (canonical) {
+      newAllowed.add(canonical);
+      byLocation[canonical] = title;
+    }
+    if (Array.isArray(meta.versions)) {
+      meta.versions.forEach((ver) => {
+        if (!ver || ver.location == null) return;
+        const loc = String(ver.location).trim();
+        if (!loc) return;
+        newAllowed.add(loc);
+        byLocation[loc] = title;
+      });
+    }
+  }
+
+  allowedLocations = newAllowed;
+  postsByLocationTitle = byLocation;
+
+  try {
+    callThemeEffect('handlePostsMetadataUpdate', {
+      entries,
+      lang: detail && detail.lang,
+      document,
+      window
+    });
+  } catch (_) { /* ignore theme effect errors */ }
+
+  const rawId = getQueryVariable('id');
+  const tabParam = (getQueryVariable('tab') || '').toLowerCase();
+  const homeSlug = getHomeSlug();
+  const onSearch = tabParam === 'search';
+  const onPosts = !rawId && (tabParam ? tabParam === 'posts' : homeSlug === 'posts');
+
+  if (onPosts) {
+    displayIndex(postsIndexCache);
+  } else if (onSearch) {
+    const q = getQueryVariable('q') || '';
+    displaySearch(q);
+  }
+}
+
+function bindPostsMetadataListener() {
+  if (postsMetadataListenerBound) return;
+  if (typeof window === 'undefined') return;
+  try {
+    window.addEventListener(POSTS_METADATA_READY_EVENT, handlePostsMetadataReady);
+    postsMetadataListenerBound = true;
+  } catch (_) { /* ignore */ }
+}
+
+function getViewContainer(view, role) {
+  let fromEffect = null;
+  try {
+    fromEffect = callThemeEffect('getViewContainer', {
+      view,
+      role,
+      document,
+      window
+    });
+  } catch (_) {
+    fromEffect = null;
+  }
+  if (fromEffect) return fromEffect;
+  const namesByRole = {
+    main: ['main', 'mainview'],
+    toc: ['toc', 'tocBox', 'tocview'],
+    sidebar: ['sidebar', 'rightColumn', 'utilities'],
+    content: ['content', 'main'],
+    container: ['container'],
+    search: ['search', 'searchInput', 'searchBox'],
+    nav: ['nav', 'tabsNav', 'navBox'],
+    tags: ['tags', 'tagBox', 'tagview', 'tagBand'],
+    footer: ['footer']
+  };
+  return getThemeRegion(namesByRole[role] || role);
+}
+
+function getViewContainers(view) {
+  const container = {
+    view,
+    mainElement: null,
+    tocElement: null,
+    sidebarElement: null,
+    contentElement: null,
+    containerElement: null
+  };
+  try {
+    const effectResult = callThemeEffect('resolveViewContainers', {
+      view,
+      document,
+      window
+    });
+    if (effectResult && typeof effectResult === 'object') {
+      if (effectResult.mainElement) container.mainElement = effectResult.mainElement;
+      if (effectResult.tocElement) container.tocElement = effectResult.tocElement;
+      if (effectResult.sidebarElement) container.sidebarElement = effectResult.sidebarElement;
+      if (effectResult.contentElement) container.contentElement = effectResult.contentElement;
+      if (effectResult.containerElement) container.containerElement = effectResult.containerElement;
+    }
+  } catch (_) {}
+  if (!container.mainElement) container.mainElement = getViewContainer(view, 'main');
+  if (!container.tocElement) container.tocElement = getViewContainer(view, 'toc');
+  if (!container.sidebarElement) container.sidebarElement = getViewContainer(view, 'sidebar');
+  if (!container.contentElement) container.contentElement = getViewContainer(view, 'content');
+  if (!container.containerElement) container.containerElement = getViewContainer(view, 'container');
+  return container;
+}
+
+// --- UI helpers: smooth show/hide delegated to theme ---
+
+function smoothShow(el, options) {
+  if (!el) return;
+  const payload = { element: el, document, window };
+  if (options && typeof options === 'object') Object.assign(payload, options);
+  callThemeEffect('showElement', payload);
+}
+
+function smoothHide(el, onDone, options) {
+  if (!el) { if (typeof onDone === 'function') { try { onDone(); } catch (_) {} } return; }
+  const payload = { element: el, onDone, document, window };
+  if (options && typeof options === 'object') Object.assign(payload, options);
+  const handled = callThemeEffect('hideElement', payload);
+  if (!handled && typeof onDone === 'function') {
+    try { onDone(); } catch (_) {}
+  }
+}
+
+// Ensure element height fully resets to its natural auto height
+function ensureAutoHeight(el) {
+  if (!el) return;
+  try {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        el.style.height = '';
+        el.style.minHeight = '';
+        el.style.overflow = '';
+      });
+    });
+  } catch (_) {}
+}
+
+// --- Site config (root-level site.yaml) ---
+let siteConfig = {};
+
+// --- Feature helpers: landing tab and posts visibility ---
+function postsEnabled() {
+  try {
+    // Support multiple config keys for flexibility: showAllPosts (preferred), enableAllPosts, disableAllPosts
+    if (siteConfig && typeof siteConfig.showAllPosts === 'boolean') return !!siteConfig.showAllPosts;
+    if (siteConfig && typeof siteConfig.enableAllPosts === 'boolean') return !!siteConfig.enableAllPosts;
+    if (siteConfig && typeof siteConfig.disableAllPosts === 'boolean') return !siteConfig.disableAllPosts;
+  } catch (_) {}
+  return true; // default: enabled
+}
+
+function resolveLandingSlug() {
+  try {
+    const v = siteConfig && (siteConfig.landingTab || siteConfig.landing || siteConfig.homeTab || siteConfig.home);
+    if (!v) return null;
+    const wanted = String(v).trim().toLowerCase();
+    if (!wanted) return null;
+    // Prefer direct slug match
+    if (tabsBySlug && tabsBySlug[wanted]) return wanted;
+    // Fallback: match by displayed title (case-insensitive)
+    for (const [slug, info] of Object.entries(tabsBySlug || {})) {
+      const title = (info && info.title ? String(info.title) : '').trim().toLowerCase();
+      if (title && title === wanted) return slug;
+    }
+  } catch (_) {}
+  return null;
+}
+
+function getHomeSlug() {
+  try {
+    // Always prefer explicit landingTab when provided
+    const explicit = resolveLandingSlug();
+    if (explicit) return explicit;
+    // Otherwise, default to posts when enabled, else first static tab or search
+    if (postsEnabled()) return 'posts';
+    return Object.keys(tabsBySlug || {})[0] || 'search';
+  } catch (_) { return 'search'; }
+}
+
+function getHomeLabel() {
+  const slug = getHomeSlug();
+  if (slug === 'posts') return t('ui.allPosts');
+  if (slug === 'search') return t('ui.searchTab');
+  try { return (tabsBySlug && tabsBySlug[slug] && tabsBySlug[slug].title) || slug; } catch (_) { return slug; }
+}
+
+// Expose a minimal API that other modules can consult if needed
+try { window.__press_get_home_slug = () => getHomeSlug(); } catch (_) {}
+try { window.__press_posts_enabled = () => postsEnabled(); } catch (_) {}
+async function loadSiteConfig() {
+  try {
+    // YAML only
+    return await fetchConfigWithYamlFallback(['site.yaml', 'site.yml']);
+  } catch (_) { return {}; }
+}
+
+function renderSiteLinks(cfg) {
+  try {
+    callThemeEffect('renderSiteLinks', {
+      config: cfg,
+      document,
+      window
+    });
+  } catch (_) { /* noop */ }
+}
+
+function renderSiteIdentity(cfg) {
+  try {
+    callThemeEffect('renderSiteIdentity', {
+      config: cfg,
+      document,
+      window
+    });
+  } catch (_) { /* noop */ }
+}
+
+// Transform standalone internal links (?id=...) into rich article cards
+// Load cover images sequentially to reduce bandwidth contention
+function updateLayoutLoadingState(view, isLoading, containers = null) {
+  const ctx = containers || getViewContainers(view);
+  return callThemeEffect('updateLayoutLoadingState', {
+    view,
+    isLoading,
+    contentElement: ctx.contentElement,
+    sidebarElement: ctx.sidebarElement,
+    containerElement: ctx.containerElement,
+    containers: ctx,
+    document,
+    window
+  });
+}
+
+function renderPostTOCBlock({
+  tocElement,
+  articleTitle,
+  tocHtml
+} = {}) {
+  return callThemeEffect('renderPostTOC', {
+    tocElement,
+    articleTitle,
+    tocHtml,
+    translate: t,
+    document,
+    window
+  });
+}
+
+function renderErrorState(targetElement, {
+  variant = 'error',
+  title,
+  message,
+  actions = [],
+  view,
+  containers
+} = {}) {
+  return callThemeEffect('renderErrorState', {
+    targetElement,
+    variant,
+    title,
+    message,
+    actions,
+    view,
+    containers,
+    translate: t,
+    document,
+    window
+  });
+}
+
+function notifyThemeViewChange(view, context = {}) {
+  return callThemeEffect('handleViewChange', {
+    view,
+    context,
+    document,
+    window
+  });
+}
+
+function refreshTagSidebar({
+  view,
+  containers,
+  postsIndex
+} = {}) {
+  callThemeEffect('renderTagSidebar', {
+    view,
+    containers,
+    postsIndex: postsIndex === undefined ? postsIndexCache : postsIndex,
+    utilities: {
+      aggregateTags,
+      renderTagSidebar,
+      setupTagTooltips
+    },
+    document,
+    window
+  });
+}
+
+function initializeSyntaxHighlightingForView(view, { containers } = {}) {
+  const handled = callThemeEffect('initializeSyntaxHighlighting', {
+    view,
+    containers,
+    initSyntaxHighlighting,
+    document,
+    window
+  });
+  if (handled === undefined) {
+    try { initSyntaxHighlighting(); } catch (_) {}
+  }
+}
+
+function initializeMathForView(view, { containers } = {}) {
+  const scope = containers && typeof containers === 'object' ? containers : {};
+  const root = scope.mainElement || getViewContainer(view, 'main');
+  if (!root) return;
+  try { renderPressMath(root); } catch (_) {}
+}
+
+function resetTOCView(view, containers, { reason, immediate } = {}) {
+  const handled = callThemeEffect('resetTOC', {
+    view,
+    containers,
+    reason,
+    immediate,
+    smoothHide,
+    document,
+    window
+  });
+  if (handled === undefined) {
+    const toc = (containers && containers.tocElement) || getViewContainer(view, 'toc');
+    if (!toc) return;
+    const clear = () => { try { toc.innerHTML = ''; } catch (_) {}; };
+    if (immediate) {
+      clear();
+      try { toc.hidden = true; } catch (_) {}
+      try { toc.style.display = 'none'; } catch (_) {}
+      try { toc.setAttribute('aria-hidden', 'true'); } catch (_) {}
+      return;
+    }
+    smoothHide(toc, clear);
+  }
+}
+
+function enhanceIndexLayout(params = {}) {
+  callThemeEffect('enhanceIndexLayout', {
+    ...params,
+    hydrateCardCovers,
+    applyLazyLoadingIn,
+    applyMasonry,
+    debounce,
+    renderTagSidebar,
+    setupSearch,
+    document,
+    window
+  });
+}
+
+// renderSkeletonArticle moved to utils.js
+
+// RenderPostMetaCard moved to ./js/templates.js
+
+// RenderOutdatedCard moved to ./js/templates.js
+
+function renderTabs(activeSlug, searchQuery) {
+  callThemeEffect('renderTabs', {
+    activeSlug,
+    searchQuery,
+    tabsBySlug,
+    getHomeSlug: () => getHomeSlug(),
+    getHomeLabel: () => getHomeLabel(),
+    postsEnabled: () => postsEnabled(),
+    translate: t,
+    withLangParam,
+    document,
+    window
+  });
+}
+
+// Render footer navigation: Home (All Posts) + custom tabs
+function renderFooterNav() {
+  callThemeEffect('renderFooterNav', {
+    tabsBySlug,
+    getHomeSlug: () => getHomeSlug(),
+    getHomeLabel: () => getHomeLabel(),
+    postsEnabled: () => postsEnabled(),
+    getQueryVariable,
+    withLangParam,
+    t,
+    document,
+    window
+  });
+}
+
+function createThemeRuntimeContext({
+  view = '',
+  containers = null,
+  content = null,
+  route = {}
+} = {}) {
+  const layout = getThemeLayoutContext();
+  return {
+    document,
+    window,
+    view,
+    route: {
+      key: getCurrentRouteKey(),
+      ...route
+    },
+    router: {
+      getRouteKey: getCurrentRouteKey,
+      withLangParam,
+      getQueryVariable,
+      navigate(href) {
+        try {
+          history.pushState({}, '', String(href || ''));
+          routeAndRender();
+          return true;
+        } catch (_) {
+          return false;
+        }
+      }
+    },
+    i18n: createThemeI18nContext(),
+    content,
+    regions: layout && layout.regions,
+    containers,
+    utilities: {
+      getRegion: getThemeRegion,
+      renderPostNav,
+      hydratePostImages,
+      hydratePostVideos,
+      hydrateInternalLinkCards,
+      applyLazyLoadingIn,
+      applyLangHints,
+      renderPostTOC: (opts) => renderPostTOCBlock(opts),
+      renderTagSidebar,
+      setupAnchors,
+      setupTOC,
+      ensureAutoHeight,
+      getFile,
+      getContentRoot,
+      setSafeHtml
+    },
+    themeConfig: siteConfig,
+    manifest: layout && layout.manifest,
+    theme: layout && layout.theme
+  };
+}
+
+function getCachedProtectedMarkdown(postname, envelope) {
+  const key = String(postname || '');
+  if (!key || !envelope || !envelope.ciphertext) return '';
+  const cached = protectedPostUnlockCache.get(key);
+  if (!cached || cached.ciphertext !== envelope.ciphertext) return '';
+  return cached.markdown || '';
+}
+
+function cacheProtectedMarkdown(postname, envelope, markdown) {
+  const key = String(postname || '');
+  if (!key || !envelope || !envelope.ciphertext || !markdown) return;
+  protectedPostUnlockCache.set(key, {
+    ciphertext: envelope.ciphertext,
+    markdown: String(markdown || '')
+  });
+}
+
+function getProtectedPublicMetadata(markdown, postname, fallbackTitle) {
+  try {
+    const publicMarkdown = stripEncryptedBodyForPublicUse(markdown);
+    const frontMatter = parseFrontMatter(publicMarkdown).frontMatter || {};
+    const normalized = { ...frontMatter };
+    if (normalized.tags != null && normalized.tag == null) normalized.tag = normalized.tags;
+    if (normalized.version != null && normalized.versionLabel == null) normalized.versionLabel = normalized.version;
+    normalized.protected = true;
+    normalized.location = postname;
+    if (!normalized.title) normalized.title = fallbackTitle || postname;
+    return { markdown: publicMarkdown, metadata: normalized };
+  } catch (_) {
+    return {
+      markdown: '',
+      metadata: {
+        protected: true,
+        location: postname,
+        title: fallbackTitle || postname
+      }
+    };
+  }
+}
+
+function renderProtectedPostUnlock({
+  containers,
+  postname,
+  markdown,
+  envelope,
+  fallbackTitle
+} = {}) {
+  const mainEl = containers && containers.mainElement ? containers.mainElement : getViewContainer('post', 'main');
+  if (!mainEl) return;
+  resetTOCView('post', containers, { reason: 'protectedPost', immediate: true });
+  const publicInfo = getProtectedPublicMetadata(markdown, postname, fallbackTitle);
+  const publicMetadata = publicInfo.metadata || {};
+  const title = publicMetadata.title || fallbackTitle || postname;
+
+  const shell = document.createElement('section');
+  shell.className = 'protected-post-unlock';
+  shell.setAttribute('aria-live', 'polite');
+
+  const heading = document.createElement('h1');
+  heading.className = 'protected-post-title';
+  heading.textContent = title;
+  shell.appendChild(heading);
+
+  const body = document.createElement('p');
+  body.className = 'protected-post-body';
+  body.textContent = t('ui.protectedPostBody');
+  shell.appendChild(body);
+
+  const excerpt = String(publicMetadata.excerpt || '').trim();
+  if (excerpt) {
+    const excerptEl = document.createElement('p');
+    excerptEl.className = 'protected-post-excerpt';
+    excerptEl.textContent = excerpt;
+    shell.appendChild(excerptEl);
+  }
+
+  const form = document.createElement('form');
+  form.className = 'protected-post-form';
+  const unlockRequestId = __activePostRequestId;
+  const label = document.createElement('label');
+  label.className = 'protected-post-password-label';
+  label.textContent = t('ui.protectedPostPasswordLabel');
+  const input = document.createElement('input');
+  input.type = 'password';
+  input.autocomplete = 'off';
+  input.required = true;
+  input.spellcheck = false;
+  input.setAttribute('autocapitalize', 'none');
+  input.setAttribute('data-1p-ignore', 'true');
+  input.setAttribute('data-lpignore', 'true');
+  input.className = 'protected-post-password';
+  label.appendChild(input);
+  const button = document.createElement('button');
+  button.type = 'submit';
+  button.className = 'btn-primary protected-post-submit';
+  button.textContent = t('ui.protectedPostUnlock');
+  const error = document.createElement('p');
+  error.className = 'protected-post-error';
+  error.hidden = true;
+  form.append(label, button, error);
+  shell.appendChild(form);
+
+  mainEl.replaceChildren(shell);
+  notifyThemeViewChange('post', { showSearch: false, showTags: false, protected: true });
+  try { setDocTitle(title); } catch (_) {}
+  try { renderTabs('post', title); } catch (_) {}
+  try {
+    const seoData = extractSEOFromMarkdown(publicInfo.markdown || '', {
+      ...publicMetadata,
+      title,
+      location: postname
+    }, siteConfig);
+    updateSEO(seoData, siteConfig);
+  } catch (_) {}
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    error.hidden = true;
+    const password = input.value || '';
+    if (!password) return;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const originalLabel = button.textContent;
+    button.textContent = t('ui.protectedPostUnlocking');
+    try {
+      const decrypted = await decryptMarkdownDocument(markdown, password);
+      const currentPostname = getQueryVariable('id') || '';
+      if (!form.isConnected || unlockRequestId !== __activePostRequestId || currentPostname !== postname) {
+        input.value = '';
+        return;
+      }
+      cacheProtectedMarkdown(postname, envelope, decrypted);
+      input.value = '';
+      displayPost(postname, { markdown });
+    } catch (_) {
+      error.textContent = t('ui.protectedPostWrongPassword');
+      error.hidden = false;
+      try { input.focus({ preventScroll: true }); }
+      catch (__) { input.focus(); }
+    } finally {
+      button.disabled = false;
+      button.removeAttribute('aria-busy');
+      button.textContent = originalLabel || t('ui.protectedPostUnlock');
+    }
+  });
+}
+
+function isProtectedMetadataValue(value) {
+  if (value === true) return true;
+  const normalized = String(value ?? '').trim().toLowerCase();
+  return ['true', '1', 'yes', 'y', 'on', 'enabled', 'protected'].includes(normalized);
+}
+
+function isPostProtectedByIndex(postname) {
+  const loc = String(postname || '').trim();
+  if (!loc) return false;
+  try {
+    for (const [, meta] of Object.entries(postsIndexCache || {})) {
+      if (!meta || typeof meta !== 'object') continue;
+      if (String(meta.location || '') === loc) {
+        return isProtectedMetadataValue(meta.protected);
+      }
+      if (Array.isArray(meta.versions)) {
+        const match = meta.versions.find(ver => ver && String(ver.location || '') === loc);
+        if (match) {
+          return isProtectedMetadataValue(match.protected) || isProtectedMetadataValue(meta.protected);
+        }
+      }
+    }
+  } catch (_) {}
+  return false;
+}
+
+function displayPost(postname, options = {}) {
+  // Bump request token to invalidate any in-flight older renders
+  const reqId = (++__activePostRequestId);
+  const containers = getViewContainers('post');
+
+  updateLayoutLoadingState('post', true, containers);
+
+  callThemeEffect('renderPostLoadingState', {
+    view: 'post',
+    containers,
+    translator: t,
+    ensureAutoHeight,
+    showElement: smoothShow,
+    hideElement: smoothHide,
+    document,
+    window
+  });
+
+  notifyThemeViewChange('post', { showSearch: false, showTags: false });
+
+  const hasPreloadedMarkdown = Object.prototype.hasOwnProperty.call(options || {}, 'markdown');
+  const markdownSource = hasPreloadedMarkdown
+    ? Promise.resolve(String(options.markdown || ''))
+    : getFile(`${getContentRoot()}/${postname}`);
+
+  return markdownSource.then(markdown => {
+    // Ignore stale responses if a newer navigation started
+    if (reqId !== __activePostRequestId) return;
+    const encryptedEnvelope = parseEncryptedMarkdownEnvelope(markdown);
+    let markdownForRender = markdown;
+    const protectedByIndex = isPostProtectedByIndex(postname);
+    if (encryptedEnvelope.encrypted || protectedByIndex) {
+      if (!encryptedEnvelope.valid) {
+        updateLayoutLoadingState('post', false, containers);
+        resetTOCView('post', containers, { reason: 'protectedPostInvalid', immediate: true });
+        const publicInfo = getProtectedPublicMetadata(
+          encryptedEnvelope.encrypted ? markdown : '',
+          postname,
+          postsByLocationTitle[postname] || postname
+        );
+        const publicMetadata = publicInfo.metadata || {};
+        const invalidTitle = t('errors.protectedPostInvalidTitle');
+        const backHref = withLangParam(`?tab=${encodeURIComponent(getHomeSlug())}`);
+        const backText = postsEnabled() ? t('ui.backToAllPosts') : (t('ui.backToHome') || t('ui.backToAllPosts'));
+        renderErrorState(containers.mainElement || getViewContainer('post', 'main'), {
+          title: invalidTitle,
+          message: t('errors.protectedPostInvalidBody'),
+          actions: [{ href: backHref, label: backText }],
+          view: 'post',
+          containers
+        });
+        setDocTitle(invalidTitle);
+        try {
+          const seoData = extractSEOFromMarkdown(publicInfo.markdown || '', {
+            ...publicMetadata,
+            title: invalidTitle,
+            description: t('errors.protectedPostInvalidBody'),
+            excerpt: '',
+            location: postname
+          }, siteConfig);
+          updateSEO(seoData, siteConfig);
+        } catch (_) {}
+        notifyThemeViewChange('post', { showSearch: false, showTags: false });
+        return;
+      }
+      const cachedMarkdown = getCachedProtectedMarkdown(postname, encryptedEnvelope);
+      if (cachedMarkdown) {
+        markdownForRender = cachedMarkdown;
+      } else {
+        updateLayoutLoadingState('post', false, containers);
+        const fallbackTitle = postsByLocationTitle[postname] || postname;
+        renderProtectedPostUnlock({
+          containers,
+          postname,
+          markdown,
+          envelope: encryptedEnvelope,
+          fallbackTitle
+        });
+        return;
+      }
+    }
+    // Remove loading-state classes
+    updateLayoutLoadingState('post', false, containers);
+
+    const dir = (postname.lastIndexOf('/') >= 0) ? postname.slice(0, postname.lastIndexOf('/') + 1) : '';
+    const baseDir = `${getContentRoot()}/${dir}`;
+    const output = mdParse(markdownForRender, baseDir);
+    const fallbackTitle = postsByLocationTitle[postname] || postname;
+    const frontMatterMetadata = (() => {
+      try {
+        const frontMatter = parseFrontMatter(markdownForRender).frontMatter || {};
+        const normalized = { ...frontMatter };
+        if (normalized.tags != null && normalized.tag == null) normalized.tag = normalized.tags;
+        if (normalized.version != null && normalized.versionLabel == null) normalized.versionLabel = normalized.version;
+        return normalized;
+      } catch (_) {
+        return {};
+      }
+    })();
+
+    let postEntry = (Object.entries(postsIndexCache || {}) || []).find(([, v]) => v && v.location === postname);
+    let postMetadata = postEntry ? { ...postEntry[1] } : {};
+    if (postMetadata && Array.isArray(postMetadata.versions)) {
+      postMetadata.versions = postMetadata.versions.map(ver => ({ ...ver }));
+    }
+    if (!postEntry) {
+      const found = (Object.entries(postsIndexCache || {}) || []).find(([, v]) => Array.isArray(v && v.versions) && v.versions.some(ver => ver && ver.location === postname));
+      if (found) {
+        const baseMeta = found[1] || {};
+        const match = (baseMeta.versions || []).find(ver => ver.location === postname) || {};
+        postMetadata = { ...match };
+        postMetadata.versions = Array.isArray(baseMeta.versions) ? baseMeta.versions.map(ver => ({ ...ver })) : [];
+        if (baseMeta && baseMeta.title && !postMetadata.title) {
+          postMetadata.title = baseMeta.title;
+        }
+      }
+    }
+    if (postMetadata && !postMetadata.title) {
+      const resolvedTitle = postsByLocationTitle[postname] || fallbackTitle;
+      if (resolvedTitle) postMetadata.title = resolvedTitle;
+    }
+    postMetadata = {
+      ...postMetadata,
+      ...frontMatterMetadata,
+      location: postname
+    };
+    const content = createContentModel({
+      rawMarkdown: markdownForRender,
+      html: output.post,
+      tocHtml: output.toc,
+      metadata: {
+        ...postMetadata,
+        title: postMetadata.title || fallbackTitle,
+        location: postname
+      },
+      baseDir,
+      location: postname,
+      title: postMetadata.title || fallbackTitle
+    });
+    const runtimeContext = createThemeRuntimeContext({
+      view: 'post',
+      containers,
+      content,
+      route: { id: postname, title: postMetadata.title || fallbackTitle }
+    });
+
+    const effectResult = callThemeEffect('renderPostView', {
+      view: 'post',
+      containers,
+      ctx: runtimeContext,
+      content,
+      markdownHtml: output.post,
+      tocHtml: output.toc,
+      rawMarkdown: markdownForRender,
+      markdown: markdownForRender,
+      baseDir,
+      fallbackTitle,
+      postMetadata,
+      postId: postname,
+      siteConfig,
+      postsIndex: postsIndexCache,
+      postsByLocationTitle,
+      allowedLocations,
+      locationAliasMap,
+      translate: t,
+      document,
+      window,
+      utilities: {
+        renderPostNav,
+        hydratePostImages,
+        hydratePostVideos,
+        hydrateInternalLinkCards,
+        applyLazyLoadingIn,
+        applyLangHints,
+        renderPostTOC: (opts) => renderPostTOCBlock(opts),
+        renderTagSidebar,
+        getArticleTitleFromMain,
+        setupAnchors,
+        setupTOC,
+        ensureAutoHeight,
+        getFile,
+        getContentRoot,
+        setSafeHtml,
+        withLangParam,
+        fetchMarkdown: (loc) => getFile(`${getContentRoot()}/${loc}`),
+        makeLangHref: (loc) => withLangParam(`?id=${encodeURIComponent(loc)}`)
+      }
+    }) || {};
+
+    let articleTitle = fallbackTitle;
+    let decorated = false;
+    if (typeof effectResult === 'object') {
+      decorated = !!effectResult.decorated;
+      if (effectResult.title) articleTitle = String(effectResult.title);
+    }
+
+    if (!decorated) {
+      const mainEl = containers.mainElement || getViewContainer('post', 'main');
+      callThemeEffect('decoratePostView', {
+        view: 'post',
+        container: mainEl,
+        articleTitle,
+        postMetadata,
+        markdown: markdownForRender,
+        translate: t,
+        document,
+        window
+      });
+    }
+
+    try {
+      const mainEl = containers.mainElement || getViewContainer('post', 'main');
+      const annotateContext = resolveAnnotateArticleContext({
+        rawIndex: rawIndexCache,
+        postId: postname,
+        postMetadata,
+        lang: getCurrentLang()
+      });
+      mountAnnotateComments({
+        container: mainEl,
+        siteConfig,
+        context: annotateContext,
+        fetchImpl: fetch,
+        document,
+        window
+      });
+    } catch (_) {}
+
+    notifyThemeViewChange('post', { showSearch: false, showTags: false });
+    try { setDocTitle(articleTitle); } catch (_) {}
+    initializeMathForView('post', { containers });
+    initializeSyntaxHighlightingForView('post', { containers });
+    refreshTagSidebar({ view: 'post', containers, postsIndex: postsIndexCache });
+
+    try {
+      const seoData = extractSEOFromMarkdown(markdownForRender, {
+        ...postMetadata,
+        title: articleTitle,
+        location: postname
+      }, siteConfig);
+      updateSEO(seoData, siteConfig);
+    } catch (_) { /* ignore SEO errors */ }
+
+    renderTabs('post', articleTitle);
+
+    // Let theme handle hash-based scrolling if desired; fallback to previous behavior
+    const currentHash = (location.hash || '').replace(/^#/, '');
+    const handledHash = callThemeEffect('scrollToHash', {
+      hash: currentHash,
+      view: 'post',
+      containers,
+      document,
+      window
+    });
+    if (handledHash === undefined && currentHash) {
+      const target = document.getElementById(currentHash);
+      if (target) {
+        requestAnimationFrame(() => { target.scrollIntoView({ block: 'start' }); });
+      } else {
+        try {
+          const url = new URL(window.location.href);
+          url.hash = '';
+          history.replaceState({}, '', url.toString());
+        } catch (_) {}
+        try { window.scrollTo(0, 0); } catch (_) {}
+      }
+    }
+    persistSiteViewState({ updateScroll: false });
+    if (!currentHash) restoreSavedSiteScrollForCurrentRoute();
+  }).catch(() => {
+    // Ignore stale errors if a newer navigation started
+    if (reqId !== __activePostRequestId) return;
+    // Remove loading-state classes even on error
+    updateLayoutLoadingState('post', false, containers);
+
+    // Surface an overlay for missing post (e.g., 404)
+    try {
+      const err = new Error((t('errors.postNotFoundBody') || 'The requested post could not be loaded.'));
+      try { err.name = 'Warning'; } catch(_) {}
+      showErrorOverlay(err, {
+        message: err.message,
+        origin: 'view.post.notfound',
+        filename: `${getContentRoot()}/${postname}`,
+        assetUrl: `${getContentRoot()}/${postname}`,
+        id: postname
+      });
+    } catch (_) {}
+
+    resetTOCView('post', containers, { reason: 'postError' });
+    const backHref = withLangParam(`?tab=${encodeURIComponent(getHomeSlug())}`);
+    const backText = postsEnabled() ? t('ui.backToAllPosts') : (t('ui.backToHome') || t('ui.backToAllPosts'));
+    renderErrorState(containers.mainElement || getViewContainer('post', 'main'), {
+      title: t('errors.postNotFoundTitle'),
+      message: t('errors.postNotFoundBody'),
+      actions: [{ href: backHref, label: backText }],
+      view: 'post',
+      containers
+    });
+    setDocTitle(t('ui.notFound'));
+    notifyThemeViewChange('post', { showSearch: false, showTags: false });
+  });
+}
+
+function displayIndex(parsed) {
+  const containers = getViewContainers('posts');
+  resetTOCView('posts', containers, { reason: 'index' });
+
+  // Build an entries array strictly following index.yaml order when available
+  const entries = (function entriesInIndexYamlOrder(map) {
+    try {
+      const source = map && typeof map === 'object' ? map : {};
+      // If we don't have the raw index, fall back to object insertion order
+      if (!rawIndexCache || typeof rawIndexCache !== 'object') return Object.entries(source);
+
+      const cur = (getCurrentLang && getCurrentLang()) || 'en';
+      const curNorm = normalizeLangKey(cur);
+      const siteDef = (typeof siteConfig === 'object' && (siteConfig.defaultLanguage || siteConfig.defaultLang)) || 'en';
+      const defNorm = normalizeLangKey(siteDef);
+
+      const RESERVED = new Set(['tag','tags','image','date','excerpt','thumb','cover','protected','encryption']);
+      const seen = new Set();
+      const ordered = [];
+
+      const pickPreferred = (entry) => {
+        const variants = [];
+        try {
+          for (const [k, v] of Object.entries(entry || {})) {
+            if (RESERVED.has(k)) continue;
+            const nk = normalizeLangKey(k);
+            if (k === 'location' && typeof v === 'string') {
+              variants.push({ lang: 'default', location: String(v) });
+            } else if (typeof v === 'string') {
+              variants.push({ lang: nk, location: String(v) });
+            } else if (Array.isArray(v)) {
+              v.forEach(item => { if (typeof item === 'string') variants.push({ lang: nk, location: String(item) }); });
+            } else if (v && typeof v === 'object' && typeof v.location === 'string') {
+              variants.push({ lang: nk, location: String(v.location) });
+            }
+          }
+        } catch (_) {}
+        if (!variants.length) return '';
+        const findBy = (langs) => variants.find(x => langs.includes(x.lang));
+        const cand = findBy([curNorm]) || findBy([defNorm]) || findBy(['en']) || findBy(['default']) || variants[0];
+        return (cand && cand.location) ? String(cand.location) : '';
+      };
+
+      // Iterate raw index keys in author-defined order
+      for (const [, rawEntry] of Object.entries(rawIndexCache)) {
+        if (!rawEntry || typeof rawEntry !== 'object') continue;
+        const prefLoc = pickPreferred(rawEntry);
+        if (!prefLoc) continue;
+        const title = postsByLocationTitle[prefLoc];
+        if (!title) continue;
+        if (seen.has(title)) continue;
+        const meta = source[title];
+        if (!meta) continue;
+        seen.add(title);
+        ordered.push([title, meta]);
+      }
+
+      // Append any remaining entries not present in raw index (defensive)
+      for (const [title, meta] of Object.entries(source)) {
+        if (seen.has(title)) continue;
+        ordered.push([title, meta]);
+      }
+      return ordered;
+    } catch (_) {
+      return Object.entries(map || {});
+    }
+  })(parsed);
+  const total = entries.length;
+  const qPage = parseInt(getQueryVariable('page') || '1', 10);
+  let totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  let page = isNaN(qPage) ? 1 : Math.min(Math.max(1, qPage), totalPages);
+  const start = (page - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  let pageEntries = entries.slice(start, end);
+  // Allow theme to customize pagination behavior (e.g., infinite scroll)
+  try {
+    const paginated = callThemeEffect('paginateEntries', {
+      view: 'posts',
+      entries,
+      total,
+      page,
+      pageSize: PAGE_SIZE,
+      totalPages,
+      document,
+      window
+    });
+    if (paginated && typeof paginated === 'object') {
+      if (Array.isArray(paginated.pageEntries)) pageEntries = paginated.pageEntries;
+      if (typeof paginated.page === 'number' && !isNaN(paginated.page)) {
+        // Keep local variables in sync so renderers receive consistent values
+        const newPage = Math.max(1, paginated.page);
+        if (newPage !== page) {
+          page = newPage;
+          totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+          const npStart = (newPage - 1) * PAGE_SIZE;
+          const npEnd = npStart + PAGE_SIZE;
+          if (!Array.isArray(paginated.pageEntries)) pageEntries = entries.slice(npStart, npEnd);
+        }
+      }
+      if (typeof paginated.totalPages === 'number' && !isNaN(paginated.totalPages)) {
+        totalPages = Math.max(1, paginated.totalPages);
+      }
+    }
+  } catch (_) { /* ignore pagination effect issues */ }
+
+  const mainview = containers.mainElement || getViewContainer('posts', 'main');
+  const runtimeContext = createThemeRuntimeContext({
+    view: 'posts',
+    containers,
+    route: { page }
+  });
+  callThemeEffect('renderIndexView', {
+    view: 'posts',
+    containers,
+    ctx: runtimeContext,
+    container: mainview,
+    entries,
+    pageEntries,
+    page,
+    total,
+    totalPages,
+    pageSize: PAGE_SIZE,
+    siteConfig,
+    withLangParam,
+    translate: t,
+    getHomeSlug: () => getHomeSlug(),
+    postsEnabled: () => postsEnabled(),
+    window,
+    document
+  });
+  enhanceIndexLayout({
+    view: 'posts',
+    containers,
+    containerElement: mainview,
+    allEntries: entries,
+    pageEntries,
+    total,
+    page,
+    totalPages,
+    postsIndexMap: postsIndexCache,
+    siteConfig
+  });
+
+  renderTabs('posts');
+  notifyThemeViewChange('posts', { showSearch: true, showTags: true, queryValue: '' });
+  setDocTitle(t('titles.allPosts'));
+
+  callThemeEffect('afterIndexRender', {
+    entries: pageEntries,
+    translate: t,
+    getFile,
+    getContentRoot,
+    extractExcerpt,
+    computeReadTime,
+    document,
+    window,
+    updateMasonryItem,
+    siteConfig
+  });
+  persistSiteViewState({ updateScroll: false });
+  restoreSavedSiteScrollForCurrentRoute();
+}
+
+function displaySearch(query) {
+  const rawTag = getQueryVariable('tag');
+  const q = String(query || '').trim();
+  const tagFilter = rawTag ? String(rawTag).trim() : '';
+  if (!q && !tagFilter) return displayIndex(postsIndexCache);
+
+  const containers = getViewContainers('search');
+  resetTOCView('search', containers, { reason: 'search' });
+
+  // Filter by title or tags; allow theme to override
+  const allEntries = Object.entries(postsIndexCache || {});
+  const defaultFilter = (entries, query, tag) => {
+    const ql = String(query || '').toLowerCase();
+    const tagl = String(tag || '').toLowerCase();
+    return entries.filter(([title, meta]) => {
+      const tagVal = meta && meta.tag;
+      const tags = Array.isArray(tagVal)
+        ? tagVal.map(x => String(x))
+        : (typeof tagVal === 'string' ? String(tagVal).split(',') : (tagVal != null ? [String(tagVal)] : []));
+      const normTags = tags.map(s => s.trim()).filter(Boolean);
+      if (tag) {
+        return normTags.some(tg => tg.toLowerCase() === tagl);
+      }
+      const inTitle = String(title || '').toLowerCase().includes(ql);
+      const inTags = normTags.some(tg => tg.toLowerCase().includes(ql));
+      return inTitle || inTags;
+    });
+  };
+  let filtered = null;
+  try {
+    const themed = callThemeEffect('filterSearchEntries', {
+      view: 'search',
+      entries: allEntries,
+      query: q,
+      tagFilter,
+      postsIndexMap: postsIndexCache,
+      siteConfig,
+      utilities: { defaultFilter },
+      document,
+      window
+    });
+    if (Array.isArray(themed)) filtered = themed;
+  } catch (_) { /* ignore search effect issues */ }
+  if (!Array.isArray(filtered)) filtered = defaultFilter(allEntries, q, tagFilter);
+
+  const total = filtered.length;
+  const qPage = parseInt(getQueryVariable('page') || '1', 10);
+  let totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  let page = isNaN(qPage) ? 1 : Math.min(Math.max(1, qPage), totalPages);
+  const start = (page - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  let pageEntries = filtered.slice(start, end);
+  try {
+    const paginated = callThemeEffect('paginateEntries', {
+      view: 'search',
+      entries: filtered,
+      total,
+      page,
+      pageSize: PAGE_SIZE,
+      totalPages,
+      query: q,
+      tagFilter,
+      document,
+      window
+    });
+    if (paginated && typeof paginated === 'object') {
+      if (Array.isArray(paginated.pageEntries)) pageEntries = paginated.pageEntries;
+      if (typeof paginated.page === 'number' && !isNaN(paginated.page)) {
+        const newPage = Math.max(1, paginated.page);
+        if (newPage !== page) {
+          page = newPage;
+          totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+          const npStart = (newPage - 1) * PAGE_SIZE;
+          const npEnd = npStart + PAGE_SIZE;
+          if (!Array.isArray(paginated.pageEntries)) pageEntries = filtered.slice(npStart, npEnd);
+        }
+      }
+      if (typeof paginated.totalPages === 'number' && !isNaN(paginated.totalPages)) {
+        totalPages = Math.max(1, paginated.totalPages);
+      }
+    }
+  } catch (_) { /* ignore pagination effect issues */ }
+
+  const mainview = containers.mainElement || getViewContainer('search', 'main');
+  const runtimeContext = createThemeRuntimeContext({
+    view: 'search',
+    containers,
+    route: { query: q, tag: tagFilter, page }
+  });
+  callThemeEffect('renderSearchResults', {
+    view: 'search',
+    containers,
+    ctx: runtimeContext,
+    container: mainview,
+    entries: pageEntries,
+    total,
+    page,
+    totalPages,
+    query: q,
+    tagFilter,
+    siteConfig,
+    withLangParam,
+    translate: t,
+    getHomeSlug: () => getHomeSlug(),
+    postsEnabled: () => postsEnabled(),
+    window,
+    document
+  });
+  enhanceIndexLayout({
+    view: 'search',
+    containers,
+    containerElement: mainview,
+    allEntries: Object.entries(postsIndexCache || {}),
+    pageEntries,
+    total,
+    page,
+    totalPages,
+    postsIndexMap: postsIndexCache,
+    siteConfig,
+    query: q,
+    tagFilter
+  });
+
+  renderTabs('search', tagFilter ? t('ui.tagSearch', tagFilter) : q);
+  notifyThemeViewChange('search', { showSearch: true, showTags: true, queryValue: q, tagFilter });
+  setDocTitle(tagFilter ? t('ui.tagSearch', tagFilter) : t('titles.search', q));
+
+  callThemeEffect('afterSearchRender', {
+    entries: pageEntries,
+    translate: t,
+    getFile,
+    getContentRoot,
+    extractExcerpt,
+    computeReadTime,
+    document,
+    window,
+    updateMasonryItem,
+    siteConfig
+  });
+  persistSiteViewState({ updateScroll: false });
+  restoreSavedSiteScrollForCurrentRoute();
+}
+
+function displayStaticTab(slug) {
+  const tab = tabsBySlug[slug];
+  if (!tab) return displayIndex({});
+
+  const containers = getViewContainers('tab');
+
+  updateLayoutLoadingState('tab', true, containers);
+
+  resetTOCView('tab', containers, { reason: 'staticTab' });
+  const main = containers.mainElement || getViewContainer('tab', 'main');
+  callThemeEffect('renderStaticTabLoadingState', {
+    view: 'tab',
+    containers,
+    document,
+    window
+  });
+  notifyThemeViewChange('tab', { showSearch: false, showTags: false });
+  renderTabs(slug);
+  getFile(`${getContentRoot()}/${tab.location}`)
+    .then(md => {
+      // 移除加载状态类
+      updateLayoutLoadingState('tab', false, containers);
+
+      const dir = (tab.location.lastIndexOf('/') >= 0) ? tab.location.slice(0, tab.location.lastIndexOf('/') + 1) : '';
+      const baseDir = `${getContentRoot()}/${dir}`;
+      const output = mdParse(md, baseDir);
+      const content = createContentModel({
+        rawMarkdown: md,
+        html: output.post,
+        tocHtml: output.toc,
+        metadata: {
+          title: tab.title,
+          author: tab.author || 'Ekily',
+          location: tab.location
+        },
+        baseDir,
+        location: tab.location,
+        title: tab.title
+      });
+      const runtimeContext = createThemeRuntimeContext({
+        view: 'tab',
+        containers,
+        content,
+        route: { tab: slug, title: tab.title }
+      });
+
+      const effectResult = callThemeEffect('renderStaticTabView', {
+        view: 'tab',
+        containers,
+        ctx: runtimeContext,
+        content,
+        markdownHtml: output.post,
+        tocHtml: output.toc,
+        rawMarkdown: md,
+        markdown: md,
+        baseDir,
+        tab,
+        slug,
+        siteConfig,
+        postsByLocationTitle,
+        allowedLocations,
+        locationAliasMap,
+        translate: t,
+        document,
+        window,
+        utilities: {
+          hydratePostImages,
+          hydratePostVideos,
+          hydrateInternalLinkCards,
+          applyLazyLoadingIn,
+          applyLangHints,
+          renderPostTOC: (opts) => renderPostTOCBlock(opts),
+          renderTagSidebar,
+          getArticleTitleFromMain,
+          setupAnchors,
+          setupTOC,
+          ensureAutoHeight,
+          getFile,
+          getContentRoot,
+          setSafeHtml,
+          withLangParam,
+          fetchMarkdown: (loc) => getFile(`${getContentRoot()}/${loc}`),
+          makeLangHref: (loc) => withLangParam(`?id=${encodeURIComponent(loc)}`)
+        }
+      }) || {};
+
+      let pageTitle = tab.title;
+      if (typeof effectResult === 'object') {
+        if (effectResult.title) pageTitle = String(effectResult.title);
+      }
+
+      initializeSyntaxHighlightingForView('tab', { containers });
+      initializeMathForView('tab', { containers });
+      refreshTagSidebar({ view: 'tab', containers, postsIndex: postsIndexCache });
+
+      try {
+        const seoData = extractSEOFromMarkdown(md, {
+          title: pageTitle,
+          author: tab.author || 'Ekily',
+          location: tab.location
+        }, siteConfig);
+        updateSEO(seoData, siteConfig);
+      } catch (_) {}
+
+      try { setDocTitle(pageTitle); } catch (_) {}
+      persistSiteViewState({ updateScroll: false });
+      restoreSavedSiteScrollForCurrentRoute();
+    })
+    .catch((e) => {
+      // 移除加载状态类，即使出错也要移除
+      updateLayoutLoadingState('tab', false, containers);
+
+      // Surface an overlay for missing static tab page
+      try {
+        const url = `${getContentRoot()}/${tab.location}`;
+        const msg = (t('errors.pageUnavailableBody') || 'Could not load this tab.') + (e && e.message ? ` (${e.message})` : '');
+        const err = new Error(msg);
+        try { err.name = 'Warning'; } catch(_) {}
+        showErrorOverlay(err, { message: msg, origin: 'view.tab.unavailable', tagName: 'md', filename: url, assetUrl: url, tab: slug });
+      } catch (_) {}
+
+      renderErrorState(containers.mainElement || getViewContainer('tab', 'main'), {
+        title: t('errors.pageUnavailableTitle'),
+        message: t('errors.pageUnavailableBody'),
+        view: 'tab',
+        containers
+      });
+      setDocTitle(t('ui.pageUnavailable'));
+    });
+}
+
+// Simple router: render based on current URL
+function routeAndRender() {
+  const rawId = getQueryVariable('id');
+  // Always apply cross-language aliasing when available so switching language rewrites to the correct variant
+  const id = (rawId && locationAliasMap.has(rawId)) ? locationAliasMap.get(rawId) : rawId;
+  // Reflect remapped ID in the URL without triggering navigation
+  try {
+    if (id && rawId && id !== rawId) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('id', id);
+      history.replaceState({}, '', url.toString());
+    }
+  } catch (_) {}
+  const tabParam = (getQueryVariable('tab') || '').toLowerCase();
+  const homeSlug = getHomeSlug();
+  let tab = tabParam || homeSlug;
+  // If posts are disabled but someone navigates to ?tab=posts, treat it as home
+  if (!postsEnabled() && tab === 'posts') tab = homeSlug;
+  const isValidId = (x) => typeof x === 'string' && !x.includes('..') && !x.startsWith('/') && !x.includes('\\') && allowedLocations.has(x);
+
+  // Capture current navigation state for error reporting
+  try {
+    const route = (() => {
+      if (isValidId(id)) {
+        return { view: 'post', id, title: postsByLocationTitle[id] || null };
+      }
+      if (tab === 'search') {
+        const q = getQueryVariable('q') || '';
+        return { view: 'search', q };
+      }
+      if (tab !== 'posts' && tabsBySlug[tab]) {
+        return { view: 'tab', tab, title: (tabsBySlug[tab] && tabsBySlug[tab].title) || tab };
+      }
+      const page = parseInt(getQueryVariable('page') || '1', 10);
+      return { view: 'posts', page: isNaN(page) ? 1 : page };
+    })();
+    setReporterContext({ route, routeUpdatedAt: new Date().toISOString() });
+  } catch (_) { /* ignore */ }
+
+  persistSiteViewState({ updateScroll: false });
+
+  if (isValidId(id)) {
+    renderTabs('post');
+    displayPost(id);
+  } else if (tab === 'search') {
+    const q = getQueryVariable('q') || '';
+    const tag = getQueryVariable('tag') || '';
+  renderTabs('search', tag || q);
+    displaySearch(q);
+    // Update SEO for search page
+    try {
+      const localizedTitle = tag ? t('ui.tagSearch', tag) : (q ? t('titles.search', q) : t('ui.searchTab'));
+      const baseSite = (() => { try { return document.title.split('·').slice(1).join('·').trim(); } catch { return ''; } })();
+      const title = baseSite ? `${localizedTitle} - ${baseSite}` : localizedTitle;
+      updateSEO({
+        title,
+        description: tag ? `Posts tagged "${tag}"` : (q ? `Search results for "${q}"` : 'Search through blog posts and content'),
+        type: 'website'
+      }, siteConfig);
+    } catch (_) { /* ignore SEO errors to avoid breaking UI */ }
+  } else if (tab !== 'posts' && tabsBySlug[tab]) {
+    displayStaticTab(tab);
+  } else {
+    renderTabs('posts');
+    displayIndex(postsIndexCache);
+    // Update SEO for home/posts page
+    const page = parseInt(getQueryVariable('page') || '1', 10);
+    const lang = getCurrentLang && getCurrentLang();
+    const getLocalizedValue = (val) => {
+      if (!val) return '';
+      if (typeof val === 'string') return val;
+      return (lang && val[lang]) || val.default || '';
+    };
+    
+    try {
+      updateSEO({
+        title: page > 1 ? 
+          `${getLocalizedValue(siteConfig.siteTitle) || 'All Posts'} - Page ${page}` : 
+          getLocalizedValue(siteConfig.siteTitle) || 'Ekily Press',
+        description: getLocalizedValue(siteConfig.siteDescription) || 'Where knowledge becomes pages.',
+        type: 'website',
+        url: window.location.href
+      }, siteConfig);
+    } catch (_) { /* ignore SEO errors to avoid breaking UI */ }
+  }
+  // Keep footer nav in sync as route/tabs may impact labels
+  renderFooterNav();
+}
+
+
+// Intercept in-app navigation and use History API
+// isModifiedClick moved to utils.js
+
+document.addEventListener('click', (e) => {
+  if (callThemeEffect('handleDocumentClick', { event: e, document, window })) return;
+  const a = e.target && e.target.closest ? e.target.closest('a') : null;
+  if (!a) return;
+
+  if (isModifiedClick(e)) return;
+  const hrefAttr = a.getAttribute('href') || '';
+  // Allow any in-page hash links (e.g., '#', '#heading' or '?id=...#heading')
+  if (hrefAttr.includes('#')) return;
+  // External targets or explicit new tab
+  if (a.target && a.target === '_blank') return;
+  try {
+    const url = new URL(a.href, window.location.href);
+    // Only handle same-origin and same-path navigations
+    if (url.origin !== window.location.origin) return;
+    if (url.pathname !== window.location.pathname) return;
+    const sp = url.searchParams;
+    const hasInAppParams = sp.has('id') || sp.has('tab') || url.search === '';
+    if (!hasInAppParams) return;
+    e.preventDefault();
+    const prevKey = __lastRouteKey || getCurrentRouteKey();
+    persistSiteViewState();
+    history.pushState({}, '', url.toString());
+    routeAndRender();
+    const nextKey = getCurrentRouteKey();
+    const handled = callThemeEffect('handleRouteScroll', {
+      reason: 'push',
+      prevKey,
+      nextKey,
+      document,
+      window
+    });
+    if (handled === undefined) {
+      try { window.scrollTo(0, 0); } catch (_) {}
+    }
+    __lastRouteKey = nextKey;
+  } catch (_) {
+    // If URL parsing fails, fall through to default navigation
+  }
+});
+
+window.addEventListener('popstate', () => {
+  const prevKey = __lastRouteKey || getCurrentRouteKey();
+  routeAndRender();
+  refreshTagSidebar({ postsIndex: postsIndexCache });
+  try {
+    const curKey = getCurrentRouteKey();
+    const handled = callThemeEffect('handleRouteScroll', {
+      reason: 'popstate',
+      prevKey,
+      nextKey: curKey,
+      document,
+      window
+    });
+    if (handled === undefined) {
+      // Fallback: if navigating between different post IDs, scroll to top
+      if (prevKey && prevKey.startsWith('post:') && curKey.startsWith('post:') && prevKey !== curKey) {
+        try { window.scrollTo(0, 0); } catch (_) {}
+      }
+    }
+    __lastRouteKey = curKey;
+  } catch (_) {}
+});
+
+// Update sliding indicator on window resize
+window.addEventListener('resize', (event) => {
+  callThemeEffect('handleWindowResize', { event, document, window });
+});
+
+// Boot
+// Boot sequence overview:
+// 1) Initialize i18n (detects ?lang → localStorage → browser → default or <html lang>)
+// 2) Mount theme tools and apply saved theme
+// 3) Load localized index/tabs JSON with fallback chain and render
+// Initialize i18n first so localized UI renders correctly
+const defaultLang = (document.documentElement && document.documentElement.getAttribute('lang')) || 'en';
+// Bootstrap i18n without persisting to localStorage so site.yaml can
+// still override the default language on first load.
+await initI18n({ defaultLang, persist: false });
+// Expose translate helper for modules that don't import i18n directly
+try { window.__press_t = (key) => t(key); } catch (_) { /* no-op */ }
+
+// Install error reporter early to catch resource 404s (e.g., theme CSS, images)
+try { initErrorReporter({}); } catch (_) {}
+
+let siteConfigResult = {};
+try {
+  siteConfigResult = await loadSiteConfig();
+} catch (_) {
+  siteConfigResult = {};
+}
+siteConfig = siteConfigResult || {};
+try { configureFetchCachePolicy(siteConfig); } catch (_) {}
+
+// Apply content root override early so subsequent loads honor it
+try {
+  const rawRoot = (siteConfig && (siteConfig.contentRoot || siteConfig.contentBase || siteConfig.contentPath)) || 'wwwroot';
+  if (typeof window !== 'undefined') window.__press_content_root = String(rawRoot).replace(/^\/+|\/+$/g, '');
+} catch (_) {}
+
+// Apply site-configured defaults early
+try {
+  // 1) Page size (pagination)
+  const cfgPageSize = (siteConfig && (siteConfig.pageSize || siteConfig.postsPerPage));
+  if (cfgPageSize != null) {
+    const n = parseInt(cfgPageSize, 10);
+    if (!isNaN(n) && n > 0) PAGE_SIZE = n;
+  }
+  // 2) Default language: honor only when user hasn't chosen via URL/localStorage
+  const cfgDefaultLang = (siteConfig && (siteConfig.defaultLanguage || siteConfig.defaultLang));
+  if (cfgDefaultLang) {
+    let hasUrlLang = false;
+    try { const u = new URL(window.location.href); hasUrlLang = !!u.searchParams.get('lang'); } catch (_) {}
+    let savedLang = '';
+    try { savedLang = String(localStorage.getItem('lang') || ''); } catch (_) {}
+    const hasSaved = !!savedLang;
+    const htmlDefault = String(defaultLang || 'en').toLowerCase();
+    const savedIsHtmlDefault = savedLang && savedLang.toLowerCase() === htmlDefault;
+    if (!hasUrlLang && (!hasSaved || savedIsHtmlDefault)) {
+      await initI18n({ lang: String(cfgDefaultLang) });
+    }
+  }
+} catch (_) { /* ignore site default application errors */ }
+
+// Apply site-controlled theme after loading config
+try {
+  applyThemeConfig(siteConfig);
+} catch (_) {}
+
+// Build layout according to the active theme pack before binding UI logic
+await ensureThemeLayout();
+
+// Ensure theme controls are present, then apply and bind
+const controlsHandled = callThemeEffect('setupThemeControls', {
+  mountThemeControls,
+  applySavedTheme,
+  bindThemeToggle,
+  bindPostEditor,
+  bindThemePackPicker,
+  document,
+  window
+});
+if (controlsHandled === undefined) {
+  try { applySavedTheme(); } catch (_) {}
+}
+
+// Localize search placeholder ASAP
+callThemeEffect('updateSearchPlaceholder', {
+  placeholder: t('sidebar.searchPlaceholder'),
+  document,
+  window
+});
+try { setupSearch(); } catch (_) {}
+
+// Observe viewport changes for responsive tabs
+callThemeEffect('setupResponsiveTabsObserver', {
+  getTabs: () => tabsBySlug,
+  document,
+  window,
+  renderTabs
+});
+
+// Reflect theme config in the layout (e.g., data attributes)
+try {
+  callThemeEffect('reflectThemeConfig', {
+    config: siteConfig,
+    document,
+    window
+  });
+} catch (_) {}
+
+// Soft reset to the site's default language without full reload
+async function softResetToSiteDefaultLanguage() {
+  try {
+    const def = (siteConfig && (siteConfig.defaultLanguage || siteConfig.defaultLang)) || defaultLang || 'en';
+    // Switch language immediately (do not persist to mimic reset semantics)
+    await initI18n({ lang: String(def), persist: false });
+    // Reflect placeholder promptly
+    callThemeEffect('updateSearchPlaceholder', {
+      placeholder: t('sidebar.searchPlaceholder'),
+      document,
+      window
+    });
+    // Update URL to drop any lang param so defaults apply going forward
+    try { const u = new URL(window.location.href); u.searchParams.delete('lang'); history.replaceState(history.state, document.title, u.toString()); } catch (_) {}
+  } catch (_) {}
+  // Reload localized content and tabs for the new language, then rerender
+  try {
+    const results = await Promise.allSettled([
+      loadContentJsonWithRaw(getContentRoot(), 'index'),
+      loadTabsJson(getContentRoot(), 'tabs')
+    ]);
+    const contentResult = results[0].status === 'fulfilled' ? (results[0].value || {}) : {};
+    const posts = contentResult.entries || {};
+    const tabs = results[1].status === 'fulfilled' ? (results[1].value || {}) : {};
+    const rawIndex = contentResult.raw || null;
+    // Cache raw index for stable ordering
+    rawIndexCache = rawIndex && typeof rawIndex === 'object' ? rawIndex : null;
+
+    // Rebuild tabs and caches (mirrors boot path)
+    tabsBySlug = {};
+    stableToCurrentTabSlug = {};
+    for (const [title, cfg] of Object.entries(tabs)) {
+      const unifiedSlug = (cfg && typeof cfg === 'object' && cfg.slug) ? String(cfg.slug) : null;
+      const slug = unifiedSlug || slugifyTab(title);
+      const loc = typeof cfg === 'string' ? cfg : String(cfg.location || '');
+      if (!loc) continue;
+      tabsBySlug[slug] = { title, location: loc };
+      const baseKey = (unifiedSlug ? unifiedSlug : slug);
+      stableToCurrentTabSlug[baseKey] = slug;
+    }
+
+    const baseAllowed = new Set();
+    Object.values(posts).forEach(v => {
+      if (!v) return;
+      if (v.location) baseAllowed.add(String(v.location));
+      if (Array.isArray(v.versions)) v.versions.forEach(ver => { if (ver && ver.location) baseAllowed.add(String(ver.location)); });
+    });
+    if (rawIndex && typeof rawIndex === 'object' && !Array.isArray(rawIndex)) {
+      try {
+        for (const [, entry] of Object.entries(rawIndex)) {
+          if (!entry || typeof entry !== 'object') continue;
+          for (const [k, v] of Object.entries(entry)) {
+            if (['tag','tags','image','date','excerpt','thumb','cover'].includes(k)) continue;
+            if (k === 'location' && typeof v === 'string') { baseAllowed.add(String(v)); continue; }
+            if (Array.isArray(v)) { v.forEach(item => { if (typeof item === 'string') baseAllowed.add(String(item)); }); continue; }
+            if (v && typeof v === 'object' && typeof v.location === 'string') baseAllowed.add(String(v.location));
+            else if (typeof v === 'string') baseAllowed.add(String(v));
+          }
+        }
+      } catch (_) {}
+    }
+  // Wire up version selector(s) (if multiple versions available)
+    allowedLocations = baseAllowed;
+    postsByLocationTitle = {};
+    for (const [title, meta] of Object.entries(posts)) {
+      if (meta && meta.location) postsByLocationTitle[meta.location] = title;
+      if (meta && Array.isArray(meta.versions)) meta.versions.forEach(ver => { if (ver && ver.location) postsByLocationTitle[ver.location] = title; });
+    }
+    postsIndexCache = posts;
+    locationAliasMap = new Map();
+    try {
+      if (rawIndex && typeof rawIndex === 'object' && !Array.isArray(rawIndex)) {
+        const cur = (getCurrentLang && getCurrentLang()) || 'en';
+        const curNorm = normalizeLangKey(cur);
+        for (const [, entry] of Object.entries(rawIndex)) {
+          if (!entry || typeof entry !== 'object') continue;
+          const reserved = new Set(['tag','tags','image','date','excerpt','thumb','cover']);
+          const variants = [];
+          for (const [k, v] of Object.entries(entry)) {
+            if (reserved.has(k)) continue;
+            const nk = normalizeLangKey(k);
+            if (k === 'location' && typeof v === 'string') {
+              variants.push({ lang: 'default', location: String(v) });
+            } else if (typeof v === 'string') {
+              variants.push({ lang: nk, location: String(v) });
+            } else if (Array.isArray(v)) {
+              // For version arrays, include all paths for aliasing
+              v.forEach(item => { if (typeof item === 'string') variants.push({ lang: nk, location: String(item) }); });
+            } else if (v && typeof v === 'object' && typeof v.location === 'string') {
+              variants.push({ lang: nk, location: String(v.location) });
+            }
+          }
+          if (!variants.length) continue;
+          const findBy = (langs) => variants.find(x => langs.includes(x.lang));
+          // Prefer the primary location for the current language as computed in postsIndexCache
+          let chosen = null;
+          let chosenLocation = null;
+          try {
+            const seed = findBy([curNorm]) || findBy(['en']) || findBy(['default']) || variants[0];
+            if (seed && postsByLocationTitle && postsIndexCache) {
+              const title = postsByLocationTitle[seed.location];
+              const meta = title ? postsIndexCache[title] : null;
+              if (meta && meta.location) chosenLocation = String(meta.location);
+            }
+          } catch (_) {}
+          if (chosenLocation) {
+            chosen = { lang: curNorm, location: chosenLocation };
+          } else {
+            chosen = findBy([curNorm]) || findBy(['en']) || findBy(['default']) || variants[0];
+            if (!chosen) chosen = variants[0];
+          }
+          variants.forEach(v => { if (v.location && chosen.location && v.lang !== curNorm) locationAliasMap.set(v.location, chosen.location); });
+        }
+      }
+    } catch (_) {}
+    try { refreshLanguageSelector(); } catch (_) {}
+    // Rebuild the Tools panel so all labels reflect the new language
+    try {
+      callThemeEffect('resetThemeControls', {
+        document,
+        window,
+        mountThemeControls,
+        applySavedTheme,
+        bindThemeToggle,
+        bindThemePackPicker,
+        refreshLanguageSelector
+      });
+    } catch (_) {}
+    try {
+      renderSiteIdentity(siteConfig);
+      const cfgTitle = (function pick(val){
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        const lang = getCurrentLang && getCurrentLang();
+        const v = (lang && val[lang]) || val.default || '';
+        return typeof v === 'string' ? v : '';
+      })(siteConfig && siteConfig.siteTitle);
+      if (cfgTitle) setBaseSiteTitle(cfgTitle);
+    } catch (_) {}
+    try { renderSiteLinks(siteConfig); } catch (_) {}
+    try {
+      const lang = getCurrentLang && getCurrentLang();
+      const getLocalizedValue = (val) => {
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        return (lang && val[lang]) || val.default || '';
+      };
+      updateSEO({
+        title: getLocalizedValue(siteConfig.siteTitle) || 'Ekily Press',
+        description: getLocalizedValue(siteConfig.siteDescription) || 'Where knowledge becomes pages.',
+        type: 'website', url: window.location.href
+      }, siteConfig);
+    } catch (_) {}
+    restoreLastSiteRouteIfEntry();
+    routeAndRender();
+    bindSiteViewStatePersistence();
+    bindPostsMetadataListener();
+  } catch (_) {
+    try { window.location.reload(); } catch (__) {}
+  }
+}
+// Expose as a global so the UI can call it
+try { window.__press_softResetLang = () => softResetToSiteDefaultLanguage(); } catch (_) {}
+
+restoreLastSiteRouteIfEntry();
+
+// Now fetch localized content and tabs for the (possibly updated) language
+const loadResults = await Promise.allSettled([
+  loadContentJsonWithRaw(getContentRoot(), 'index'),
+  loadTabsJson(getContentRoot(), 'tabs')
+]);
+
+try {
+  const contentResult = loadResults[0].status === 'fulfilled' ? (loadResults[0].value || {}) : {};
+  const posts = contentResult.entries || {};
+  const tabs = loadResults[1].status === 'fulfilled' ? (loadResults[1].value || {}) : {};
+  const rawIndex = contentResult.raw || null;
+  // Cache raw index for stable ordering
+  rawIndexCache = rawIndex && typeof rawIndex === 'object' ? rawIndex : null;
+    tabsBySlug = {};
+    stableToCurrentTabSlug = {};
+    for (const [title, cfg] of Object.entries(tabs)) {
+      // Prefer a stable slug coming from unified tabs (when available); fallback to computed slug
+      const unifiedSlug = (cfg && typeof cfg === 'object' && cfg.slug) ? String(cfg.slug) : null;
+      const slug = unifiedSlug || slugifyTab(title);
+      const loc = typeof cfg === 'string' ? cfg : String(cfg.location || '');
+      if (!loc) continue;
+      tabsBySlug[slug] = { title, location: loc };
+      // Map stable base slug to current slug to preserve active tab across language switches
+      const baseKey = (unifiedSlug ? unifiedSlug : slug);
+      stableToCurrentTabSlug[baseKey] = slug;
+    }
+    // Build a whitelist of allowed post file paths. Start with the current-language
+    // transformed entries, then include any language-variant locations discovered
+    // from the raw unified index.yaml (if present).
+    const baseAllowed = new Set();
+    Object.values(posts).forEach(v => {
+      if (!v) return;
+      if (v.location) baseAllowed.add(String(v.location));
+      if (Array.isArray(v.versions)) v.versions.forEach(ver => { if (ver && ver.location) baseAllowed.add(String(ver.location)); });
+    });
+    if (rawIndex && typeof rawIndex === 'object' && !Array.isArray(rawIndex)) {
+      try {
+        for (const [, entry] of Object.entries(rawIndex)) {
+          if (!entry || typeof entry !== 'object') continue;
+          for (const [k, v] of Object.entries(entry)) {
+            // Skip known non-variant keys
+            if (['tag','tags','image','date','excerpt','thumb','cover'].includes(k)) continue;
+            const nk = normalizeLangKey(k);
+            const cur = (getCurrentLang && getCurrentLang()) || 'en';
+            const curNorm = normalizeLangKey(cur);
+            const allowLang = (nk === 'default' || nk === curNorm || k === 'location');
+            if (!allowLang) continue;
+            // Support both unified and legacy shapes (only for allowed languages)
+            if (k === 'location' && typeof v === 'string') { baseAllowed.add(String(v)); continue; }
+            if (Array.isArray(v)) { v.forEach(item => { if (typeof item === 'string') baseAllowed.add(String(item)); }); continue; }
+            if (v && typeof v === 'object' && typeof v.location === 'string') baseAllowed.add(String(v.location));
+            else if (typeof v === 'string') baseAllowed.add(String(v));
+          }
+        }
+      } catch (_) { /* ignore parse issues */ }
+    }
+    allowedLocations = baseAllowed;
+    postsByLocationTitle = {};
+    for (const [title, meta] of Object.entries(posts)) {
+      if (meta && meta.location) postsByLocationTitle[meta.location] = title;
+      if (meta && Array.isArray(meta.versions)) meta.versions.forEach(ver => { if (ver && ver.location) postsByLocationTitle[ver.location] = title; });
+    }
+    postsIndexCache = posts;
+    // Build cross-language location alias map so switching languages keeps the same article
+    locationAliasMap = new Map();
+    try {
+      if (rawIndex && typeof rawIndex === 'object' && !Array.isArray(rawIndex)) {
+        const cur = (getCurrentLang && getCurrentLang()) || 'en';
+        const curNorm = normalizeLangKey(cur);
+        for (const [, entry] of Object.entries(rawIndex)) {
+          if (!entry || typeof entry !== 'object') continue;
+          const reserved = new Set(['tag','tags','image','date','excerpt','thumb','cover']);
+          const variants = [];
+          for (const [k, v] of Object.entries(entry)) {
+            if (reserved.has(k)) continue;
+            const nk = normalizeLangKey(k);
+            if (k === 'location' && typeof v === 'string') {
+              variants.push({ lang: 'default', location: String(v) });
+            } else if (typeof v === 'string') {
+              variants.push({ lang: nk, location: String(v) });
+            } else if (Array.isArray(v)) {
+              v.forEach(item => { if (typeof item === 'string') variants.push({ lang: nk, location: String(item) }); });
+            } else if (v && typeof v === 'object' && typeof v.location === 'string') {
+              variants.push({ lang: nk, location: String(v.location) });
+            }
+          }
+          if (!variants.length) continue;
+          const findBy = (langs) => variants.find(x => langs.includes(x.lang));
+          // Prefer the primary location for the current language as computed in postsIndexCache
+          let chosen = null;
+          let chosenLocation = null;
+          try {
+            const seed = findBy([curNorm]) || findBy(['en']) || findBy(['default']) || variants[0];
+            if (seed && postsByLocationTitle && postsIndexCache) {
+              const title = postsByLocationTitle[seed.location];
+              const meta = title ? postsIndexCache[title] : null;
+              if (meta && meta.location) chosenLocation = String(meta.location);
+            }
+          } catch (_) {}
+          if (chosenLocation) {
+            chosen = { lang: curNorm, location: chosenLocation };
+          } else {
+            chosen = findBy([curNorm]) || findBy(['en']) || findBy(['default']) || variants[0];
+            if (!chosen) chosen = variants[0];
+          }
+          variants.forEach(v => { if (v.location && chosen.location && v.lang !== curNorm) locationAliasMap.set(v.location, chosen.location); });
+        }
+      }
+    } catch (_) { /* ignore alias build errors */ }
+  // Reflect available content languages in the UI selector (for unified index)
+    try { refreshLanguageSelector(); } catch (_) {}
+    // Render site identity and profile links from site config
+    try {
+      renderSiteIdentity(siteConfig);
+      // Also update the base document title (tab suffix) from config
+      const cfgTitle = (function pick(val){
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        const lang = getCurrentLang && getCurrentLang();
+        const v = (lang && val[lang]) || val.default || '';
+        return typeof v === 'string' ? v : '';
+      })(siteConfig && siteConfig.siteTitle);
+      if (cfgTitle) setBaseSiteTitle(cfgTitle);
+    } catch (_) {}
+    try { renderSiteLinks(siteConfig); } catch (_) {}
+
+    // Apply site-controlled theme after loading config
+    try {
+      applyThemeConfig(siteConfig);
+      callThemeEffect('reflectThemeConfig', {
+        config: siteConfig,
+        document,
+        window
+      });
+    } catch (_) {}
+
+    // Initialize global error reporter with optional report URL from site config
+    try {
+      const pick = (val) => {
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        const lang = getCurrentLang && getCurrentLang();
+        const v = (lang && val[lang]) || val.default || '';
+        return typeof v === 'string' ? v : '';
+      };
+      const resolveReportUrl = (cfg) => {
+        try {
+          if (!cfg || typeof cfg !== 'object') return null;
+          // Derive from repo fields when available
+          const repo = cfg.repo || {};
+          const owner = repo && typeof repo.owner === 'string' ? repo.owner.trim() : '';
+          const name = repo && typeof repo.name === 'string' ? repo.name.trim() : '';
+          if (owner && name) return `https://github.com/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/issues/new`;
+          return null;
+        } catch (_) { return null; }
+      };
+      initErrorReporter({
+        reportUrl: resolveReportUrl(siteConfig),
+        siteTitle: pick(siteConfig && siteConfig.siteTitle) || 'Press',
+        enableOverlay: !!(siteConfig && siteConfig.errorOverlay === true)
+      });
+    } catch (_) {}
+    
+    // Set up default SEO with site config
+    try {
+      const lang = getCurrentLang && getCurrentLang();
+      const getLocalizedValue = (val) => {
+        if (!val) return '';
+        if (typeof val === 'string') return val;
+        return (lang && val[lang]) || val.default || '';
+      };
+      
+      // Update initial page meta tags with site config
+      updateSEO({
+        title: getLocalizedValue(siteConfig.siteTitle) || 'Ekily Press',
+        description: getLocalizedValue(siteConfig.siteDescription) || 'Where knowledge becomes pages.',
+        type: 'website',
+        url: window.location.href
+      }, siteConfig);
+    } catch (_) {}
+    
+  restoreLastSiteRouteIfEntry();
+  routeAndRender();
+  bindSiteViewStatePersistence();
+  bindPostsMetadataListener();
+} catch (e) {
+  const bootContainers = getViewContainers('boot');
+  resetTOCView('boot', bootContainers, { reason: 'bootError' });
+  renderErrorState(bootContainers.mainElement || getViewContainer('boot', 'main'), {
+    title: t('ui.indexUnavailable'),
+    message: t('errors.indexUnavailableBody'),
+    view: 'boot',
+    containers: bootContainers
+  });
+  notifyThemeViewChange('boot', { showSearch: false, showTags: false });
+  try {
+    const err = new Error((t('errors.indexUnavailableBody') || 'Could not load the post index.'));
+    try { err.name = 'Warning'; } catch(_) {}
+    showErrorOverlay(err, { message: err.message, origin: 'boot.indexUnavailable', error: (e && e.message) || String(e || '') });
+  } catch (_) {}
+}
+
+// Footer: set dynamic year once
+try {
+  callThemeEffect('setupFooter', { translate: t, document, window });
+} catch (_) {}

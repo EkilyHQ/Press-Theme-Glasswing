@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://press.schema/index.schema.json",
+  "title": "Press Posts Index",
+  "description": "Schema for Press posts index entries.",
+  "since": "v2.0.0",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/$defs/indexEntry"
+  },
+  "$defs": {
+    "tags": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "number"
+            ]
+          }
+        }
+      ]
+    },
+    "legacyEntry": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "Path or identifier for the post."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the post."
+        },
+        "tag": {
+          "$ref": "#/$defs/tags",
+          "description": "Single tag or list of tags (legacy)."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags",
+          "description": "Tags associated with the post."
+        },
+        "date": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "Publication date (string) or timestamp (number)."
+        },
+        "image": {
+          "type": "string",
+          "description": "Main image URL for the post."
+        },
+        "thumb": {
+          "type": "string",
+          "description": "Thumbnail image URL for the post."
+        },
+        "cover": {
+          "type": "string",
+          "description": "Cover image URL for the post."
+        },
+        "excerpt": {
+          "type": "string",
+          "description": "Short summary shown on cards and SEO."
+        }
+      },
+      "required": [
+        "location"
+      ],
+      "additionalProperties": true
+    },
+    "langEntry": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Localized title."
+            },
+            "location": {
+              "type": "string",
+              "description": "Localized path or slug."
+            },
+            "excerpt": {
+              "type": "string",
+              "description": "Localized excerpt or summary."
+            }
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "simplifiedOrUnifiedEntry": {
+      "type": "object",
+      "properties": {
+        "tag": {
+          "$ref": "#/$defs/tags",
+          "description": "Single tag or list of tags."
+        },
+        "tags": {
+          "$ref": "#/$defs/tags",
+          "description": "Tags associated with the entry."
+        },
+        "date": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "Publication date (string) or timestamp (number)."
+        },
+        "image": {
+          "type": "string",
+          "description": "Main image URL for the post."
+        },
+        "thumb": {
+          "type": "string",
+          "description": "Thumbnail image URL for the post."
+        },
+        "cover": {
+          "type": "string",
+          "description": "Cover image URL for the post."
+        },
+        "excerpt": {
+          "type": "string",
+          "description": "Short summary shown on cards and SEO."
+        },
+        "default": {
+          "$ref": "#/$defs/langEntry",
+          "description": "Default language entry."
+        }
+      },
+      "patternProperties": {
+        "^[A-Za-z]{2,3}(?:-[A-Za-z0-9]+)*$": {
+          "$ref": "#/$defs/langEntry",
+          "description": "Language-specific entry keyed by Press language code (e.g., en, chs, cht-tw, ja)."
+        },
+        "^(chs|中文|简体中文|日本語|にほんご|english|jp)$": {
+          "$ref": "#/$defs/langEntry",
+          "description": "Language aliases supported for convenience."
+        }
+      },
+      "additionalProperties": true,
+      "minProperties": 1
+    },
+    "indexEntry": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/legacyEntry"
+        },
+        {
+          "$ref": "#/$defs/simplifiedOrUnifiedEntry"
+        }
+      ]
+    }
+  }
+}
