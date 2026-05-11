@@ -302,8 +302,11 @@ function renderHome(params = {}) {
 function renderPost(params = {}) {
   const main = getMain(params);
   if (!main) return undefined;
+  const { t } = getI18n(params);
   const meta = params.postMetadata || {};
   const title = text(meta.title || params.fallbackTitle, 'Untitled');
+  const translatedTop = t('ui.top');
+  const topLabel = translatedTop && translatedTop !== 'ui.top' ? translatedTop : 'Top';
   const cover = renderCover(meta, title, 'glasswing-article__cover', params);
   setHtml(main, `<article class="glasswing-article">
     <header class="glasswing-article__header">
@@ -321,7 +324,10 @@ function renderPost(params = {}) {
       utilities.renderPostTOC({
         tocElement: params.containers && params.containers.tocElement,
         tocHtml: params.tocHtml,
-        articleTitle: title
+        articleTitle: title,
+        topLabel,
+        topAria: topLabel,
+        contentRoot: main
       });
     }
     if (typeof utilities.renderPostNav === 'function') {
@@ -458,6 +464,7 @@ function ensureFooterStructure(footer) {
       <span data-glasswing-footer-tagline>Glasswing for Press</span>
     </div>
     <nav class="glasswing-footer__links" aria-label="Site links" data-glasswing-site-links></nav>
+    <div class="glasswing-footer__toc is-empty" data-glasswing-footer-toc></div>
     <div class="glasswing-footer__tools" data-theme-region="tools" id="toolsPanel"></div>
     <div class="glasswing-footer__meta">
       <button type="button" data-glasswing-top>Top</button>
@@ -474,10 +481,19 @@ function ensureFooterStructure(footer) {
   return {
     inner,
     tools,
+    toc: footer.querySelector('[data-glasswing-footer-toc]'),
     brand: footer.querySelector('[data-glasswing-footer-brand]'),
     year: footer.querySelector('[data-glasswing-year]'),
     top: footer.querySelector('[data-glasswing-top]')
   };
+}
+
+function setFooterTocEmpty(empty = true) {
+  const wrap = activeShell && activeShell.querySelector('[data-glasswing-footer-toc]');
+  if (!wrap) return;
+  wrap.classList.toggle('is-empty', !!empty);
+  const inner = wrap.closest('.glasswing-footer__inner');
+  if (inner) inner.classList.toggle('has-toc', !empty);
 }
 
 function setupThemeControls(params = {}) {
@@ -609,13 +625,6 @@ export function mount(context = {}) {
   });
   tags.setAttribute('data-theme-region', 'tags');
 
-  const toc = ensureElement(shell, '[data-theme-region="toc"]', () => {
-    const element = doc.createElement('press-toc');
-    element.className = 'glasswing-toc';
-    return element;
-  });
-  toc.setAttribute('data-theme-region', 'toc');
-
   const footer = ensureElement(shell, '[data-theme-region="footer"]', () => {
     const element = doc.createElement('footer');
     element.className = 'glasswing-footer';
@@ -624,6 +633,15 @@ export function mount(context = {}) {
   });
   footer.setAttribute('data-theme-region', 'footer');
   const footerStructure = ensureFooterStructure(footer);
+  const tocHost = (footerStructure && footerStructure.toc) || footer;
+  let toc = tocHost.querySelector('[data-theme-region="toc"]') || shell.querySelector('[data-theme-region="toc"]');
+  if (!toc) {
+    toc = doc.createElement('press-toc');
+  }
+  toc.className = 'glasswing-toc';
+  toc.setAttribute('data-theme-region', 'toc');
+  if (toc.parentElement !== tocHost) tocHost.appendChild(toc);
+  setFooterTocEmpty(!toc.innerHTML.trim());
 
   activeRegions = {
     container: shell,
@@ -671,10 +689,16 @@ export const effects = {
   setupThemeControls,
   resetThemeControls,
   renderTagSidebar: (params = {}) => clearRegion((params.containers && params.containers.sidebarElement) || activeRegions.tags),
-  resetTOC: (params = {}) => clearRegion((params.containers && params.containers.tocElement) || activeRegions.toc),
+  resetTOC: (params = {}) => {
+    const cleared = clearRegion((params.containers && params.containers.tocElement) || activeRegions.toc);
+    setFooterTocEmpty(true);
+    return cleared;
+  },
   renderPostTOC: (params = {}) => {
     const toc = params.tocElement || activeRegions.toc;
     if (!toc) return false;
+    const hasToc = !!String(params.tocHtml || '').trim();
+    setFooterTocEmpty(!hasToc);
     if (typeof toc.renderToc === 'function') {
       toc.renderToc(params);
       return true;
