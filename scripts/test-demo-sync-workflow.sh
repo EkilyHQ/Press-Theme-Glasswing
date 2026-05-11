@@ -49,6 +49,16 @@ if ! grep -F '.extraheader' "${workflow}" >/dev/null; then
   exit 1
 fi
 
+if ! grep -F "get-regexp '^http\\..*\\.extraheader$'" "${workflow}" >/dev/null; then
+  echo "demo sync workflow must match checkout auth extraheaders with a valid git-config regex" >&2
+  exit 1
+fi
+
+if grep -F "get-regexp '^http\\\\..*\\\\.extraheader$'" "${workflow}" >/dev/null; then
+  echo "demo sync workflow must not double-escape the checkout auth extraheader regex" >&2
+  exit 1
+fi
+
 if grep -F 'pull-requests: write' "${workflow}" >/dev/null; then
   echo "demo sync workflow must not request pull request permissions" >&2
   exit 1
