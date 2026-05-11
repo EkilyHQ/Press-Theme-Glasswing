@@ -164,6 +164,49 @@ function resolveMedia(meta = {}, params = {}) {
   return source;
 }
 
+function getFirstBodyImageSource(markdownHtml = '', params = {}) {
+  const markup = String(markdownHtml || '');
+  if (!markup.includes('<img')) return '';
+  const documentRef = params.document || getDocument(params.ctx || {});
+  if (documentRef && typeof documentRef.createElement === 'function') {
+    try {
+      const template = documentRef.createElement('template');
+      template.innerHTML = markup;
+      const image = template.content && template.content.querySelector('img[src]');
+      if (image) return text(image.getAttribute('src'));
+    } catch (_) {}
+  }
+  const match = markup.match(/<img\b[^>]*\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+  return match ? text(match[1] || match[2] || match[3]) : '';
+}
+
+function normalizeMediaSource(source, params = {}) {
+  const raw = text(source);
+  if (!raw) return '';
+  const documentRef = params.document || getDocument(params.ctx || {});
+  const windowRef = params.window || getWindow(params.ctx || {});
+  const base = (documentRef && documentRef.baseURI)
+    || (windowRef && windowRef.location && windowRef.location.href)
+    || 'http://press.local/';
+  try {
+    const url = new URL(raw, base);
+    url.hash = '';
+    return url.href;
+  } catch (_) {
+    return raw
+      .replace(/#.*$/, '')
+      .replace(/\\/g, '/')
+      .replace(/^\.\//, '')
+      .replace(/\/{2,}/g, '/');
+  }
+}
+
+function isSameMediaSource(left, right, params = {}) {
+  const normalizedLeft = normalizeMediaSource(left, params);
+  const normalizedRight = normalizeMediaSource(right, params);
+  return !!normalizedLeft && !!normalizedRight && normalizedLeft === normalizedRight;
+}
+
 function postHref(params = {}, meta = {}) {
   const { withLangParam } = getI18n(params);
   const location = text(meta.location);
@@ -304,7 +347,11 @@ function renderPost(params = {}) {
   if (!main) return undefined;
   const meta = params.postMetadata || {};
   const title = text(meta.title || params.fallbackTitle, 'Untitled');
-  const cover = renderCover(meta, title, 'glasswing-article__cover', params);
+  const coverSource = resolveMedia(meta, params);
+  const firstBodyImageSource = getFirstBodyImageSource(params.markdownHtml, params);
+  const cover = coverSource && !isSameMediaSource(coverSource, firstBodyImageSource, params)
+    ? renderCover(meta, title, 'glasswing-article__cover', params)
+    : '';
   setHtml(main, `<article class="glasswing-article">
     <header class="glasswing-article__header">
       ${renderMeta(meta)}
