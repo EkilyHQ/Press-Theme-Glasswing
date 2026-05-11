@@ -1,0 +1,606 @@
+const REGION_NAMES = ['container', 'content', 'main', 'nav', 'search', 'tags', 'toc', 'footer'];
+
+function getDocument(context = {}) {
+  return context.document || (typeof document !== 'undefined' ? document : null);
+}
+
+function getWindow(context = {}) {
+  return context.window || (typeof window !== 'undefined' ? window : null);
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&(?!#[0-9]+;)/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function attr(value) {
+  return escapeHtml(value);
+}
+
+function text(value, fallback = '') {
+  const raw = value == null ? '' : String(value).trim();
+  return raw || fallback;
+}
+
+function firstConfigText(value, fallback = '') {
+  if (typeof value === 'string' || typeof value === 'number') return text(value, fallback);
+  if (value && typeof value === 'object') {
+    return text(value.default || value.en || value.chs || value['zh-cn'] || Object.values(value).find((item) => typeof item === 'string'), fallback);
+  }
+  return fallback;
+}
+
+function getI18n(params = {}) {
+  const ctx = params.ctx || {};
+  const i18n = ctx.i18n || {};
+  const translate = params.translate || params.t || i18n.t;
+  return {
+    t: typeof translate === 'function' ? translate : ((key) => String(key || '')),
+    withLangParam: typeof params.withLangParam === 'function'
+      ? params.withLangParam
+      : (typeof i18n.withLangParam === 'function' ? i18n.withLangParam : ((url) => url))
+  };
+}
+
+function getMain(params = {}) {
+  return (params.containers && params.containers.mainElement)
+    || params.container
+    || (params.ctx && params.ctx.regions && typeof params.ctx.regions.get === 'function' && params.ctx.regions.get('main'))
+    || (params.ctx && params.ctx.regions && params.ctx.regions.main)
+    || null;
+}
+
+function getRegion(context = {}, name) {
+  const regions = context.regions || {};
+  if (regions && typeof regions.get === 'function') return regions.get(name);
+  return regions ? regions[name] : null;
+}
+
+function ensureElement(parent, selector, create) {
+  const existing = parent.querySelector(selector);
+  if (existing) return existing;
+  const element = create();
+  parent.appendChild(element);
+  return element;
+}
+
+function setHtml(element, html) {
+  if (!element) return false;
+  element.innerHTML = String(html || '');
+  return true;
+}
+
+function formatDate(value) {
+  const raw = value == null ? '' : String(value).trim();
+  if (!raw) return '';
+  const parsed = new Date(raw);
+  if (Number.isNaN(parsed.getTime())) return raw;
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(parsed);
+  } catch (_) {
+    return raw;
+  }
+}
+
+function getTags(meta = {}) {
+  const source = meta.tags != null ? meta.tags : meta.tag;
+  const tags = Array.isArray(source) ? source : (source == null ? [] : [source]);
+  return tags.map((item) => String(item || '').trim()).filter(Boolean);
+}
+
+function getContentRoot(params = {}) {
+  try {
+    const utilities = params.utilities || (params.ctx && params.ctx.utilities) || {};
+    if (typeof utilities.getContentRoot === 'function') return text(utilities.getContentRoot(), 'wwwroot');
+  } catch (_) {}
+  return 'wwwroot';
+}
+
+function getUrlPage(params = {}) {
+  try {
+    const win = params.window || activeWindow || getWindow(params.ctx);
+    const search = win && win.location ? win.location.search : '';
+    const parsed = new URLSearchParams(search || '').get('page');
+    const page = parseInt(parsed || '1', 10);
+    return Number.isNaN(page) ? 1 : Math.max(1, page);
+  } catch (_) {
+    return 1;
+  }
+}
+
+function getConfiguredPageSize(params = {}, fallback = 8) {
+  const config = params.siteConfig || {};
+  const raw = config.pageSize != null ? config.pageSize : (config.postsPerPage != null ? config.postsPerPage : params.pageSize);
+  const parsed = parseInt(raw || fallback, 10);
+  return Number.isNaN(parsed) || parsed <= 0 ? fallback : parsed;
+}
+
+function getPostsPageState(params = {}) {
+  const allEntries = Array.isArray(params.entries) ? params.entries : [];
+  const suppliedEntries = Array.isArray(params.pageEntries) ? params.pageEntries : allEntries;
+  const pageFromParams = parseInt(params.page || '1', 10);
+  const pageFromUrl = getUrlPage(params);
+  const page = Math.max(1, Number.isNaN(pageFromParams) ? pageFromUrl : Math.max(pageFromParams, pageFromUrl));
+  const fallbackSize = suppliedEntries.length || allEntries.length || 8;
+  const pageSize = getConfiguredPageSize(params, fallbackSize);
+  const computedTotalPages = allEntries.length ? Math.max(1, Math.ceil(allEntries.length / pageSize)) : Math.max(1, parseInt(params.totalPages || '1', 10));
+  const totalPages = Math.max(computedTotalPages, parseInt(params.totalPages || '1', 10) || 1);
+  const shouldSlice = allEntries.length && (page !== pageFromParams || pageSize !== Number(params.pageSize) || allEntries.length > suppliedEntries.length);
+  const pageEntries = shouldSlice ? allEntries.slice((page - 1) * pageSize, page * pageSize) : suppliedEntries;
+  return {
+    ...params,
+    page,
+    pageEntries,
+    pageSize,
+    totalPages
+  };
+}
+
+function resolveMedia(meta = {}, params = {}) {
+  let source = text(meta.cover || meta.thumb || meta.image);
+  if (!source) return '';
+  if (/^[a-z][a-z0-9+.-]*:/i.test(source) || source.startsWith('/') || source.startsWith('#')) return source;
+  if (!source.includes('/')) {
+    const location = text(meta.location);
+    const idx = location.lastIndexOf('/');
+    const base = idx >= 0 ? location.slice(0, idx + 1) : '';
+    source = `${base}${source}`.replace(/\/{2,}/g, '/');
+  }
+  const root = getContentRoot(params).replace(/^\/+|\/+$/g, '');
+  if (root && !source.startsWith(`${root}/`)) return `${root}/${source}`.replace(/\/{2,}/g, '/');
+  return source;
+}
+
+function postHref(params = {}, meta = {}) {
+  const { withLangParam } = getI18n(params);
+  const location = text(meta.location);
+  return location ? withLangParam(`?id=${encodeURIComponent(location)}`) : '#';
+}
+
+function renderMeta(meta = {}) {
+  const date = formatDate(meta.date);
+  const tags = getTags(meta);
+  const labels = [];
+  if (date) labels.push(`<span>${escapeHtml(date)}</span>`);
+  tags.slice(0, 2).forEach((tag) => labels.push(`<span>${escapeHtml(tag)}</span>`));
+  if (meta.protected) labels.push('<span>Protected</span>');
+  if (meta.draft) labels.push('<span>Draft</span>');
+  return labels.length ? `<div class="glasswing-card__meta">${labels.join('')}</div>` : '';
+}
+
+function renderCover(meta = {}, title = '', className = 'glasswing-card__media', params = {}) {
+  const source = resolveMedia(meta, params);
+  if (!source) return '';
+  return `<div class="${attr(className)}"><img src="${attr(source)}" alt="${attr(title)}" loading="lazy" decoding="async"></div>`;
+}
+
+function renderHero(entry, params = {}) {
+  if (!entry) return '';
+  const [title, meta = {}] = entry;
+  const href = postHref(params, meta);
+  const excerpt = text(meta.excerpt);
+  const media = renderCover(meta, title, 'glasswing-hero__media', params);
+  return `<article class="glasswing-hero">
+    <a class="glasswing-hero__link" href="${attr(href)}">
+      <div class="glasswing-hero__copy">
+        ${renderMeta(meta)}
+        <h1>${escapeHtml(title)}</h1>
+        ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}
+        <span class="glasswing-action">Read feature</span>
+      </div>
+      ${media || '<div class="glasswing-hero__media glasswing-hero__media--empty" aria-hidden="true"></div>'}
+    </a>
+  </article>`;
+}
+
+function renderSecondary(entry, params = {}) {
+  if (!entry) return '';
+  const [title, meta = {}] = entry;
+  const href = postHref(params, meta);
+  const excerpt = text(meta.excerpt);
+  return `<article class="glasswing-secondary-card">
+    <a href="${attr(href)}">
+      <div>
+        ${renderMeta(meta)}
+        <h2>${escapeHtml(title)}</h2>
+        ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}
+      </div>
+      <span class="glasswing-action">Read story</span>
+    </a>
+  </article>`;
+}
+
+function renderRow(entry, params = {}) {
+  if (!entry) return '';
+  const [title, meta = {}] = entry;
+  const href = postHref(params, meta);
+  const excerpt = text(meta.excerpt);
+  return `<article class="glasswing-row">
+    <a href="${attr(href)}">
+      <div class="glasswing-row__body">
+        ${renderMeta(meta)}
+        <h2>${escapeHtml(title)}</h2>
+        ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}
+      </div>
+      <span class="glasswing-row__arrow" aria-hidden="true">-></span>
+    </a>
+  </article>`;
+}
+
+function renderPagination(params = {}, baseTab = 'posts') {
+  const page = Math.max(1, Number(params.page || 1));
+  const totalPages = Math.max(1, Number(params.totalPages || 1));
+  if (totalPages <= 1) return '';
+  const { withLangParam, t } = getI18n(params);
+  const makeHref = (target) => {
+    const query = baseTab === 'search'
+      ? `?tab=search&q=${encodeURIComponent(params.query || '')}&tag=${encodeURIComponent(params.tagFilter || '')}&page=${target}`
+      : `?tab=posts&page=${target}`;
+    return withLangParam(query);
+  };
+  const prev = page > 1
+    ? `<a href="${attr(makeHref(page - 1))}">${escapeHtml(t('ui.prev') || 'Previous')}</a>`
+    : '<span aria-disabled="true">Previous</span>';
+  const next = page < totalPages
+    ? `<a href="${attr(makeHref(page + 1))}">${escapeHtml(t('ui.next') || 'Next')}</a>`
+    : '<span aria-disabled="true">Next</span>';
+  return `<nav class="glasswing-pagination" aria-label="Pagination">${prev}<span>${page} / ${totalPages}</span>${next}</nav>`;
+}
+
+function renderPlainList(params = {}, options = {}) {
+  const entries = Array.isArray(params.pageEntries)
+    ? params.pageEntries
+    : (Array.isArray(params.entries) ? params.entries : []);
+  const heading = text(options.heading, 'Articles');
+  const intro = text(options.intro);
+  const rows = entries.map((entry) => renderRow(entry, params)).join('');
+  return `<section class="glasswing-list-page index">
+    <header class="glasswing-list-page__header">
+      <p>${escapeHtml(options.kicker || 'Index')}</p>
+      <h1>${escapeHtml(heading)}</h1>
+      ${intro ? `<span>${escapeHtml(intro)}</span>` : ''}
+    </header>
+    <div class="glasswing-list">${rows || '<p class="glasswing-empty">No posts yet.</p>'}</div>
+    ${renderPagination(params, options.baseTab || 'posts')}
+  </section>`;
+}
+
+function renderHome(params = {}) {
+  const state = getPostsPageState(params);
+  const entries = Array.isArray(state.pageEntries) ? state.pageEntries : [];
+  if (Number(state.page || 1) > 1) {
+    return renderPlainList(state, {
+      heading: 'All articles',
+      kicker: 'Archive',
+      baseTab: 'posts'
+    });
+  }
+  const hero = entries[0];
+  const secondary = entries.slice(1, 4);
+  const rest = entries.slice(4);
+  return `<section class="glasswing-front index">
+    ${renderHero(hero, state)}
+    ${secondary.length ? `<section class="glasswing-secondary" aria-label="Latest stories">${secondary.map((entry) => renderSecondary(entry, state)).join('')}</section>` : ''}
+    ${rest.length ? `<section class="glasswing-after"><h2>More articles</h2><div class="glasswing-list">${rest.map((entry) => renderRow(entry, state)).join('')}</div></section>` : ''}
+    ${renderPagination(state, 'posts')}
+  </section>`;
+}
+
+function renderPost(params = {}) {
+  const main = getMain(params);
+  if (!main) return undefined;
+  const meta = params.postMetadata || {};
+  const title = text(meta.title || params.fallbackTitle, 'Untitled');
+  const cover = renderCover(meta, title, 'glasswing-article__cover', params);
+  setHtml(main, `<article class="glasswing-article">
+    <header class="glasswing-article__header">
+      ${renderMeta(meta)}
+      <h1>${escapeHtml(title)}</h1>
+      ${text(meta.excerpt) ? `<p>${escapeHtml(meta.excerpt)}</p>` : ''}
+      ${cover}
+    </header>
+    <div class="glasswing-article__body">${params.markdownHtml || ''}</div>
+    <footer class="glasswing-article__nav" data-post-nav></footer>
+  </article>`);
+  try {
+    const utilities = params.utilities || {};
+    if (typeof utilities.renderPostTOC === 'function') {
+      utilities.renderPostTOC({
+        tocElement: params.containers && params.containers.tocElement,
+        tocHtml: params.tocHtml,
+        articleTitle: title
+      });
+    }
+    if (typeof utilities.renderPostNav === 'function') {
+      utilities.renderPostNav(main.querySelector('[data-post-nav]'), params.postsIndex || {}, meta.location);
+    }
+    if (typeof utilities.hydratePostImages === 'function') utilities.hydratePostImages(main);
+    if (typeof utilities.hydratePostVideos === 'function') utilities.hydratePostVideos(main);
+    if (typeof utilities.applyLazyLoadingIn === 'function') utilities.applyLazyLoadingIn(main);
+    if (typeof utilities.applyLangHints === 'function') utilities.applyLangHints(main);
+  } catch (_) {}
+  return { decorated: true, title };
+}
+
+function renderPosts(params = {}) {
+  const main = getMain(params);
+  if (!main) return undefined;
+  setHtml(main, renderHome(params));
+  return { decorated: true };
+}
+
+function renderSearch(params = {}) {
+  const main = getMain(params);
+  if (!main) return undefined;
+  const query = text(params.query || params.tagFilter);
+  const heading = query ? `Search: ${query}` : 'Search';
+  setHtml(main, renderPlainList(params, {
+    heading,
+    kicker: 'Search',
+    intro: params.total != null ? `${params.total} results` : '',
+    baseTab: 'search'
+  }));
+  return { decorated: true, title: heading };
+}
+
+function renderTab(params = {}) {
+  const main = getMain(params);
+  if (!main) return undefined;
+  const title = text((params.tab && params.tab.title) || params.title);
+  setHtml(main, `<article class="glasswing-article glasswing-article--tab">
+    ${title ? `<header class="glasswing-article__header"><h1>${escapeHtml(title)}</h1></header>` : ''}
+    <div class="glasswing-article__body">${params.markdownHtml || ''}</div>
+  </article>`);
+  return { decorated: true, title };
+}
+
+function renderError(params = {}) {
+  const main = getMain(params);
+  if (!main) return undefined;
+  const actions = Array.isArray(params.actions) ? params.actions : [];
+  setHtml(main, `<section class="glasswing-notice">
+    <h1>${escapeHtml(params.title || 'Page not found')}</h1>
+    ${params.message ? `<p>${escapeHtml(params.message)}</p>` : ''}
+    ${actions.length ? `<div>${actions.map((action) => `<a class="glasswing-action" href="${attr(action.href || '#')}">${escapeHtml(action.label || 'Open')}</a>`).join('')}</div>` : ''}
+  </section>`);
+  return { decorated: true };
+}
+
+function renderLoading(params = {}) {
+  const main = getMain(params);
+  if (!main) return undefined;
+  setHtml(main, '<section class="glasswing-notice"><p>Loading...</p></section>');
+  return { decorated: true };
+}
+
+function clearRegion(region) {
+  if (!region) return false;
+  region.innerHTML = '';
+  return true;
+}
+
+function renderTabs(params = {}) {
+  const nav = params.navElement || getRegion({ regions: params.regions || activeRegions }, 'nav');
+  if (!nav) return false;
+  const { t, withLangParam } = getI18n(params);
+  const tabs = params.tabsBySlug || {};
+  const active = String(params.activeSlug || '');
+  const links = [];
+  if (typeof params.postsEnabled !== 'function' || params.postsEnabled()) {
+    links.push({ slug: 'posts', label: t('ui.allPosts') || 'Articles', href: withLangParam('?tab=posts') });
+  }
+  Object.entries(tabs).forEach(([slug, info]) => {
+    if (!slug) return;
+    links.push({
+      slug,
+      label: text(info && info.title, slug),
+      href: withLangParam(`?tab=${encodeURIComponent(slug)}`)
+    });
+  });
+  nav.innerHTML = links.map((link) => `<a class="${link.slug === active ? 'is-active' : ''}" href="${attr(link.href)}">${escapeHtml(link.label)}</a>`).join('');
+  return true;
+}
+
+function renderSiteIdentity(params = {}) {
+  const brand = activeShell && activeShell.querySelector('[data-glasswing-brand]');
+  if (!brand) return false;
+  const config = params.config || params.siteConfig || {};
+  const title = firstConfigText(config.siteTitle, 'Press');
+  brand.textContent = title;
+  return true;
+}
+
+function setupFooter(params = {}) {
+  const footer = getRegion({ regions: activeRegions }, 'footer');
+  if (!footer) return false;
+  const year = new Date().getFullYear();
+  footer.innerHTML = `<span>Glasswing for Press</span><button type="button" data-glasswing-top>Top</button><span>${year}</span>`;
+  const button = footer.querySelector('[data-glasswing-top]');
+  const win = params.window || activeWindow;
+  if (button && win) {
+    button.addEventListener('click', () => {
+      try { win.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { try { win.scrollTo(0, 0); } catch (__) {} }
+    });
+  }
+  return true;
+}
+
+function resolveViewContainers() {
+  return {
+    mainElement: activeRegions.main,
+    tocElement: activeRegions.toc,
+    sidebarElement: activeRegions.tags,
+    contentElement: activeRegions.content,
+    containerElement: activeRegions.container
+  };
+}
+
+function getViewContainer(params = {}) {
+  const role = String(params.role || 'main');
+  if (role === 'sidebar') return activeRegions.tags;
+  return activeRegions[role] || activeRegions.main || null;
+}
+
+let activeRegions = {};
+let activeShell = null;
+let activeWindow = null;
+
+export function mount(context = {}) {
+  const doc = getDocument(context);
+  activeWindow = getWindow(context);
+  if (!doc || !doc.body) return context;
+
+  const shell = ensureElement(doc.body, '[data-theme-root="glasswing"]', () => {
+    const element = doc.createElement('div');
+    element.setAttribute('data-theme-root', 'glasswing');
+    doc.body.insertBefore(element, doc.body.firstChild);
+    return element;
+  });
+  shell.className = 'glasswing-shell';
+  shell.setAttribute('data-theme-region', 'container');
+  activeShell = shell;
+
+  const header = ensureElement(shell, '.glasswing-header', () => {
+    const element = doc.createElement('header');
+    element.className = 'glasswing-header';
+    return element;
+  });
+
+  const brand = ensureElement(header, '[data-glasswing-brand]', () => {
+    const element = doc.createElement('a');
+    element.href = '?tab=posts';
+    element.className = 'glasswing-brand';
+    element.setAttribute('data-glasswing-brand', '');
+    element.textContent = 'Press';
+    return element;
+  });
+  brand.href = '?tab=posts';
+
+  const nav = ensureElement(header, '[data-theme-region="nav"]', () => {
+    const element = doc.createElement('nav');
+    element.className = 'glasswing-nav';
+    element.setAttribute('aria-label', 'Primary navigation');
+    return element;
+  });
+  nav.setAttribute('data-theme-region', 'nav');
+
+  const search = ensureElement(header, '[data-theme-region="search"]', () => {
+    const element = doc.createElement('press-search');
+    element.className = 'glasswing-search';
+    return element;
+  });
+  search.setAttribute('data-theme-region', 'search');
+
+  const main = ensureElement(shell, '[data-theme-region="main"]', () => {
+    const element = doc.createElement('main');
+    element.className = 'glasswing-main';
+    element.setAttribute('role', 'main');
+    element.setAttribute('tabindex', '-1');
+    return element;
+  });
+  main.setAttribute('data-theme-region', 'main');
+
+  const tags = ensureElement(shell, '[data-theme-region="tags"]', () => {
+    const element = doc.createElement('aside');
+    element.className = 'glasswing-tags';
+    element.setAttribute('aria-label', 'Tags');
+    return element;
+  });
+  tags.setAttribute('data-theme-region', 'tags');
+
+  const toc = ensureElement(shell, '[data-theme-region="toc"]', () => {
+    const element = doc.createElement('press-toc');
+    element.className = 'glasswing-toc';
+    return element;
+  });
+  toc.setAttribute('data-theme-region', 'toc');
+
+  const footer = ensureElement(shell, '[data-theme-region="footer"]', () => {
+    const element = doc.createElement('footer');
+    element.className = 'glasswing-footer';
+    element.setAttribute('role', 'contentinfo');
+    return element;
+  });
+  footer.setAttribute('data-theme-region', 'footer');
+
+  activeRegions = {
+    container: shell,
+    content: main,
+    footer,
+    main,
+    nav,
+    search,
+    tags,
+    toc
+  };
+
+  if (context.regions && typeof context.regions.registerMany === 'function') {
+    context.regions.registerMany(activeRegions);
+    activeRegions = context.regions;
+  } else {
+    context.regions = activeRegions;
+  }
+
+  return { views, components, effects, regions: activeRegions };
+}
+
+export const views = {
+  post: renderPost,
+  posts: renderPosts,
+  search: renderSearch,
+  tab: renderTab,
+  error: renderError,
+  loading: renderLoading
+};
+
+export const components = {};
+
+export const effects = {
+  getViewContainer,
+  resolveViewContainers,
+  renderSiteIdentity,
+  renderTabs,
+  renderFooterNav: () => true,
+  renderTagSidebar: (params = {}) => clearRegion((params.containers && params.containers.sidebarElement) || activeRegions.tags),
+  resetTOC: (params = {}) => clearRegion((params.containers && params.containers.tocElement) || activeRegions.toc),
+  renderPostTOC: (params = {}) => {
+    const toc = params.tocElement || activeRegions.toc;
+    if (!toc) return false;
+    if (typeof toc.renderToc === 'function') {
+      toc.renderToc(params);
+      return true;
+    }
+    toc.innerHTML = params.tocHtml || '';
+    return true;
+  },
+  renderPostView: renderPost,
+  renderIndexView: renderPosts,
+  renderSearchResults: renderSearch,
+  renderStaticTabView: renderTab,
+  renderErrorState: renderError,
+  renderPostLoadingState: renderLoading,
+  renderStaticTabLoadingState: renderLoading,
+  enhanceIndexLayout: () => true,
+  afterIndexRender: () => true,
+  afterSearchRender: () => true,
+  setupFooter
+};
+
+export function createThemeApi() {
+  return { views, components, effects };
+}
+
+export default {
+  mount,
+  views,
+  components,
+  effects
+};

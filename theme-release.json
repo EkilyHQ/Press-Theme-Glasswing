@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "type": "press-theme",
+  "value": "glasswing",
+  "label": "Glasswing",
+  "version": "0.1.0",
+  "contractVersion": 1,
+  "release": {
+    "tag": "v0.1.0",
+    "htmlUrl": "https://github.com/EkilyHQ/Press-Theme-Glasswing/releases/tag/v0.1.0",
+    "publishedAt": "2026-05-11T00:00:00Z",
+    "notes": ""
+  },
+  "asset": {
+    "name": "press-theme-glasswing-v0.1.0.zip",
+    "url": "https://raw.githubusercontent.com/EkilyHQ/Press-Theme-Glasswing/release-artifacts/v0.1.0/press-theme-glasswing-v0.1.0.zip",
+    "size": 0,
+    "digest": "sha256:replace-with-release-digest"
+  },
+  "files": [
+    "modules/glasswing.js",
+    "theme.css",
+    "theme.json"
+  ]
+}
