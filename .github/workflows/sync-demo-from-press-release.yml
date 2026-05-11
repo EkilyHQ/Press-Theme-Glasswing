@@ -101,13 +101,31 @@ jobs:
         working-directory: source
         run: |
           set -euo pipefail
+
+          copy_checkout_git_auth() {
+            local source_repo="$1"
+            local target_repo="$2"
+            local keys
+            keys="$(git -C "${source_repo}" config --local --name-only --get-regexp '^http\\..*\\.extraheader$' || true)"
+            [[ -n "${keys}" ]] || return 0
+
+            while IFS= read -r key; do
+              [[ -n "${key}" ]] || continue
+              git -C "${source_repo}" config --local --get-all "${key}" |
+                while IFS= read -r value; do
+                  git -C "${target_repo}" config --local --add "${key}" "${value}"
+                done
+            done <<< "${keys}"
+          }
+
           git fetch origin "${DEMO_BRANCH}" || true
           if git show-ref --verify --quiet "refs/remotes/origin/${DEMO_BRANCH}"; then
             git worktree add ../demo "origin/${DEMO_BRANCH}"
           else
             mkdir -p ../demo
             git -C ../demo init
-            git -C ../demo remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+            git -C ../demo remote add origin "$(git remote get-url origin)"
+            copy_checkout_git_auth . ../demo
             git -C ../demo checkout --orphan "${DEMO_BRANCH}"
           fi
 
