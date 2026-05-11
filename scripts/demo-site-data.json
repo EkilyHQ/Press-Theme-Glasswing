@@ -3,16 +3,20 @@
   "label": "Glasswing",
   "repo": "EkilyHQ/Press-Theme-Glasswing",
   "siteTitle": "Jun Ives Review",
-  "siteDescription": "A fictional public-domain culture review for showing Glasswing's editorial front page.",
+  "siteDescription": "An independent culture review for public-domain images, small exhibitions, books, and archival curiosities.",
   "author": "Jun Ives",
   "aboutTitle": "About Jun Ives Review",
-  "about": "Jun Ives Review is a fictional one-person magazine about images that feel light on the page: old paintings, diagram plates, specimen drawings, and small archival surprises. The writing is invented for the demo. Source material is public-domain or CC0-compatible and cited in every article.",
+  "about": "Jun Ives Review is a fictional one-person magazine about images that feel light on the page: paintings, diagram plates, specimen drawings, exhibition rooms, and small archival surprises. The demo is structured like a real editorial site with a lead story, recurring columns, reviews, source notes, and an archive that can support more than a handful of posts. All criticism, events, and editorial details are invented for theme testing. Public-domain or CC0-compatible source material is cited in every article.",
   "posts": [
     {
       "id": "front-page-at-sunrise",
       "title": "A Front Page at Sunrise",
       "date": "2026-05-06",
-      "tags": ["editorial", "painting", "lead-story"],
+      "tags": [
+        "editorial",
+        "painting",
+        "lead-story"
+      ],
       "excerpt": "A lead story on why a single orange mark can carry a whole publication front page.",
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Monet_-_Impression%2C_Sunrise.jpg",
       "source": {
@@ -22,15 +26,20 @@
       },
       "body": [
         "Glasswing wants one strong lead story, so I gave it a small sun. The painting is public-domain, but its editorial behavior still feels contemporary: a single mark, a low horizon, enough haze to make the headline work.",
-        "This demo article tests the hero slot, secondary story rhythm, and dense rows below the fold. The theme should make the front page feel curated rather than merely sorted.",
-        "A magazine front page is a promise about proportion. One story gets the window; the others get the street."
+        "The front page test was not whether the image is famous. It was whether the layout can make a familiar image feel newly selected. The answer depends on proportion: one large story, two secondary pieces, then an archive that does not collapse into clutter.",
+        "A magazine front page is a promise about attention. One story gets the window; the others get the street. If the window is too loud, nobody trusts the street.",
+        "Editorial note: keep the headline short, let the excerpt carry the argument, and never make the source note compete with the deck."
       ]
     },
     {
       "id": "butterfly-plate-index",
       "title": "Indexing a Butterfly Plate",
       "date": "2026-04-19",
-      "tags": ["diagram", "natural-history", "index"],
+      "tags": [
+        "diagram",
+        "natural-history",
+        "index"
+      ],
       "excerpt": "A compact review of a 1905 butterfly diagram as an editorial layout object.",
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/NIE_1905_Butterflies_and_Moths.jpg",
       "source": {
@@ -40,16 +49,44 @@
       },
       "body": [
         "The plate is already a layout: numbered figures, explanatory density, and a quiet demand that the reader move between image and caption.",
+        "What makes it contemporary is not the subject but the navigation problem. The eye wants to compare, return, verify, and then wander. That is exactly the behavior a review archive should support.",
         "Glasswing's compact list view makes this kind of archival note useful after it leaves the front page. It does not need oversized cards forever; it needs a strong first appearance and a disciplined archive.",
         "The best diagrams are not simplified. They are generous about where the complexity sits."
+      ]
+    },
+    {
+      "id": "gallery-two-quiet-wall",
+      "title": "Gallery Two, Quiet Wall",
+      "date": "2026-04-07",
+      "tags": [
+        "exhibition",
+        "review",
+        "interior"
+      ],
+      "excerpt": "A fictional exhibition review focused on wall spacing, captions, and the work a room does before the art speaks.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Interior_of_the_Dining_Room_from_Lansdowne_House_MET_DT132.jpg",
+      "source": {
+        "label": "Interior of the Dining Room from Lansdowne House, The Metropolitan Museum of Art on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Interior_of_the_Dining_Room_from_Lansdowne_House_MET_DT132.jpg",
+        "license": "Public domain; image made available by The Metropolitan Museum of Art"
+      },
+      "body": [
+        "The best room in the fictional show was not the room with the best objects. It was the room that understood distance. Each label sat low enough to read without interrupting the wall, and each object had one neighbor instead of three rivals.",
+        "Exhibition design is criticism with a tape measure. Move a frame two inches and the argument changes. Add a bench and the visit becomes slower, which is sometimes the whole point.",
+        "This piece gives Glasswing a review that is not image-led in the obvious way. The interior source acts as atmosphere while the article tests long-form editorial rhythm, paragraphs, and source notes below the fold.",
+        "Verdict: the quiet wall wins because it trusts the visitor to notice order before explanation."
       ]
     },
     {
       "id": "under-glass-column",
       "title": "The Under-Glass Column",
       "date": "2026-03-30",
-      "tags": ["specimen", "column", "drawing"],
-      "excerpt": "A fictional column about containment, captions, and the drama of small drawings.",
+      "tags": [
+        "specimen",
+        "column",
+        "drawing"
+      ],
+      "excerpt": "A recurring column about containment, captions, and the drama of small drawings.",
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Butterfly_Under_Glass_Drawing.jpg",
       "source": {
         "label": "Butterfly Under Glass Drawing on Wikimedia Commons",
@@ -58,15 +95,43 @@
       },
       "body": [
         "The drawing is tiny, almost too modest for a modern screen, which makes it a useful editorial test. Can the theme make small archival art feel selected rather than lost?",
+        "A column is also a glass case: narrow, intentional, and better when it has one object to protect. That is why this recurring feature uses one image, one argument, and one source note.",
         "Glasswing's strong typography helps. The headline can carry the first look, and the source note can stay factual without stealing the piece.",
-        "A column is also a glass case: narrow, intentional, and better when it has one object to protect."
+        "The object is not dramatic. The decision to keep looking is the drama."
+      ]
+    },
+    {
+      "id": "book-note-margins",
+      "title": "Book Note: The Margins Did the Work",
+      "date": "2026-03-08",
+      "tags": [
+        "books",
+        "margins",
+        "criticism"
+      ],
+      "excerpt": "A short book-note format for testing secondary posts that still feel fully edited.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Manuscript_page_with_marginal_notes.jpg",
+      "source": {
+        "label": "Manuscript page with marginal notes on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Manuscript_page_with_marginal_notes.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "The fictional book under review argues that margins are where readers become visible. The claim sounds precious until the facsimiles begin to accumulate: grocery sums, corrections, flowers pressed too flat to identify, names repeated until the ink thins.",
+        "What I liked was the restraint. The book does not romanticize every annotation. Some margins are dull. Some are wrong. Some are only proof that a reader owned a pencil.",
+        "This article gives the demo a lower-stakes format between the lead essay and the archive note. A real review site needs these middle pieces. Not every post can arrive wearing a headline suit.",
+        "Best page: the spread where the printed argument is ordinary and the reader's disagreement is electric."
       ]
     },
     {
       "id": "metamorphosis-review",
       "title": "Reviewing a Metamorphosis",
       "date": "2026-02-22",
-      "tags": ["review", "illustration", "archive"],
+      "tags": [
+        "review",
+        "illustration",
+        "archive"
+      ],
       "excerpt": "A review-style note about transformation as an editorial sequence.",
       "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Metamorphosis_of_a_Butterfly_Merrian_1705.jpg",
       "source": {
@@ -76,8 +141,141 @@
       },
       "body": [
         "The illustration works like a four-act review: leaf, larva, chrysalis, wing. The page does not need to invent drama because the sequence already has it.",
+        "The strongest decision is separation. Each stage remains legible because the drawing refuses to merge transformation into a blur. Contemporary layouts could learn from that patience.",
         "This post checks whether Glasswing can hold historical material without becoming nostalgic. The palette is warm, the rules are sharp, and the article view keeps the image close to the argument.",
         "Transformation is easiest to understand when the stages are allowed to remain separate."
+      ]
+    },
+    {
+      "id": "small-museum-calendar",
+      "title": "Small Museum Calendar",
+      "date": "2026-01-27",
+      "tags": [
+        "calendar",
+        "museum",
+        "preview"
+      ],
+      "excerpt": "A preview column that makes the fictional magazine feel scheduled and current.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Museum_gallery_room.jpg",
+      "source": {
+        "label": "Museum gallery room on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Museum_gallery_room.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "The best week on the calendar belongs to the smallest room: a print cabinet open for three afternoons, a textile handling session, and a talk about labels that changed after conservation.",
+        "A culture site feels real when it has dates, not only opinions. This column gives the demo a recurring preview format that can sit below the lead without feeling like filler.",
+        "Recommendation: book the print cabinet slot first. The room only seats twelve, which is exactly why it may be the most useful event."
+      ]
+    },
+    {
+      "id": "poster-on-the-corner",
+      "title": "Poster on the Corner",
+      "date": "2026-01-13",
+      "tags": [
+        "poster",
+        "street",
+        "design"
+      ],
+      "excerpt": "A street-design note about a public poster that works because it leaves space.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Vintage_poster_wall.jpg",
+      "source": {
+        "label": "Vintage poster wall on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Vintage_poster_wall.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "The poster won the corner by refusing to shout. One image, one date, one line of type, and enough blank paper to make the bakery window beside it look noisy.",
+        "Street posters are useful tests for editorial judgment because the reader is moving. If the argument cannot survive a three-second glance, the layout is doing too much.",
+        "Glasswing handles this format well: short, visual, opinionated, and still sourced."
+      ]
+    },
+    {
+      "id": "archive-room-sound",
+      "title": "The Sound of the Archive Room",
+      "date": "2025-12-29",
+      "tags": [
+        "archive",
+        "essay",
+        "sound"
+      ],
+      "excerpt": "An essay that reviews the behavior around images, not only the images themselves.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Archive_reading_room.jpg",
+      "source": {
+        "label": "Archive reading room on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Archive_reading_room.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "The archive room has a soundtrack: pencil, page cradle, scanner breath, chair leg, apology. None of it appears in the catalog record, but all of it changes how an image is read.",
+        "A review site should sometimes write around the object. The conditions of looking are part of the work, especially when the work survives by being handled carefully.",
+        "This essay gives the demo a slower pace after the image-led pieces."
+      ]
+    },
+    {
+      "id": "review-of-a-caption",
+      "title": "Review of a Caption",
+      "date": "2025-12-05",
+      "tags": [
+        "caption",
+        "criticism",
+        "museum"
+      ],
+      "excerpt": "A compact criticism piece about a caption that changes the whole picture.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Gallery_caption_label.jpg",
+      "source": {
+        "label": "Gallery caption label on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Gallery_caption_label.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "The caption used one verb that saved the painting from sentimentality: traded. Not loved, not remembered, not inspired. Traded. Suddenly the soft landscape had an economy.",
+        "Captions are small criticism with institutional stationery. They can flatten a work, rescue it, or reveal that the curator knows exactly where the pressure belongs.",
+        "Glasswing needs pieces at this scale because a real magazine notices small editorial acts."
+      ]
+    },
+    {
+      "id": "print-room-postcard",
+      "title": "Print Room Postcard",
+      "date": "2025-11-15",
+      "tags": [
+        "print-room",
+        "postcard",
+        "collection"
+      ],
+      "excerpt": "A postcard-length review that still carries a clear editorial point.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Old_postcard_collection.jpg",
+      "source": {
+        "label": "Old postcard collection on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Old_postcard_collection.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "A postcard is a publication with a destination. That makes it more demanding than a print. It has to be seen, handled, addressed, delayed, and maybe kept.",
+        "The collection works because the backs are as good as the fronts: crooked names, forwarding marks, and one message that says only arrived raining.",
+        "Short reviews help the archive breathe between longer essays."
+      ]
+    },
+    {
+      "id": "winter-issue-note",
+      "title": "Winter Issue Note",
+      "date": "2025-10-22",
+      "tags": [
+        "editorial-note",
+        "issue",
+        "winter"
+      ],
+      "excerpt": "An editor's note that gives the demo a seasonal issue frame.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Winter_landscape_painting.jpg",
+      "source": {
+        "label": "Winter landscape painting on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Winter_landscape_painting.jpg",
+        "license": "Public domain or freely licensed media as identified by Wikimedia Commons"
+      },
+      "body": [
+        "The winter issue is about pale images that refuse to disappear: snow fields, empty rooms, silver insects, labels printed in grey ink.",
+        "We held three pieces for spring because they needed color around them. Editing is often a calendar decision pretending to be taste.",
+        "This note makes the demo front page feel published, not merely generated. A magazine should have weather."
       ]
     }
   ]
