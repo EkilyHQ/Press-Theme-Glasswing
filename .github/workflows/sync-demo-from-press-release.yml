@@ -1,0 +1,147 @@
+name: Sync Demo From Press Release
+
+on:
+  repository_dispatch:
+    types:
+      - press-system-release
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Press release tag to sync, for example v3.4.0. Leave empty for latest.
+        required: false
+  schedule:
+    - cron: '43 3 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-demo-from-press-release
+  cancel-in-progress: false
+
+jobs:
+  sync-demo:
+    runs-on: ubuntu-latest
+    env:
+      PRESS_REPOSITORY: ${{ vars.PRESS_REPOSITORY || 'EkilyHQ/Press' }}
+      INPUT_TAG: ${{ inputs.tag }}
+      DISPATCH_TAG: ${{ github.event.client_payload.tag }}
+      DISPATCH_ASSET_NAME: ${{ github.event.client_payload.asset_name }}
+      DISPATCH_ASSET_SIZE: ${{ github.event.client_payload.asset_size }}
+      DISPATCH_ASSET_SHA256: ${{ github.event.client_payload.asset_sha256 }}
+      PRESS_RELEASE_TOKEN: ${{ secrets.PRESS_RELEASE_TOKEN || github.token }}
+      DEMO_BRANCH: demo
+    steps:
+      - name: Checkout theme source
+        uses: actions/checkout@v4
+        with:
+          path: source
+          fetch-depth: 0
+
+      - name: Resolve Press release
+        id: release
+        working-directory: source
+        env:
+          GH_TOKEN: ${{ secrets.PRESS_RELEASE_TOKEN || github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p ../dist
+
+          tag="${INPUT_TAG:-${DISPATCH_TAG:-}}"
+          if [[ -n "${tag}" ]]; then
+            gh api "repos/${PRESS_REPOSITORY}/releases/tags/${tag}" > ../dist/press-release.json
+          else
+            gh api "repos/${PRESS_REPOSITORY}/releases/latest" > ../dist/press-release.json
+          fi
+
+          export DISPATCH_ASSET_NAME DISPATCH_ASSET_SIZE DISPATCH_ASSET_SHA256
+          node <<'NODE' > ../dist/press-release-env.txt
+          const fs = require('fs');
+          const release = JSON.parse(fs.readFileSync('../dist/press-release.json', 'utf8'));
+          const payloadName = process.env.DISPATCH_ASSET_NAME || '';
+          const assets = Array.isArray(release.assets) ? release.assets : [];
+          const candidates = assets.filter((asset) => {
+            const name = String(asset.name || '');
+            if (payloadName) return name === payloadName;
+            return /^press-system-v\d+\.\d+\.\d+\.zip$/.test(name);
+          });
+          if (candidates.length !== 1) {
+            throw new Error(`expected exactly one Press system package asset, found ${candidates.length}`);
+          }
+          const asset = candidates[0];
+          const body = String(release.body || '');
+          const digest = String(asset.digest || process.env.DISPATCH_ASSET_SHA256 || '').replace(/^sha256:/i, '')
+            || ((body.match(/SHA-256:\s*`?([a-fA-F0-9]{64})`?/) || [])[1] || '');
+          const size = Number(asset.size || process.env.DISPATCH_ASSET_SIZE || 0);
+          const lines = [
+            `tag=${release.tag_name || ''}`,
+            `asset_name=${asset.name || ''}`,
+            `asset_url=${asset.browser_download_url || ''}`,
+            `asset_size=${Number.isFinite(size) ? size : 0}`,
+            `asset_sha256=${digest}`,
+            `html_url=${release.html_url || ''}`
+          ];
+          process.stdout.write(`${lines.join('\n')}\n`);
+          NODE
+
+          while IFS='=' read -r key value; do
+            [[ -n "${key}" ]] || continue
+            echo "${key}=${value}" >> "${GITHUB_OUTPUT}"
+          done < ../dist/press-release-env.txt
+
+      - name: Download Press system package
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --silent --show-error \
+            --header "Authorization: Bearer ${PRESS_RELEASE_TOKEN}" \
+            --output dist/press-system.zip \
+            "${{ steps.release.outputs.asset_url }}"
+
+      - name: Prepare demo worktree
+        working-directory: source
+        run: |
+          set -euo pipefail
+          git fetch origin "${DEMO_BRANCH}" || true
+          if git show-ref --verify --quiet "refs/remotes/origin/${DEMO_BRANCH}"; then
+            git worktree add ../demo "origin/${DEMO_BRANCH}"
+          else
+            mkdir -p ../demo
+            git -C ../demo init
+            git -C ../demo remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+            git -C ../demo checkout --orphan "${DEMO_BRANCH}"
+          fi
+
+      - name: Sync demo site
+        run: |
+          set -euo pipefail
+          bash source/scripts/sync-demo-from-press-release.sh \
+            --demo-root demo \
+            --theme-root source/theme \
+            --archive dist/press-system.zip \
+            --tag "${{ steps.release.outputs.tag }}" \
+            --sha256 "${{ steps.release.outputs.asset_sha256 }}" \
+            --size "${{ steps.release.outputs.asset_size }}"
+
+      - name: Validate demo sync workflow
+        working-directory: source
+        run: |
+          bash scripts/test-demo-sync-workflow.sh
+
+      - name: Commit and push demo branch
+        working-directory: demo
+        env:
+          SYNC_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$(git status --porcelain)" ]]; then
+            echo "Demo branch is already current with ${SYNC_TAG}."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add .
+          git commit -m "Sync demo site ${SYNC_TAG}"
+          git pull --rebase origin "${DEMO_BRANCH}" || true
+          git push origin "HEAD:${DEMO_BRANCH}"
