@@ -1,4 +1,9 @@
-const REGION_NAMES = ['container', 'content', 'main', 'nav', 'search', 'tags', 'toc', 'footer'];
+import {
+  applySavedTheme,
+  mountThemeControls
+} from '../../../js/theme.js';
+
+const REGION_NAMES = ['container', 'content', 'main', 'nav', 'search', 'tags', 'toc', 'footer', 'tools'];
 
 function getDocument(context = {}) {
   return context.document || (typeof document !== 'undefined' ? document : null);
@@ -409,23 +414,110 @@ function renderTabs(params = {}) {
   return true;
 }
 
+function renderFooterLinks(config = activeSiteConfig, params = {}) {
+  const linksRegion = activeShell && activeShell.querySelector('[data-glasswing-site-links]');
+  if (!linksRegion) return false;
+  const { t, withLangParam } = getI18n(params);
+  const profileLinks = Array.isArray(config && config.profileLinks) ? config.profileLinks : [];
+  const links = [
+    { label: t('ui.allPosts') || 'All Posts', href: withLangParam('?tab=posts') },
+    ...profileLinks
+      .map((item) => ({
+        label: text(item && item.label),
+        href: text(item && item.href)
+      }))
+      .filter((item) => item.label && item.href)
+  ];
+  linksRegion.innerHTML = `<h2>Site</h2>${links.map((item) => `<a href="${attr(item.href)}">${escapeHtml(item.label)}</a>`).join('')}`;
+  return true;
+}
+
 function renderSiteIdentity(params = {}) {
   const brand = activeShell && activeShell.querySelector('[data-glasswing-brand]');
-  if (!brand) return false;
   const config = params.config || params.siteConfig || {};
+  activeSiteConfig = config;
   const title = firstConfigText(config.siteTitle, 'Press');
-  brand.textContent = title;
+  if (brand) brand.textContent = title;
+  const footerBrand = activeShell && activeShell.querySelector('[data-glasswing-footer-brand]');
+  if (footerBrand) footerBrand.textContent = title;
+  renderFooterLinks(config, params);
+  return !!brand || !!footerBrand;
+}
+
+function ensureFooterStructure(footer) {
+  if (!footer) return null;
+  const doc = footer.ownerDocument || getDocument();
+  if (!doc) return null;
+  let inner = footer.querySelector('.glasswing-footer__inner');
+  if (!inner) {
+    footer.textContent = '';
+    inner = doc.createElement('div');
+    inner.className = 'glasswing-footer__inner';
+    inner.innerHTML = `<div class="glasswing-footer__brand">
+      <a href="?tab=posts" data-glasswing-footer-brand>Press</a>
+      <span data-glasswing-footer-tagline>Glasswing for Press</span>
+    </div>
+    <nav class="glasswing-footer__links" aria-label="Site links" data-glasswing-site-links></nav>
+    <div class="glasswing-footer__tools" data-theme-region="tools" id="toolsPanel"></div>
+    <div class="glasswing-footer__meta">
+      <button type="button" data-glasswing-top>Top</button>
+      <span data-glasswing-year></span>
+    </div>`;
+    footer.appendChild(inner);
+  }
+  const tools = footer.querySelector('[data-theme-region="tools"]');
+  if (tools) {
+    tools.setAttribute('data-theme-region', 'tools');
+    tools.id = 'toolsPanel';
+    activeRegions.tools = tools;
+  }
+  return {
+    inner,
+    tools,
+    brand: footer.querySelector('[data-glasswing-footer-brand]'),
+    year: footer.querySelector('[data-glasswing-year]'),
+    top: footer.querySelector('[data-glasswing-top]')
+  };
+}
+
+function setupThemeControls(params = {}) {
+  const footer = getRegion({ regions: activeRegions }, 'footer');
+  const structure = ensureFooterStructure(footer);
+  const tools = structure && structure.tools;
+  if (!tools) return false;
+  try {
+    const mount = params.mountThemeControls || mountThemeControls;
+    if (typeof mount === 'function') mount({ host: tools, variant: 'glasswing' });
+  } catch (_) {}
+  try {
+    const applyTheme = params.applySavedTheme || applySavedTheme;
+    if (typeof applyTheme === 'function') applyTheme();
+  } catch (_) {}
   return true;
+}
+
+function resetThemeControls(params = {}) {
+  const footer = getRegion({ regions: activeRegions }, 'footer');
+  const structure = ensureFooterStructure(footer);
+  if (!structure || !structure.tools) return false;
+  structure.tools.innerHTML = '';
+  return setupThemeControls(params);
 }
 
 function setupFooter(params = {}) {
   const footer = getRegion({ regions: activeRegions }, 'footer');
   if (!footer) return false;
+  const structure = ensureFooterStructure(footer);
   const year = new Date().getFullYear();
-  footer.innerHTML = `<span>Glasswing for Press</span><button type="button" data-glasswing-top>Top</button><span>${year}</span>`;
-  const button = footer.querySelector('[data-glasswing-top]');
+  if (structure && structure.year) structure.year.textContent = String(year);
+  renderSiteIdentity({ config: activeSiteConfig, ...params });
+  if (structure && structure.tools && !structure.tools.querySelector('press-theme-controls')) {
+    setupThemeControls(params);
+  }
+  const button = structure && structure.top;
   const win = params.window || activeWindow;
-  if (button && win) {
+  if (button && win && button.dataset.glasswingBound !== '1') {
+    button.dataset.glasswingBound = '1';
     button.addEventListener('click', () => {
       try { win.scrollTo({ top: 0, behavior: 'smooth' }); } catch (_) { try { win.scrollTo(0, 0); } catch (__) {} }
     });
@@ -452,6 +544,7 @@ function getViewContainer(params = {}) {
 let activeRegions = {};
 let activeShell = null;
 let activeWindow = null;
+let activeSiteConfig = {};
 
 export function mount(context = {}) {
   const doc = getDocument(context);
@@ -530,6 +623,7 @@ export function mount(context = {}) {
     return element;
   });
   footer.setAttribute('data-theme-region', 'footer');
+  const footerStructure = ensureFooterStructure(footer);
 
   activeRegions = {
     container: shell,
@@ -539,7 +633,8 @@ export function mount(context = {}) {
     nav,
     search,
     tags,
-    toc
+    toc,
+    tools: footerStructure && footerStructure.tools
   };
 
   if (context.regions && typeof context.regions.registerMany === 'function') {
@@ -569,6 +664,12 @@ export const effects = {
   renderSiteIdentity,
   renderTabs,
   renderFooterNav: () => true,
+  renderSiteLinks: (params = {}) => {
+    activeSiteConfig = params.config || params.siteConfig || activeSiteConfig || {};
+    return renderFooterLinks(activeSiteConfig, params);
+  },
+  setupThemeControls,
+  resetThemeControls,
   renderTagSidebar: (params = {}) => clearRegion((params.containers && params.containers.sidebarElement) || activeRegions.tags),
   resetTOC: (params = {}) => clearRegion((params.containers && params.containers.tocElement) || activeRegions.toc),
   renderPostTOC: (params = {}) => {

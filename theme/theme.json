@@ -47,7 +47,8 @@
       "required": true
     },
     "container": {},
-    "content": {}
+    "content": {},
+    "tools": {}
   },
   "components": [
     "press-search",
