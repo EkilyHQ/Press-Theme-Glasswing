@@ -141,7 +141,7 @@ while IFS= read -r entry; do
   [[ "${rel}" != "${entry}" ]] || continue
 
   case "${rel}" in
-    index.html|index_editor.html|index_editor_preview.html|assets/main.js) ;;
+    index.html|index_editor.html|index_editor_preview.html|assets/press-system.json|assets/main.js) ;;
     assets/js/*|assets/i18n/*|assets/schema/*|assets/themes/native/*) ;;
     assets/themes/packs.json)
       echo "system release archive must not provide demo packs.json" >&2
@@ -196,13 +196,14 @@ sync_payload_dir() {
 }
 
 mkdir -p "${demo_root}"
-for path in index.html index_editor.html index_editor_preview.html assets/main.js assets/js assets/i18n assets/schema assets/themes/native; do
+for path in index.html index_editor.html index_editor_preview.html assets/press-system.json assets/main.js assets/js assets/i18n assets/schema assets/themes/native; do
   rm -rf "${demo_root}/${path}"
 done
 
 copy_payload_file "index.html"
 copy_payload_file "index_editor.html"
 copy_payload_file "index_editor_preview.html"
+copy_payload_file "assets/press-system.json"
 copy_payload_file "assets/main.js"
 sync_payload_dir "assets/js"
 sync_payload_dir "assets/i18n"
@@ -331,6 +332,7 @@ const registry = [
     label: String(nativeManifest.name || 'Native'),
     version: String(nativeManifest.version || ''),
     contractVersion: Number(nativeManifest.contractVersion || 1),
+    engines: nativeManifest.engines && typeof nativeManifest.engines === 'object' ? nativeManifest.engines : {},
     builtIn: true,
     removable: false,
     source: { type: 'builtin' },
@@ -342,6 +344,7 @@ const registry = [
     label: String(themeManifest.name || data.label || slug),
     version: String(themeManifest.version || releaseManifest.version || ''),
     contractVersion: Number(themeManifest.contractVersion || 1),
+    engines: themeManifest.engines && typeof themeManifest.engines === 'object' ? themeManifest.engines : {},
     builtIn: false,
     removable: true,
     source: {
