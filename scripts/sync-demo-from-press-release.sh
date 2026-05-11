@@ -159,9 +159,15 @@ mkdir -p "${extract_dir}"
 unzip -q "${archive_path}" -d "${extract_dir}"
 payload_dir="${extract_dir}/${payload_root}"
 
+symlink_path="$(find "${payload_dir}" -type l -print -quit)"
+if [[ -n "${symlink_path}" ]]; then
+  echo "system release archive contains symlink: ${symlink_path#${payload_dir}/}" >&2
+  exit 1
+fi
+
 require_payload_file() {
   local path="$1"
-  if [[ ! -f "${payload_dir}/${path}" ]]; then
+  if [[ ! -f "${payload_dir}/${path}" || -L "${payload_dir}/${path}" ]]; then
     echo "system release archive is missing ${path}" >&2
     exit 1
   fi
@@ -169,7 +175,7 @@ require_payload_file() {
 
 require_payload_dir() {
   local path="$1"
-  if [[ ! -d "${payload_dir}/${path}" ]]; then
+  if [[ ! -d "${payload_dir}/${path}" || -L "${payload_dir}/${path}" ]]; then
     echo "system release archive is missing ${path}/" >&2
     exit 1
   fi
@@ -232,6 +238,10 @@ function writeFile(rel, content) {
   const target = path.join(demoRoot, rel);
   ensureDir(path.dirname(target));
   fs.writeFileSync(target, content.endsWith('\n') ? content : `${content}\n`, 'utf8');
+}
+
+function removePath(rel) {
+  fs.rmSync(path.join(demoRoot, rel), { recursive: true, force: true });
 }
 
 function copyDir(src, dest) {
@@ -425,6 +435,7 @@ writeFile('wwwroot/tab/sources/en.md', [
   ''
 ].join('\n'));
 
+removePath('wwwroot/post');
 for (const post of posts) {
   writeFile(`wwwroot/post/${post.id}/en.md`, markdownPost(post));
 }
