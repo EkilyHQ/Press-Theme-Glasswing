@@ -251,13 +251,18 @@ jobs:
           const digest = process.env.digest;
           const publishedAt = process.env.published_at;
           const files = fs.readFileSync('dist/files.txt', 'utf8').split(/\r?\n/).filter(Boolean);
+          const themeManifest = JSON.parse(fs.readFileSync('theme/theme.json', 'utf8'));
+          const engines = themeManifest.engines && typeof themeManifest.engines === 'object'
+            ? themeManifest.engines
+            : {};
           const manifest = {
             schemaVersion: 1,
             type: 'press-theme',
             value: slug,
             label,
             version,
-            contractVersion: 1,
+            contractVersion: Number(themeManifest.contractVersion || 1),
+            engines,
             release: {
               tag,
               htmlUrl: `https://github.com/${repo}/releases/tag/${tag}`,

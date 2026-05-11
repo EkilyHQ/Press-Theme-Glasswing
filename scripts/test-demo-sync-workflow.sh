@@ -4,10 +4,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 workflow=".github/workflows/sync-demo-from-press-release.yml"
+theme_release_workflow=".github/workflows/theme-release.yml"
 script="scripts/sync-demo-from-press-release.sh"
 data="scripts/demo-site-data.json"
 
-for path in "${workflow}" "${script}" "${data}"; do
+for path in "${workflow}" "${theme_release_workflow}" "${script}" "${data}"; do
   if [[ ! -f "${path}" ]]; then
     echo "expected ${path} to exist" >&2
     exit 1
@@ -69,6 +70,11 @@ if ! grep -F 'assets/themes/packs.json' "${script}" >/dev/null; then
   exit 1
 fi
 
+if ! grep -F 'assets/press-system.json' "${script}" >/dev/null; then
+  echo "demo sync script must copy the Press system version manifest" >&2
+  exit 1
+fi
+
 if ! grep -F 'wwwroot/index.yaml' "${script}" >/dev/null; then
   echo "demo sync script must generate demo content index data" >&2
   exit 1
@@ -87,8 +93,16 @@ fi
 node <<'NODE'
 const fs = require('fs');
 const data = JSON.parse(fs.readFileSync('scripts/demo-site-data.json', 'utf8'));
+const theme = JSON.parse(fs.readFileSync('theme/theme.json', 'utf8'));
+const releaseWorkflow = fs.readFileSync('.github/workflows/theme-release.yml', 'utf8');
 if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(data.slug || '')) {
   throw new Error('demo site data must define a safe slug');
+}
+if (!theme.engines || theme.engines.press !== '>=3.4.0 <4.0.0') {
+  throw new Error('theme/theme.json must declare engines.press for Press compatibility');
+}
+if (!releaseWorkflow.includes('themeManifest.engines') || !releaseWorkflow.includes('engines,')) {
+  throw new Error('theme release workflow must copy theme engines into theme-release.json');
 }
 if (!Array.isArray(data.posts) || data.posts.length < 4) {
   throw new Error('demo site data must include at least four posts');
@@ -125,8 +139,9 @@ create_release_payload() {
 
   printf '<!doctype html>\n' > "${payload}/index_editor.html"
   printf '<!doctype html>\n' > "${payload}/index_editor_preview.html"
+  printf '{"schemaVersion":1,"type":"press-system","version":"0.0.0","tag":"v0.0.0","upgradeFrom":{"ranges":[],"allowUnknownSource":true,"message":""}}\n' > "${payload}/assets/press-system.json"
   printf 'console.log("main");\n' > "${payload}/assets/main.js"
-  printf '{"name":"Native","version":"0.0.0","contractVersion":1}\n' > "${payload}/assets/themes/native/theme.json"
+  printf '{"name":"Native","version":"0.0.0","contractVersion":1,"engines":{"press":">=0.0.0 <1.0.0"}}\n' > "${payload}/assets/themes/native/theme.json"
   printf 'body {}\n' > "${payload}/assets/themes/native/theme.css"
 }
 
