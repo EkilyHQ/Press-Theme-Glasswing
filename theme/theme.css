@@ -859,7 +859,7 @@ a {
 }
 
 .glasswing-toc .toc-header {
-  display: flex;
+  display: none;
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
@@ -870,11 +870,7 @@ a {
 
 .glasswing-toc .toc-header span,
 .glasswing-toc .press-toc__title {
-  min-width: 0;
-  color: #f6f1e8;
-  font-size: .95rem;
-  font-weight: 820;
-  line-height: 1.25;
+  display: none;
 }
 
 .glasswing-toc .toc-top {
@@ -1077,24 +1073,8 @@ a {
 }
 
 .glasswing-footer__toc .glasswing-toc [data-press-toc-body] {
-  max-height: min(38vh, 420px);
-  overflow: auto;
-  padding-right: .25rem;
-  scrollbar-width: thin;
-  scrollbar-color: #3a3834 transparent;
-}
-
-.glasswing-footer__toc .glasswing-toc [data-press-toc-body]::-webkit-scrollbar {
-  width: 8px;
-}
-
-.glasswing-footer__toc .glasswing-toc [data-press-toc-body]::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.glasswing-footer__toc .glasswing-toc [data-press-toc-body]::-webkit-scrollbar-thumb {
-  background: #3a3834;
-  border-radius: 999px;
+  overflow: visible;
+  padding-right: 0;
 }
 
 .glasswing-footer__tools {

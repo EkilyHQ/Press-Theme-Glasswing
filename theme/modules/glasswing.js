@@ -302,11 +302,8 @@ function renderHome(params = {}) {
 function renderPost(params = {}) {
   const main = getMain(params);
   if (!main) return undefined;
-  const { t } = getI18n(params);
   const meta = params.postMetadata || {};
   const title = text(meta.title || params.fallbackTitle, 'Untitled');
-  const translatedTop = t('ui.top');
-  const topLabel = translatedTop && translatedTop !== 'ui.top' ? translatedTop : 'Top';
   const cover = renderCover(meta, title, 'glasswing-article__cover', params);
   setHtml(main, `<article class="glasswing-article">
     <header class="glasswing-article__header">
@@ -324,9 +321,7 @@ function renderPost(params = {}) {
       utilities.renderPostTOC({
         tocElement: params.containers && params.containers.tocElement,
         tocHtml: params.tocHtml,
-        articleTitle: title,
-        topLabel,
-        topAria: topLabel,
+        articleTitle: '',
         contentRoot: main
       });
     }
@@ -640,6 +635,8 @@ export function mount(context = {}) {
   }
   toc.className = 'glasswing-toc';
   toc.setAttribute('data-theme-region', 'toc');
+  toc.setAttribute('show-top', 'false');
+  toc.setAttribute('toc-title', '');
   if (toc.parentElement !== tocHost) tocHost.appendChild(toc);
   setFooterTocEmpty(!toc.innerHTML.trim());
 
@@ -699,6 +696,9 @@ export const effects = {
     if (!toc) return false;
     const hasToc = !!String(params.tocHtml || '').trim();
     setFooterTocEmpty(!hasToc);
+    toc.setAttribute('show-top', 'false');
+    toc.setAttribute('toc-title', '');
+    params = { ...params, articleTitle: '' };
     if (typeof toc.renderToc === 'function') {
       toc.renderToc(params);
       return true;
