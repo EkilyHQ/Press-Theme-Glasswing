@@ -13,7 +13,7 @@
       "type": "builtin"
     },
     "release": {
-      "tag": "v3.4.0"
+      "tag": "v3.4.1"
     },
     "files": [
       "base.css",
