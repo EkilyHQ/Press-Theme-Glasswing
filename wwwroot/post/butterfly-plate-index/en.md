@@ -16,6 +16,8 @@ image: "https://commons.wikimedia.org/wiki/Special:FilePath/NIE_1905_Butterflies
 
 The plate is already a layout: numbered figures, explanatory density, and a quiet demand that the reader move between image and caption.
 
+What makes it contemporary is not the subject but the navigation problem. The eye wants to compare, return, verify, and then wander. That is exactly the behavior a review archive should support.
+
 Glasswing's compact list view makes this kind of archival note useful after it leaves the front page. It does not need oversized cards forever; it needs a strong first appearance and a disciplined archive.
 
 The best diagrams are not simplified. They are generous about where the complexity sits.

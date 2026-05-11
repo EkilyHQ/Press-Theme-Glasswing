@@ -16,9 +16,11 @@ image: "https://commons.wikimedia.org/wiki/Special:FilePath/Monet_-_Impression%2
 
 Glasswing wants one strong lead story, so I gave it a small sun. The painting is public-domain, but its editorial behavior still feels contemporary: a single mark, a low horizon, enough haze to make the headline work.
 
-This demo article tests the hero slot, secondary story rhythm, and dense rows below the fold. The theme should make the front page feel curated rather than merely sorted.
+The front page test was not whether the image is famous. It was whether the layout can make a familiar image feel newly selected. The answer depends on proportion: one large story, two secondary pieces, then an archive that does not collapse into clutter.
 
-A magazine front page is a promise about proportion. One story gets the window; the others get the street.
+A magazine front page is a promise about attention. One story gets the window; the others get the street. If the window is too loud, nobody trusts the street.
+
+Editorial note: keep the headline short, let the excerpt carry the argument, and never make the source note compete with the deck.
 
 ## Source Note
 Primary image/source: [Claude Monet, Impression, Sunrise on Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg). Public domain; the work is identified by Commons as free of known copyright restrictions.

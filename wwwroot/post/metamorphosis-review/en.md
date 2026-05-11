@@ -16,6 +16,8 @@ image: "https://commons.wikimedia.org/wiki/Special:FilePath/Metamorphosis_of_a_B
 
 The illustration works like a four-act review: leaf, larva, chrysalis, wing. The page does not need to invent drama because the sequence already has it.
 
+The strongest decision is separation. Each stage remains legible because the drawing refuses to merge transformation into a blur. Contemporary layouts could learn from that patience.
+
 This post checks whether Glasswing can hold historical material without becoming nostalgic. The palette is warm, the rules are sharp, and the article view keeps the image close to the argument.
 
 Transformation is easiest to understand when the stages are allowed to remain separate.
