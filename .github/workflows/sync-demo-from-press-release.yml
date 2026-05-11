@@ -106,7 +106,7 @@ jobs:
             local source_repo="$1"
             local target_repo="$2"
             local keys
-            keys="$(git -C "${source_repo}" config --local --name-only --get-regexp '^http\\..*\\.extraheader$' || true)"
+            keys="$(git -C "${source_repo}" config --local --name-only --get-regexp '^http\..*\.extraheader$' || true)"
             [[ -n "${keys}" ]] || return 0
 
             while IFS= read -r key; do
