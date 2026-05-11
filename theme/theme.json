@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/theme.json",
   "name": "Glasswing",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "contractVersion": 1,
   "styles": [
     "theme.css"
