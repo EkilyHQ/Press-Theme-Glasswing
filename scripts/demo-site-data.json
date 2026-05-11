@@ -1,0 +1,84 @@
+{
+  "slug": "glasswing",
+  "label": "Glasswing",
+  "repo": "EkilyHQ/Press-Theme-Glasswing",
+  "siteTitle": "Jun Ives Review",
+  "siteDescription": "A fictional public-domain culture review for showing Glasswing's editorial front page.",
+  "author": "Jun Ives",
+  "aboutTitle": "About Jun Ives Review",
+  "about": "Jun Ives Review is a fictional one-person magazine about images that feel light on the page: old paintings, diagram plates, specimen drawings, and small archival surprises. The writing is invented for the demo. Source material is public-domain or CC0-compatible and cited in every article.",
+  "posts": [
+    {
+      "id": "front-page-at-sunrise",
+      "title": "A Front Page at Sunrise",
+      "date": "2026-05-06",
+      "tags": ["editorial", "painting", "lead-story"],
+      "excerpt": "A lead story on why a single orange mark can carry a whole publication front page.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Monet_-_Impression%2C_Sunrise.jpg",
+      "source": {
+        "label": "Claude Monet, Impression, Sunrise on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg",
+        "license": "Public domain; the work is identified by Commons as free of known copyright restrictions"
+      },
+      "body": [
+        "Glasswing wants one strong lead story, so I gave it a small sun. The painting is public-domain, but its editorial behavior still feels contemporary: a single mark, a low horizon, enough haze to make the headline work.",
+        "This demo article tests the hero slot, secondary story rhythm, and dense rows below the fold. The theme should make the front page feel curated rather than merely sorted.",
+        "A magazine front page is a promise about proportion. One story gets the window; the others get the street."
+      ]
+    },
+    {
+      "id": "butterfly-plate-index",
+      "title": "Indexing a Butterfly Plate",
+      "date": "2026-04-19",
+      "tags": ["diagram", "natural-history", "index"],
+      "excerpt": "A compact review of a 1905 butterfly diagram as an editorial layout object.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/NIE_1905_Butterflies_and_Moths.jpg",
+      "source": {
+        "label": "NIE 1905 Butterflies and Moths on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:NIE_1905_Butterflies_and_Moths.jpg",
+        "license": "Public domain in the United States; published before January 1, 1931"
+      },
+      "body": [
+        "The plate is already a layout: numbered figures, explanatory density, and a quiet demand that the reader move between image and caption.",
+        "Glasswing's compact list view makes this kind of archival note useful after it leaves the front page. It does not need oversized cards forever; it needs a strong first appearance and a disciplined archive.",
+        "The best diagrams are not simplified. They are generous about where the complexity sits."
+      ]
+    },
+    {
+      "id": "under-glass-column",
+      "title": "The Under-Glass Column",
+      "date": "2026-03-30",
+      "tags": ["specimen", "column", "drawing"],
+      "excerpt": "A fictional column about containment, captions, and the drama of small drawings.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Butterfly_Under_Glass_Drawing.jpg",
+      "source": {
+        "label": "Butterfly Under Glass Drawing on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Butterfly_Under_Glass_Drawing.jpg",
+        "license": "Public domain in the United States; published before January 1, 1931"
+      },
+      "body": [
+        "The drawing is tiny, almost too modest for a modern screen, which makes it a useful editorial test. Can the theme make small archival art feel selected rather than lost?",
+        "Glasswing's strong typography helps. The headline can carry the first look, and the source note can stay factual without stealing the piece.",
+        "A column is also a glass case: narrow, intentional, and better when it has one object to protect."
+      ]
+    },
+    {
+      "id": "metamorphosis-review",
+      "title": "Reviewing a Metamorphosis",
+      "date": "2026-02-22",
+      "tags": ["review", "illustration", "archive"],
+      "excerpt": "A review-style note about transformation as an editorial sequence.",
+      "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Metamorphosis_of_a_Butterfly_Merrian_1705.jpg",
+      "source": {
+        "label": "Metamorphosis of a Butterfly, Merian 1705 on Wikimedia Commons",
+        "page": "https://commons.wikimedia.org/wiki/File:Metamorphosis_of_a_Butterfly_Merrian_1705.jpg",
+        "license": "Public domain; the artist died in 1717 and the work is out of copyright"
+      },
+      "body": [
+        "The illustration works like a four-act review: leaf, larva, chrysalis, wing. The page does not need to invent drama because the sequence already has it.",
+        "This post checks whether Glasswing can hold historical material without becoming nostalgic. The palette is warm, the rules are sharp, and the article view keeps the image close to the argument.",
+        "Transformation is easiest to understand when the stages are allowed to remain separate."
+      ]
+    }
+  ]
+}
