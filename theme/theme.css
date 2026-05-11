@@ -904,7 +904,6 @@ a {
 .glasswing-toc ul ul {
   margin: .2rem 0 .2rem .85rem;
   padding-left: .85rem;
-  border-left: 1px solid #2f2d29;
 }
 
 .glasswing-toc li {
@@ -1046,6 +1045,7 @@ a {
 }
 
 .glasswing-footer__links h2,
+.glasswing-footer__toc h2,
 .glasswing-footer press-theme-controls .section-title {
   margin: 0 0 .35rem;
   color: #f6f1e8;

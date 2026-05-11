@@ -459,13 +459,22 @@ function ensureFooterStructure(footer) {
       <span data-glasswing-footer-tagline>Glasswing for Press</span>
     </div>
     <nav class="glasswing-footer__links" aria-label="Site links" data-glasswing-site-links></nav>
-    <div class="glasswing-footer__toc is-empty" data-glasswing-footer-toc></div>
+    <div class="glasswing-footer__toc is-empty" data-glasswing-footer-toc>
+      <h2 data-glasswing-footer-toc-title>Table of contents</h2>
+    </div>
     <div class="glasswing-footer__tools" data-theme-region="tools" id="toolsPanel"></div>
     <div class="glasswing-footer__meta">
       <button type="button" data-glasswing-top>Top</button>
       <span data-glasswing-year></span>
     </div>`;
     footer.appendChild(inner);
+  }
+  const tocWrap = footer.querySelector('[data-glasswing-footer-toc]');
+  if (tocWrap && !tocWrap.querySelector('[data-glasswing-footer-toc-title]')) {
+    const heading = doc.createElement('h2');
+    heading.setAttribute('data-glasswing-footer-toc-title', '');
+    heading.textContent = 'Table of contents';
+    tocWrap.insertBefore(heading, tocWrap.firstChild || null);
   }
   const tools = footer.querySelector('[data-theme-region="tools"]');
   if (tools) {
