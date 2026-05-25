@@ -4,11 +4,12 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 workflow=".github/workflows/sync-demo-from-press-release.yml"
+pages_workflow=".github/workflows/pages.yml"
 theme_release_workflow=".github/workflows/theme-release.yml"
 script="scripts/sync-demo-from-press-release.sh"
 data="scripts/demo-site-data.json"
 
-for path in "${workflow}" "${theme_release_workflow}" "${script}" "${data}"; do
+for path in "${workflow}" "${pages_workflow}" "${theme_release_workflow}" "${script}" "${data}"; do
   if [[ ! -f "${path}" ]]; then
     echo "expected ${path} to exist" >&2
     exit 1
@@ -40,28 +41,80 @@ if ! grep -F 'git push origin "HEAD:${DEMO_BRANCH}"' "${workflow}" >/dev/null; t
   exit 1
 fi
 
-if ! grep -F 'copy_checkout_git_auth' "${workflow}" >/dev/null; then
-  echo "demo sync workflow must copy checkout git auth when bootstrapping demo" >&2
+if ! grep -F 'GITHUB_TOKEN: ${{ github.token }}' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must expose GITHUB_TOKEN when bootstrapping demo branch auth" >&2
   exit 1
 fi
 
-if ! grep -F '.extraheader' "${workflow}" >/dev/null; then
-  echo "demo sync workflow must preserve checkout auth extraheaders" >&2
+if ! grep -F 'https://x-access-token:%s@github.com/%s.git' "${workflow}" >/dev/null || ! grep -F 'GITHUB_REPOSITORY' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must bootstrap missing demo branch remotes with token-based auth" >&2
   exit 1
 fi
 
-if ! grep -F "get-regexp '^http\\..*\\.extraheader$'" "${workflow}" >/dev/null; then
-  echo "demo sync workflow must match checkout auth extraheaders with a valid git-config regex" >&2
-  exit 1
-fi
-
-if grep -F "get-regexp '^http\\\\..*\\\\.extraheader$'" "${workflow}" >/dev/null; then
-  echo "demo sync workflow must not double-escape the checkout auth extraheader regex" >&2
+if grep -F 'copy_checkout_git_auth' "${workflow}" >/dev/null || grep -F '.extraheader' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must not depend on checkout v4 extraheader auth copying" >&2
   exit 1
 fi
 
 if grep -F 'pull-requests: write' "${workflow}" >/dev/null; then
   echo "demo sync workflow must not request pull request permissions" >&2
+  exit 1
+fi
+
+if ! grep -F 'workflow_run:' "${pages_workflow}" >/dev/null || ! grep -F -- '- Sync Demo From Press Release' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must deploy after successful demo sync runs" >&2
+  exit 1
+fi
+
+if ! grep -F 'branches:' "${pages_workflow}" >/dev/null || ! grep -F -- '- main' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow_run trigger must be restricted to main-branch sync runs" >&2
+  exit 1
+fi
+
+if ! grep -F 'workflow_dispatch:' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must support manual deploys" >&2
+  exit 1
+fi
+
+if ! grep -F 'pages: write' "${pages_workflow}" >/dev/null || ! grep -F 'id-token: write' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must request Pages artifact deployment permissions" >&2
+  exit 1
+fi
+
+if ! grep -F 'ref: demo' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must deploy the demo branch" >&2
+  exit 1
+fi
+
+for needle in \
+  'actions/checkout@v6' \
+  'actions/configure-pages@v6' \
+  'actions/upload-pages-artifact@v5' \
+  'actions/deploy-pages@v5'
+do
+  if ! grep -F "${needle}" "${pages_workflow}" >/dev/null; then
+    echo "demo Pages workflow must include ${needle}" >&2
+    exit 1
+  fi
+done
+
+if grep -E 'actions/(checkout@v4|configure-pages@v5|deploy-pages@v4|upload-artifact@v4|upload-pages-artifact@v3)' "${workflow}" "${pages_workflow}" "${theme_release_workflow}" >/dev/null; then
+  echo "theme workflows must not pin known Node 20-backed GitHub actions" >&2
+  exit 1
+fi
+
+if ! grep -F 'git ls-files -z -- .nojekyll index.html index_editor.html index_editor_preview.html site.yaml assets wwwroot' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must upload the generated demo site surface" >&2
+  exit 1
+fi
+
+if ! grep -F 'path: dist/pages' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must deploy the prepared Pages artifact directory" >&2
+  exit 1
+fi
+
+if ! grep -F 'include-hidden-files: true' "${pages_workflow}" >/dev/null; then
+  echo "demo Pages workflow must include dotfiles such as .nojekyll in the Pages artifact" >&2
   exit 1
 fi
 
