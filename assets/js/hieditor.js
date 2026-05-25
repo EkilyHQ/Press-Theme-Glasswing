@@ -1,4 +1,4 @@
-import { simpleHighlight } from './syntax-highlight.js?v=press-system-v3.4.56';
+import { simpleHighlight } from './syntax-highlight.js?v=press-system-v3.4.57';
 
 function escapeHtmlInline(text) {
   if (!text) return '';

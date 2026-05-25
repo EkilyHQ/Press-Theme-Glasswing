@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.56';
+} from './theme.js?v=press-system-v3.4.57';
 import {
   t,
   withLangParam,
@@ -13,14 +13,14 @@ import {
   ensureLanguageBundle,
   getAvailableLangs,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.56';
+} from './i18n.js?v=press-system-v3.4.57';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.56';
+} from './theme-regions.js?v=press-system-v3.4.57';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -35,8 +35,8 @@ const defaultThemeLayoutState = createThemeLayoutState();
 
 const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = 1;
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.56';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.56';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.57';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.57';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',

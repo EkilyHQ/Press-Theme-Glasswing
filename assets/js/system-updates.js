@@ -1,7 +1,7 @@
-import { mdParse } from './markdown.js?v=press-system-v3.4.56';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.56';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.56';
-import { t } from './i18n.js?v=press-system-v3.4.56';
+import { mdParse } from './markdown.js?v=press-system-v3.4.57';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.57';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.57';
+import { t } from './i18n.js?v=press-system-v3.4.57';
 import {
   compareSemver,
   isUpgradeAllowed,
@@ -10,8 +10,9 @@ import {
   normalizeSemver,
   normalizeUpgradeFrom,
   semverToTag
-} from './press-version.js?v=press-system-v3.4.56';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.56';
+} from './press-version.js?v=press-system-v3.4.57';
+import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.57';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.57';
 
 const TEXT_EXTENSIONS = new Set([
   '.js', '.mjs', '.cjs', '.ts', '.json', '.yaml', '.yml', '.md', '.txt', '.html', '.css', '.svg', '.xml',
@@ -23,8 +24,6 @@ export const SYSTEM_UPDATE_ASSET_NAME_PATTERN = /^press-system-v\d+\.\d+\.\d+\.z
 
 const RELEASE_API_URL = 'https://api.github.com/repos/EkilyHQ/Press/releases/latest';
 const RELEASE_MANIFEST_URL = 'https://raw.githubusercontent.com/EkilyHQ/Press/release-artifacts/system-release.json';
-const SYSTEM_UPDATE_ALLOWED_PATH_PATTERN = /^(?:index\.html|index_editor\.html|index_editor_preview\.html|assets\/(?:press-system\.json|press-runtime-manifest\.json|main\.js|js\/.+|i18n\/.+|schema\/.+|themes\/native\/.+))$/;
-const SYSTEM_UPDATE_BLOCKED_PATH_PATTERN = /^(?:\.git\/|\.github\/|wwwroot\/|site\.ya?ml$|site\.local\.ya?ml$|CNAME$|robots\.txt$|sitemap\.xml$|README(?:\.md)?$|BRANCHING\.md$|scripts\/|assets\/(?:avatar\.png|avatar\.jpe?g|hero\.jpeg)$)/i;
 
 function createSystemUpdateElements() {
   return {
@@ -279,7 +278,7 @@ function stripCommonArchiveRoot(entries) {
 
 export function isSystemUpdatePath(path) {
   const clean = String(path || '').replace(/\\+/g, '/').replace(/^\/+/, '');
-  return SYSTEM_UPDATE_ALLOWED_PATH_PATTERN.test(clean) && !SYSTEM_UPDATE_BLOCKED_PATH_PATTERN.test(clean);
+  return isPressSystemUpdatePath(clean);
 }
 
 export function collectSystemUpdateArchiveEntries(buffer) {
