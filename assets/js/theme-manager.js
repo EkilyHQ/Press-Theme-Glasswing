@@ -1,7 +1,7 @@
-import { t } from './i18n.js?v=press-system-v3.4.53';
-import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.53';
-import { getProductStateThemeEntry, loadProductState } from './product-state.js?v=press-system-v3.4.53';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.53';
+import { t } from './i18n.js?v=press-system-v3.4.54';
+import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.54';
+import { getProductStateThemeEntry, loadProductState } from './product-state.js?v=press-system-v3.4.54';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.54';
 
 const THEME_ROOT = 'assets/themes';
 const REQUIRED_CONTRACT_VERSION = 1;
