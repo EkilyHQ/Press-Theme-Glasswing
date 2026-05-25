@@ -4,7 +4,7 @@ import {
   hasMarkdownDraftContent,
   isEncryptedMarkdownDraftEntry,
   normalizeMarkdownContent
-} from './composer-markdown-state.js?v=press-system-v3.4.50';
+} from './composer-markdown-state.js?v=press-system-v3.4.51';
 
 const noop = () => {};
 
@@ -45,9 +45,9 @@ export function createComposerMarkdownDraftController(options = {}) {
   const updateUnsyncedSummary = typeof options.updateUnsyncedSummary === 'function' ? options.updateUnsyncedSummary : noop;
   const showToast = typeof options.showToast === 'function' ? options.showToast : noop;
   const t = typeof options.t === 'function' ? options.t : (key) => String(key || '');
-  const consoleRef = options.consoleRef || console;
-  const setTimeoutRef = typeof options.setTimeoutRef === 'function' ? options.setTimeoutRef : setTimeout;
-  const clearTimeoutRef = typeof options.clearTimeoutRef === 'function' ? options.clearTimeoutRef : clearTimeout;
+  const consoleRef = options.consoleRef || null;
+  const setTimeoutRef = typeof options.setTimeoutRef === 'function' ? options.setTimeoutRef : () => null;
+  const clearTimeoutRef = typeof options.clearTimeoutRef === 'function' ? options.clearTimeoutRef : noop;
   const now = typeof options.now === 'function' ? options.now : () => Date.now();
 
   function readDraftStore() {

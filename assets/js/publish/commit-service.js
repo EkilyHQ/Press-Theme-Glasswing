@@ -1,15 +1,15 @@
 import {
   createConnectPublishCommit,
   ensureConnectPublishGrant as authorizeConnectPublishGrant
-} from './transports/connect-transport.js?v=press-system-v3.4.50';
+} from './transports/connect-transport.js?v=press-system-v3.4.51';
 
 export async function ensurePublishGrant({
   connect,
   repo,
   getCachedGrant,
   setCachedGrant,
-  windowRef = window,
-  documentRef = document,
+  windowRef = null,
+  documentRef = null,
   translate = (key) => key
 } = {}) {
   return authorizeConnectPublishGrant({
@@ -31,8 +31,9 @@ export async function publishCommit({
   contentRoot,
   getCachedGrant,
   setCachedGrant,
-  windowRef = window,
-  documentRef = document,
+  windowRef = null,
+  documentRef = null,
+  fetchImpl = null,
   translate = (key) => key,
   onStatus
 } = {}) {
@@ -62,17 +63,19 @@ export async function publishCommit({
       files,
       grant,
       contentRoot,
+      fetchImpl,
       translate
     });
   }
 
-  const { createFineGrainedTokenCommit } = await import('./transports/github-pat-transport.js?v=press-system-v3.4.50');
+  const { createFineGrainedTokenCommit } = await import('./transports/github-pat-transport.js?v=press-system-v3.4.51');
   return createFineGrainedTokenCommit(transport && transport.token, {
     owner,
     name,
     branch,
     headline,
     files,
+    fetchImpl,
     onStatus
   });
 }

@@ -1,5 +1,5 @@
-import { computeReadTime, extractExcerpt, parseFrontMatter } from './content.js?v=press-system-v3.4.50';
-import { parseEncryptedMarkdownEnvelope } from './encrypted-content.js?v=press-system-v3.4.50';
+import { computeReadTime, extractExcerpt, parseFrontMatter } from './content.js?v=press-system-v3.4.51';
+import { parseEncryptedMarkdownEnvelope } from './encrypted-content.js?v=press-system-v3.4.51';
 
 const INDEX_PUBLISH_METADATA_KEYS = new Set([
   'location',
@@ -60,7 +60,7 @@ export function createIndexPublishMetadataEnricher({
   getLockedEncryptedMarkdownDraft = () => '',
   getMarkdownProtectionState = () => ({}),
   getContentRootSafe = () => 'wwwroot',
-  fetchImpl = fetch
+  fetchImpl = null
 } = {}) {
   function isIndexVariantPublishComplete(value) {
     if (!isIndexMetadataObject(value)) return false;
@@ -221,6 +221,7 @@ export function createIndexPublishMetadataEnricher({
     }
     const root = safeString(contentRoot || getContentRootSafe() || 'wwwroot').replace(/\\+/g, '/').replace(/\/?$/, '');
     const url = `${root || 'wwwroot'}/${normalized}`;
+    if (typeof fetchImpl !== 'function') return null;
     try {
       const response = await fetchImpl(url, { cache: 'no-store' });
       if (!response || !response.ok) return null;
