@@ -1,4 +1,4 @@
-import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.59';
+import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.60';
 
 export const CARET_POINT_MEASURE_LIMIT = 12000;
 

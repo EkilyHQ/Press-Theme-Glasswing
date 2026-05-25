@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "type": "press-runtime-assets",
-  "version": "3.4.59",
-  "tag": "v3.4.59",
-  "cacheKey": "press-system-v3.4.59",
+  "version": "3.4.60",
+  "tag": "v3.4.60",
+  "cacheKey": "press-system-v3.4.60",
   "strategy": "query-param",
   "entries": [
     {
@@ -14,7 +14,7 @@
     {
       "path": "assets/i18n/cht-hk.js",
       "size": 4630,
-      "sha256": "3c9267ed9425fb99799dbc3b6494721be7914a8c3a96a1183cdb1375fd0e5637"
+      "sha256": "f4eecddd24e663f01d05ade0016fd578e417514bf0ca0ecce286cb925469e1b7"
     },
     {
       "path": "assets/i18n/cht-tw.js",
@@ -34,7 +34,7 @@
     {
       "path": "assets/i18n/languages.json",
       "size": 487,
-      "sha256": "aa30f3b540154f48078e7dbd0c127e325ff3853b3eda51dd3b9cbf075940bc40"
+      "sha256": "3d8a50ba48689765ae43c53b2156ca72899431d8ec1cf26adaedca0164bb779d"
     },
     {
       "path": "assets/js/annotate.js",
@@ -49,12 +49,12 @@
     {
       "path": "assets/js/components.js",
       "size": 38400,
-      "sha256": "d1107386d63dc8389b272ee127e6912a7bf379ee34a3a12ca46c2d5d4f470450"
+      "sha256": "244c306ccbda587adb820e455983a3a90a10b1fb696e6976a86865f047c0363e"
     },
     {
       "path": "assets/js/composer-bootstrap.js",
       "size": 13845,
-      "sha256": "b092391137854d99effc39e89c137758421cbd090cf8805709ecb982f5732090"
+      "sha256": "002e00bfd2d578ec4154056bbf129dcf35670bc4c4d3f0c961f878f0bd2bafa8"
     },
     {
       "path": "assets/js/composer-content-mutations.js",
@@ -64,7 +64,7 @@
     {
       "path": "assets/js/composer-content-staging.js",
       "size": 15273,
-      "sha256": "e001d8f7e7405e77eb83995352b8d39b5c3c0abe2db899c3751f67d9e504b452"
+      "sha256": "38d59cd4cab23aad22251e4f79d988752b993ebe72788ad495674ac325aa8858"
     },
     {
       "path": "assets/js/composer-dialogs.js",
@@ -84,7 +84,7 @@
     {
       "path": "assets/js/composer-editor-shell.js",
       "size": 21289,
-      "sha256": "fa141f2a287365059ece8731b4cdf8e018024906f8e2a7bce66eb779a6ab944f"
+      "sha256": "cda50b429218ea1f62a957bd449e30193d4ddb38c1c15fc19a9d11dee7e2404a"
     },
     {
       "path": "assets/js/composer-file-panel-controller.js",
@@ -94,7 +94,7 @@
     {
       "path": "assets/js/composer-index-publish-metadata.js",
       "size": 12445,
-      "sha256": "fed00851ec4b438f325e021e11764e3312f57c830a07342f507bc8e9f226b1d5"
+      "sha256": "d03b345d037a67d2c7c5847f5179f50386ae9b65f2c4e80836d352b9f24d2d82"
     },
     {
       "path": "assets/js/composer-index-tabs-model.js",
@@ -119,12 +119,12 @@
     {
       "path": "assets/js/composer-markdown-assets.js",
       "size": 26908,
-      "sha256": "34885a6d7a2559d91c99d7344b3c9f96521bdfbc9c6e113b24e62959a53791a0"
+      "sha256": "e0be4fc518242b41c4b08118c6c5d241709402ce3140d9b829064b9fbb75d856"
     },
     {
       "path": "assets/js/composer-markdown-drafts.js",
       "size": 15687,
-      "sha256": "d0821bb613702f16e8ebdb1d4fb71421a754c42d48a62eddf973032fbe41bc91"
+      "sha256": "0b09d4360d4ed044eb57280d96e71e013363d076d0949a5ed210d401f9847c69"
     },
     {
       "path": "assets/js/composer-markdown-loader.js",
@@ -144,7 +144,7 @@
     {
       "path": "assets/js/composer-markdown-state.js",
       "size": 3442,
-      "sha256": "5c1a4dcf092a0159dc721b073260811991abff803f560f8154624098b6bda3de"
+      "sha256": "5f6dc42116c5f13ca9f5a3e4174c72597aec716fccd4ef391ac0cf36f5578748"
     },
     {
       "path": "assets/js/composer-markdown-workspace.js",
@@ -174,27 +174,27 @@
     {
       "path": "assets/js/composer-post-commit-state.js",
       "size": 8207,
-      "sha256": "69cb911e258bccd633758b8cef4dc3dce4fee3a61c0e913ebb4d3a6c99582f05"
+      "sha256": "377dac2185dcf0192b73f1e3df868d8e79a228dade8f24e20f40c4749a75da29"
     },
     {
       "path": "assets/js/composer-publish-flow.js",
       "size": 6707,
-      "sha256": "d669c42370d61527f6819c591adb1580309c8730e9e0a800b5b3d8851377ec13"
+      "sha256": "dcd747d43d6a426645f35d9ee3c7274d969aa9e9bb4e824d42935b1b94ff55fe"
     },
     {
       "path": "assets/js/composer-publish-service.js",
       "size": 6283,
-      "sha256": "7cae6f8a085d57abcc0328e6c6222b650231bfef63c2f896f5f33adce42b4c5d"
+      "sha256": "abe5c50241983f281de35abd7953cbca0bab9451f8cf7818de8bc4cc1db6a61d"
     },
     {
       "path": "assets/js/composer-publish-settings-ui.js",
       "size": 16123,
-      "sha256": "cde62b467ca7af07c15e73a688ab707935f8317f69e4f092d038557982b8b0eb"
+      "sha256": "b05e119cae30a2f43730d4db44b8add9f7b0fc8ce357fd86fb15ba4b8a5a28c9"
     },
     {
       "path": "assets/js/composer-publish-state-service.js",
       "size": 9506,
-      "sha256": "984199f5ec66ce2751ed8cf20d9f3b9c63392f863abd6f557e81689058f32d4e"
+      "sha256": "ec50636a82592d355b575f14bec90314b41e4700dab2c1282e4bd3688b20b15e"
     },
     {
       "path": "assets/js/composer-publish-summary.js",
@@ -214,12 +214,12 @@
     {
       "path": "assets/js/composer-runtime.js",
       "size": 7585,
-      "sha256": "2609ee1d749fd424943d209c9f6cfbffd71c0e834855e6b6f453414e7b51f209"
+      "sha256": "0c5d78cec3abb11d58003879d9542cf28764125cfdd314c0f700bf9cdfa93655"
     },
     {
       "path": "assets/js/composer-seo-staging.js",
       "size": 17082,
-      "sha256": "5363c6056891ceca134982daedcc4a58807e6747b4aa65bf0f5656f9de9f1840"
+      "sha256": "e959cb46d584e2fce46c72e631dc5ac154db9afb77cbf241295b703f1cb7b113"
     },
     {
       "path": "assets/js/composer-service-registry.js",
@@ -234,7 +234,7 @@
     {
       "path": "assets/js/composer-site-config.js",
       "size": 6696,
-      "sha256": "6498d65f07c27783a815e19ef081dd86217fb305735b22f12fd0b4bab539acad"
+      "sha256": "462b5d5d833dd8a9a2bb56b9b30a99f97f802b090c9c348be1e3ced4aa24f041"
     },
     {
       "path": "assets/js/composer-site-model.js",
@@ -254,7 +254,7 @@
     {
       "path": "assets/js/composer-sync-commit-controller.js",
       "size": 3594,
-      "sha256": "34dc030f19050b9fa1bb6935f7af12df2d751b2fb5a7eb1246de3b40e5e1bfd1"
+      "sha256": "39512df3538bb1a6f56de172d9836f305cfd08c80a55dcaac3fb3fcce681f9a3"
     },
     {
       "path": "assets/js/composer-sync-overlay.js",
@@ -274,7 +274,7 @@
     {
       "path": "assets/js/composer-system-theme-bridge.js",
       "size": 3894,
-      "sha256": "31418dc73319628f32912e59ebf15c9a0f516fd06e9d080982f1e6dd6cb8734c"
+      "sha256": "d0427a423c04dda5bbbca392a4829583ad74be1713113126e9480d74d925b220"
     },
     {
       "path": "assets/js/composer-ui-motion.js",
@@ -304,22 +304,22 @@
     {
       "path": "assets/js/composer.js",
       "size": 81018,
-      "sha256": "c09894623a0f2ef21c77409ac3b8264f97c23c6b0da93c6075a8100f1052ee77"
+      "sha256": "2e15ffcd126dadbfb2f83e1677079b5c5a939e613f4f16326c75901f3c2b44b3"
     },
     {
       "path": "assets/js/content-model.js",
       "size": 7327,
-      "sha256": "51419a82c001b47113b827ee8640917e59cc59c558234972618292a413e20c76"
+      "sha256": "3d2deeca2c9732e7f67491da3d4024a464e0e2b36510f472197b5bb932ba2987"
     },
     {
       "path": "assets/js/content.js",
       "size": 3704,
-      "sha256": "53f88014afb9cf7529547cd4e45f7dc22b382759ffb2381ad7e16e002ddeaf34"
+      "sha256": "14c0e893fad983bca618b2597a6c67101144da257f7861c627bdbdfde15beacb"
     },
     {
       "path": "assets/js/dom-utils.js",
       "size": 897,
-      "sha256": "15f2db6f51d1fd962df29e0d57dcc9cf58842d75e9e95d26da742d8b3ecf63bc"
+      "sha256": "f1910862472dd59b04cc3150c724b40d5b4d2a0b5f256b7a93682a29708e036e"
     },
     {
       "path": "assets/js/editor-app-kernel.js",
@@ -349,12 +349,12 @@
     {
       "path": "assets/js/editor-blocks-caret-session.js",
       "size": 19555,
-      "sha256": "0c9c319021b64facbcc4b79e13b6852463ba5075bf02574e4cafea0eea4299e0"
+      "sha256": "9c7b1ea2d1ee447b3d8c05eaaf2b958a3fc9bcf6364000bf072a71c55d012736"
     },
     {
       "path": "assets/js/editor-blocks-code-session.js",
       "size": 10213,
-      "sha256": "fd14417a8a8f9538f3d920d7ab8088a529d9fe722073ab097f24a1c26851cd74"
+      "sha256": "dc3173770fbaa46d28ab906aa46e57de6539dc54c60619fbf06770d62149c8dd"
     },
     {
       "path": "assets/js/editor-blocks-command-session.js",
@@ -434,7 +434,7 @@
     {
       "path": "assets/js/editor-blocks-runtime.js",
       "size": 2016,
-      "sha256": "145585d75f540bdfa3aaa7cd8e7c17123e801d976e1891ad1839965a34c4f46a"
+      "sha256": "fa4fa5c27a52c690014a47ad64e349290a7ffb516dfd40efe24492f28f18e984"
     },
     {
       "path": "assets/js/editor-blocks-selection-session.js",
@@ -464,17 +464,17 @@
     {
       "path": "assets/js/editor-blocks.js",
       "size": 55356,
-      "sha256": "f81bea979ac703ea5e860fff2a5bea1809d2e1a697c43fba6474154937f0a25b"
+      "sha256": "78ca53ed77988d8563b646f7374749732a4e4592fdcce72dc68f78db06f5efaf"
     },
     {
       "path": "assets/js/editor-boot-runtime.js",
       "size": 1864,
-      "sha256": "bdec278ab8d1c0f9c66daa3fdebbf37fb36a397911144e603d837f80fa7d9612"
+      "sha256": "82d67f4f776a4dcf860609b7145eaf7e19b9b9e1d1fe56d8969d11445b19787b"
     },
     {
       "path": "assets/js/editor-boot.js",
       "size": 4120,
-      "sha256": "423337f2ef962b929fea8f3e1a4f2e8461f4ae7897dfb4a18e978969f1b2750e"
+      "sha256": "31069ed5934c1dbd311269a3865b62fcd7b9fe8df5cd8d462bb615baa0bd4946"
     },
     {
       "path": "assets/js/editor-content-tree-controller.js",
@@ -489,7 +489,7 @@
     {
       "path": "assets/js/editor-drafts.js",
       "size": 694,
-      "sha256": "c83b78e2dc41421d24080888f9597fe563c380e0e77b7c6c486efcf995b69a01"
+      "sha256": "aae8f12c8e595f65597096485da4b1ed174514506f2fc79fc7b6d1e2ba4d498e"
     },
     {
       "path": "assets/js/editor-file-tree-ui.js",
@@ -499,12 +499,12 @@
     {
       "path": "assets/js/editor-main-blocks-session.js",
       "size": 9575,
-      "sha256": "a965bb885959f9567586b4a34e2d65159feecb8594bc09224d1d9be9c1a8fae1"
+      "sha256": "70da85205a96c4ad8ea7b2eb671f0b3b974b4164b17cc8db9fc27e28b497b343"
     },
     {
       "path": "assets/js/editor-main-content-service.js",
       "size": 6391,
-      "sha256": "808288cb241b09d4a0b96a73d693236bd26b7ccfd9ccb2bc6dc769a985f56507"
+      "sha256": "d28be9b2da5d1f933c38d1e0d0eaf9499168fe7277c71fc9397313a2b5e585ce"
     },
     {
       "path": "assets/js/editor-main-current-file-session.js",
@@ -524,7 +524,7 @@
     {
       "path": "assets/js/editor-main-image-session.js",
       "size": 18271,
-      "sha256": "2e3f7d21812ef75aa8524e57acddc010f0d6b0348a654631655ed68c3f08cfd9"
+      "sha256": "0b1ece039cd5a75c6ea8e54fc9fd00471d9f3f5356885570ad8ea674871c6461"
     },
     {
       "path": "assets/js/editor-main-language-session.js",
@@ -539,7 +539,7 @@
     {
       "path": "assets/js/editor-main-metadata-panel.js",
       "size": 29552,
-      "sha256": "2f9ee3ffe6ac6e8424522ed7d82c4e8795ac573050eb43fbdecd2fcdfc7ba317"
+      "sha256": "c9a11b6672f60eb48f5bce2b99174c47b995f793f0ef549f32137c1ad13cc288"
     },
     {
       "path": "assets/js/editor-main-preview-session.js",
@@ -549,7 +549,7 @@
     {
       "path": "assets/js/editor-main-runtime.js",
       "size": 6535,
-      "sha256": "7de2c3daa1bf1f010cca27f40b3117241abcefb800974c8c161c4581264aa87a"
+      "sha256": "7f1211120697ead0cd1818926261c5ec14fe4f89ffb1c51e60ed347338ccdeb2"
     },
     {
       "path": "assets/js/editor-main-scroll-session.js",
@@ -579,12 +579,12 @@
     {
       "path": "assets/js/editor-main-workspace-session.js",
       "size": 10173,
-      "sha256": "de8e2ac25bfd5280c19cce79a9389a801252daeccc03a51658a4a98ea02d6c16"
+      "sha256": "7d59903e74e54053d784041332c01d79263cd11830b8e9ebc41e1376ced735c1"
     },
     {
       "path": "assets/js/editor-main.js",
       "size": 20827,
-      "sha256": "c26dada4d588510368d10d65d188fb6b7fa43b6d9653bfbc517239e583da2c6d"
+      "sha256": "8c97a1d23d6db9c134e6958527547f240ca60b91076ae17be592d16a2ac37532"
     },
     {
       "path": "assets/js/editor-markdown-ops.js",
@@ -594,12 +594,12 @@
     {
       "path": "assets/js/editor-preview-app-runtime.js",
       "size": 5887,
-      "sha256": "57859c3fc57ac10fd2b6bc49f63dd052c8c3bbec988b2e32ff8f8aec7c08451c"
+      "sha256": "87c441d023af79c0bbb483bcaebed7ce9a27e28361b5f9b20ff67b18b86af3c0"
     },
     {
       "path": "assets/js/editor-preview-runtime.js",
       "size": 17304,
-      "sha256": "4ab7f6ebe678367a93d43d2b5add8aaf8a33389122d8b0ef9514251ace2ef864"
+      "sha256": "bd854872195467b39ea0655c83147b21d1ac7b4322658393a673b0fdf3dc7b8c"
     },
     {
       "path": "assets/js/editor-session-state.js",
@@ -619,12 +619,12 @@
     {
       "path": "assets/js/encrypted-content.js",
       "size": 9898,
-      "sha256": "9c9ac7da9f53d02bc8ed957a78fd0d3c9e6921fe201dd19648cc1efa20fb2e7c"
+      "sha256": "4d095efe0507add2bd7cfeca15bd2cdd0a1233a18f35090d3bdf7e1ddda238b7"
     },
     {
       "path": "assets/js/errors.js",
       "size": 15487,
-      "sha256": "7387dc7cb0fba7f23362d2b00fe9b16f02d0e13b289c5f5dcfd37e66cce5e417"
+      "sha256": "dc79b3b2398a94a912ae53a330ea37fb3f28eae192abf853b944e9f5402bac52"
     },
     {
       "path": "assets/js/frontmatter-document.js",
@@ -634,27 +634,27 @@
     {
       "path": "assets/js/hieditor.js",
       "size": 42581,
-      "sha256": "2e956c408032f6742b06322c118f201f765dee4e5d3e3b8f2e5d20537d809de3"
+      "sha256": "c708e69fe11d16c8f08a76f4b9f81441c7efa131c9b32f17ff7ae7e2750ef20c"
     },
     {
       "path": "assets/js/i18n.js",
       "size": 48513,
-      "sha256": "65648ba0415c3aca9d311756e37bb9f9ed07dcf8809280c7e92a2effe2cdaa19"
+      "sha256": "18c7e1ae0466b880987c1d1bbfdabef5c7452da24aa445234074126335d73f10"
     },
     {
       "path": "assets/js/lightbox.js",
       "size": 18955,
-      "sha256": "165b83c12b9cf7046d083db2b61ba03e4b9b4bf6f12ffd868955c2e736f82c21"
+      "sha256": "2935e514b30fc44118b28fd98be44a90548eab68b21d1951fc2833b96a86d87a"
     },
     {
       "path": "assets/js/link-cards.js",
       "size": 17616,
-      "sha256": "df41f3792ea80a6a9405932a0cb9434e7cc582ea696a09d211b622eb71f80c32"
+      "sha256": "94a9b32ae15e344c1db0c10811b2e18e6ed32d5a7855e2298492ed5597795492"
     },
     {
       "path": "assets/js/markdown.js",
       "size": 24155,
-      "sha256": "d73614dca4bbdb112dd192a055be7fe3d8f218818639c36105f1d6ec62ae02fe"
+      "sha256": "0447598fb8e27ef6efe384416439543a2dcf3d08772fd7d9a210f8ad1a691fbf"
     },
     {
       "path": "assets/js/masonry.js",
@@ -664,7 +664,7 @@
     {
       "path": "assets/js/math-render.js",
       "size": 5282,
-      "sha256": "350f77345d4421fa2e634c2b848ef63a9c065c7c076621598381d3843c6a14a9"
+      "sha256": "470a8f462816023adffcb0edf97afedec479e97f7fbf66a209d34bbc25a20154"
     },
     {
       "path": "assets/js/post-card-html.js",
@@ -674,17 +674,17 @@
     {
       "path": "assets/js/post-nav.js",
       "size": 1490,
-      "sha256": "11490b76ee623e9d94276c7bc189b801b33f1c5fb7e4533899036dfe00a72f66"
+      "sha256": "8f2f5b39259d612a17494f27eda97a223604bd29e41eaf5062a4506b48b8873b"
     },
     {
       "path": "assets/js/post-render.js",
       "size": 11782,
-      "sha256": "1a6af64b8fca0ce8aeba22a29b33f1e0fe400c9841b2ffd82fb4d136fd7ff5e1"
+      "sha256": "bdae4b9274f6707625bd87a423a0a8ef36fc2ed335722ad6b9a2e27058690f67"
     },
     {
       "path": "assets/js/press-system-surface.mjs",
-      "size": 2619,
-      "sha256": "ff57c6fbbdee0b3dfd48151aa830dbe08bffb064a8e94c51f304dc9ffd68296b"
+      "size": 2669,
+      "sha256": "77c6ae0bb579d2dfd7cedd7227bce6b54f5aea927329e702587772c8893fa8ba"
     },
     {
       "path": "assets/js/press-version.js",
@@ -699,12 +699,12 @@
     {
       "path": "assets/js/publish/commit-service.js",
       "size": 2039,
-      "sha256": "382ca5af36a329a4705e3580693915ecf015f9bcbcbf98b1704e31c9bca1507a"
+      "sha256": "df109d68d14c3dd3dd9b5ae6a2a0fe2c3b7c7a5d2c5b3edd7507c2ae47ed9da9"
     },
     {
       "path": "assets/js/publish/propagation-watcher.js",
       "size": 7303,
-      "sha256": "75acf7eff31d9ff661b38e58a4729c597456085c3b35ad5c5c3627ea9b3970f9"
+      "sha256": "ed38c07ce526b51d7388a610ab2eebf5539b757ec3fa89599171f9b5fb8833b9"
     },
     {
       "path": "assets/js/publish/settings-store.js",
@@ -714,7 +714,7 @@
     {
       "path": "assets/js/publish/transports/connect-transport.js",
       "size": 8017,
-      "sha256": "1f891c3f51f830255939ed31fe5ad2f44052c2771b2a58c90dfb917e69e38c86"
+      "sha256": "f9241d33b07f0e3a7bbe1e7d8825b97bed233dab8cb7e777adb9f96f27630397"
     },
     {
       "path": "assets/js/publish/transports/github-pat-transport.js",
@@ -734,37 +734,37 @@
     {
       "path": "assets/js/search.js",
       "size": 1850,
-      "sha256": "5b5e9f22191f6beccceea4c6848f4f5cceebb5d6cb66f87da9db724a3b9a5cea"
+      "sha256": "29ee3adabe998fc59effbd45746b148f2f649846073c51217d76d4064104a789"
     },
     {
       "path": "assets/js/seo.js",
       "size": 30598,
-      "sha256": "a87a85fe4699b1a0e9b2912ad17777f795ee850fb48807c4b64ccc80e5160793"
+      "sha256": "c8e3ccce10f511ac90bc3abfe352e59f7d9df14307978b0e7d48093d35b942ac"
     },
     {
       "path": "assets/js/syntax-highlight.js",
       "size": 22102,
-      "sha256": "e25c6c35ee2fcbdae5695506c65925ba644a0bb953612e3bf0f218e302d71adb"
+      "sha256": "10e0e58bbbe83e4f4d84aa209c5ce8c8c6690df6cc35fedeac1a283dc933c409"
     },
     {
       "path": "assets/js/system-updates.js",
       "size": 33104,
-      "sha256": "943eb7cd64009ceea743872da0abe1bdded3930e7f2f94fa4b45c140d6da3d21"
+      "sha256": "65c23ce4a14a0975eb9826c7938782068b223b6299eae3a0f628c48bc498a8c5"
     },
     {
       "path": "assets/js/tags.js",
       "size": 11122,
-      "sha256": "a2f7c2be182ed60314e76de23e8174940a5f20bf86b556c643c3f245b01cbcae"
+      "sha256": "9f9765e8c8166c9865f24b8f146827dbae3879ed53c26302a02e77f4df5ea78c"
     },
     {
       "path": "assets/js/templates.js",
       "size": 5473,
-      "sha256": "d82df646cc75bae7b30ea0fb14f8ddb21630ffcefdc360ca9c2e7e44518fc2ac"
+      "sha256": "c1f3f14bd61b961a8b4508c26d83740375483b816fd309c3b5aad6db9785c8c9"
     },
     {
       "path": "assets/js/theme-boot.js",
       "size": 1511,
-      "sha256": "9e93eab21ef3865676f37498d39ceb786fd5d255821ff53bed293499b2be5483"
+      "sha256": "08b9e151fc538aafa6de117b68df975540f2ab0606840fe97f15863c0313bcca"
     },
     {
       "path": "assets/js/theme-contract-surface.mjs",
@@ -774,12 +774,12 @@
     {
       "path": "assets/js/theme-layout.js",
       "size": 21994,
-      "sha256": "17a9ef86b817dc1fdbf8a849518a82c6df835bf37e7bf1b6c4b09f7754ff0269"
+      "sha256": "c4e514587e551603283036e984d4e3fa2b40f9634c5088cc14fa7d0711d04306"
     },
     {
       "path": "assets/js/theme-manager.js",
       "size": 58708,
-      "sha256": "27f71d3d669453af44526d4139401eefd52d338d8efbc1f8b09b87f5a7e867c2"
+      "sha256": "6b3e0182dd198f47515fc3c5afe1ef0df959700047f9565664dac70e844ea624"
     },
     {
       "path": "assets/js/theme-regions.js",
@@ -789,12 +789,12 @@
     {
       "path": "assets/js/theme.js",
       "size": 20581,
-      "sha256": "bdb6816593d113a73959f940064fc0eaabc6cdb9dbc56f7637d9341d8c9b9836"
+      "sha256": "16ffcdd8a9232e49c20e9bb69e9defb7c1cc57c4b7f882b016510f7f457b1914"
     },
     {
       "path": "assets/js/toc.js",
       "size": 6352,
-      "sha256": "1005cc9a76d11df5551180cdd174e2d0aa7663c19502decbb55a64737c4f18bb"
+      "sha256": "7fb81e1cc604121f1908fe7925cd0c8e599c7a29d86f33fb55842fcd9d120ef8"
     },
     {
       "path": "assets/js/typography.js",
@@ -804,7 +804,7 @@
     {
       "path": "assets/js/utils.js",
       "size": 7428,
-      "sha256": "71d0fe31831de2eba7b7ad3995357bf4f3f2d3bc8a60c2b8568e89d69084cf41"
+      "sha256": "dcad2c6e539f915d7634b2477899b18f4cce45648b4398b0198949b02ec96d88"
     },
     {
       "path": "assets/js/vendor/fflate.browser.js",
@@ -1134,12 +1134,12 @@
     {
       "path": "assets/main.js",
       "size": 87501,
-      "sha256": "20bcef9984023ec4d6d8a4e804ac536ee23216e1d50a21666dc48d5ed10bd743"
+      "sha256": "8c4c1a7072634bb61a250e90093400f0114232a74718b908fb5578f13aef0959"
     },
     {
       "path": "assets/press-system.json",
       "size": 241,
-      "sha256": "ab6a23cfe39604e1db27738f7ee7c923eb40caf4c972b8e2f75ec5ee03a12f7f"
+      "sha256": "1a8c7075ca867a94ddbfe0fe09bde83fdb37ea412c4fbc056a1fdd8226875c79"
     },
     {
       "path": "assets/schema/index.json",
@@ -1174,7 +1174,7 @@
     {
       "path": "assets/themes/native/modules/interactions.js",
       "size": 102821,
-      "sha256": "7bab7af5ab875019eab71466e215fa7d3cb2e745265f63df99f5bd6ad272686e"
+      "sha256": "2001e54566b78e09d53343e78d101552216127ad577c0a348ec1f7d901213898"
     },
     {
       "path": "assets/themes/native/modules/layout.js",
@@ -1214,7 +1214,7 @@
     {
       "path": "assets/themes/native/theme.css",
       "size": 16617,
-      "sha256": "973e2b1fb46a8ab900e1e5d5277b7106342192a983695233a3024563b98336ff"
+      "sha256": "1e3395fc043aa4ad46765e91a004550e873a30b30b58e9ea994aa9aa7ed754e9"
     },
     {
       "path": "assets/themes/native/theme.json",
@@ -1224,17 +1224,17 @@
     {
       "path": "index.html",
       "size": 2196,
-      "sha256": "f0394593587ae974bc1eed667f18c546e4b6a9bb2fb583c828b60a291dc6218e"
+      "sha256": "fdca2559c2460fe4472c3f03df9287692571670893c8d8ae85eddf367b4eb089"
     },
     {
       "path": "index_editor.html",
       "size": 166169,
-      "sha256": "2fe8666bacfcdcab3e334ee36578876750d02089523f86f6a42d99d7eca5cb94"
+      "sha256": "594bfd1095e872c6d42228af4891db66ad890d07386034177b42e6ddd7f80471"
     },
     {
       "path": "index_editor_preview.html",
       "size": 725,
-      "sha256": "970870f8c2b300091059dbd106b79f3857407bb99701a3e74715c9fd902bb575"
+      "sha256": "440ebdfa6fcebee43e0598882f703b1eb5878bf9394213f6e239c9340e7eb539"
     }
   ],
   "graph": {
@@ -1244,2073 +1244,2073 @@
         "from": "assets/i18n/cht-hk.js",
         "to": "assets/i18n/cht-tw.js",
         "kind": "module-import",
-        "specifier": "./cht-tw.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./cht-tw.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/i18n/languages.json",
         "to": "assets/i18n/chs.js",
         "kind": "language-module",
-        "specifier": "./chs.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./chs.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/i18n/languages.json",
         "to": "assets/i18n/cht-hk.js",
         "kind": "language-module",
-        "specifier": "./cht-hk.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./cht-hk.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/i18n/languages.json",
         "to": "assets/i18n/cht-tw.js",
         "kind": "language-module",
-        "specifier": "./cht-tw.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./cht-tw.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/i18n/languages.json",
         "to": "assets/i18n/en.js",
         "kind": "language-module",
-        "specifier": "./en.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./en.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/i18n/languages.json",
         "to": "assets/i18n/ja.js",
         "kind": "language-module",
-        "specifier": "./ja.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./ja.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/components.js",
         "to": "assets/js/post-card-html.js",
         "kind": "module-import",
-        "specifier": "./post-card-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./post-card-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/components.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/components.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-bootstrap.js",
         "to": "assets/js/editor-app-kernel.js",
         "kind": "module-import",
-        "specifier": "./editor-app-kernel.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-kernel.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-content-staging.js",
         "to": "assets/js/composer-staging.js",
         "kind": "module-import",
-        "specifier": "./composer-staging.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-staging.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-content-staging.js",
         "to": "assets/js/repository-deletions.js",
         "kind": "module-import",
-        "specifier": "./repository-deletions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./repository-deletions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-editor-shell.js",
         "to": "assets/js/composer-system-panel.js",
         "kind": "module-import",
-        "specifier": "./composer-system-panel.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-system-panel.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-index-publish-metadata.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-index-publish-metadata.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "./encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-markdown-assets.js",
         "to": "assets/js/repository-deletions.js",
         "kind": "module-import",
-        "specifier": "./repository-deletions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./repository-deletions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-markdown-drafts.js",
         "to": "assets/js/composer-markdown-state.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-state.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-state.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-markdown-state.js",
         "to": "assets/js/composer-markdown-save.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-save.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-save.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-post-commit-state.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "./encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-flow.js",
         "to": "assets/js/publish/commit-service.js",
         "kind": "module-import",
-        "specifier": "./publish/commit-service.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./publish/commit-service.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-flow.js",
         "to": "assets/js/publish/propagation-watcher.js",
         "kind": "module-import",
-        "specifier": "./publish/propagation-watcher.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./publish/propagation-watcher.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-service.js",
         "to": "assets/js/composer-publish-flow.js",
         "kind": "module-import",
-        "specifier": "./composer-publish-flow.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-publish-flow.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-service.js",
         "to": "assets/js/composer-publish-settings-ui.js",
         "kind": "module-import",
-        "specifier": "./composer-publish-settings-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-publish-settings-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-service.js",
         "to": "assets/js/composer-publish-summary.js",
         "kind": "module-import",
-        "specifier": "./composer-publish-summary.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-publish-summary.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-service.js",
         "to": "assets/js/composer-sync-commit-controller.js",
         "kind": "module-import",
-        "specifier": "./composer-sync-commit-controller.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-sync-commit-controller.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-service.js",
         "to": "assets/js/composer-sync-overlay.js",
         "kind": "module-import",
-        "specifier": "./composer-sync-overlay.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-sync-overlay.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-service.js",
         "to": "assets/js/publish/settings-store.js",
         "kind": "module-import",
-        "specifier": "./publish/settings-store.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./publish/settings-store.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-settings-ui.js",
         "to": "assets/js/publish/settings-store.js",
         "kind": "module-import",
-        "specifier": "./publish/settings-store.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./publish/settings-store.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-state-service.js",
         "to": "assets/js/composer-content-staging.js",
         "kind": "module-import",
-        "specifier": "./composer-content-staging.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-content-staging.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-state-service.js",
         "to": "assets/js/composer-index-publish-metadata.js",
         "kind": "module-import",
-        "specifier": "./composer-index-publish-metadata.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-index-publish-metadata.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-state-service.js",
         "to": "assets/js/composer-post-commit-state.js",
         "kind": "module-import",
-        "specifier": "./composer-post-commit-state.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-post-commit-state.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-state-service.js",
         "to": "assets/js/composer-seo-staging.js",
         "kind": "module-import",
-        "specifier": "./composer-seo-staging.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-seo-staging.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-publish-state-service.js",
         "to": "assets/js/composer-staging.js",
         "kind": "module-import",
-        "specifier": "./composer-staging.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-staging.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-runtime.js",
         "to": "assets/js/editor-app-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-seo-staging.js",
         "to": "assets/js/theme-boot.js",
         "kind": "html-src",
-        "specifier": "assets/js/theme-boot.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/js/theme-boot.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-seo-staging.js",
         "to": "assets/main.js",
         "kind": "html-src",
-        "specifier": "assets/main.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/main.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-seo-staging.js",
         "to": "assets/js/seo.js",
         "kind": "module-import",
-        "specifier": "./seo.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./seo.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-site-config.js",
         "to": "assets/js/yaml.js",
         "kind": "module-import",
-        "specifier": "./yaml.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./yaml.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-sync-commit-controller.js",
         "to": "assets/js/composer-sync-panel.js",
         "kind": "module-import",
-        "specifier": "./composer-sync-panel.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-sync-panel.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-system-theme-bridge.js",
         "to": "assets/js/system-updates.js",
         "kind": "module-import",
-        "specifier": "./system-updates.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./system-updates.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer-system-theme-bridge.js",
         "to": "assets/js/theme-manager.js",
         "kind": "module-import",
-        "specifier": "./theme-manager.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-manager.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/cache-control.js",
         "kind": "module-import",
-        "specifier": "./cache-control.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./cache-control.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-bootstrap.js",
         "kind": "module-import",
-        "specifier": "./composer-bootstrap.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-bootstrap.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-content-mutations.js",
         "kind": "module-import",
-        "specifier": "./composer-content-mutations.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-content-mutations.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-dialogs.js",
         "kind": "module-import",
-        "specifier": "./composer-dialogs.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-dialogs.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-diff-ui.js",
         "kind": "module-import",
-        "specifier": "./composer-diff-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-diff-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-editor-detail-panel-controller.js",
         "kind": "module-import",
-        "specifier": "./composer-editor-detail-panel-controller.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-editor-detail-panel-controller.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-editor-shell.js",
         "kind": "module-import",
-        "specifier": "./composer-editor-shell.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-editor-shell.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-file-panel-controller.js",
         "kind": "module-import",
-        "specifier": "./composer-file-panel-controller.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-file-panel-controller.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-index-tabs-model.js",
         "kind": "module-import",
-        "specifier": "./composer-index-tabs-model.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-index-tabs-model.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-index-tabs-ui.js",
         "kind": "module-import",
-        "specifier": "./composer-index-tabs-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-index-tabs-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-actions-ui.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-actions-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-actions-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-actions.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-actions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-actions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-assets.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-assets.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-assets.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-drafts.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-drafts.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-drafts.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-loader.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-loader.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-loader.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-save.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-save.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-save.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-session.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-state.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-state.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-state.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-markdown-workspace.js",
         "kind": "module-import",
-        "specifier": "./composer-markdown-workspace.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-markdown-workspace.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-mode-controller.js",
         "kind": "module-import",
-        "specifier": "./composer-mode-controller.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-mode-controller.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-notifications.js",
         "kind": "module-import",
-        "specifier": "./composer-notifications.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-notifications.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-order-diff-ui.js",
         "kind": "module-import",
-        "specifier": "./composer-order-diff-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-order-diff-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-path-tools.js",
         "kind": "module-import",
-        "specifier": "./composer-path-tools.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-path-tools.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-publish-service.js",
         "kind": "module-import",
-        "specifier": "./composer-publish-service.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-publish-service.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-publish-state-service.js",
         "kind": "module-import",
-        "specifier": "./composer-publish-state-service.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-publish-state-service.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-remote-sync.js",
         "kind": "module-import",
-        "specifier": "./composer-remote-sync.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-remote-sync.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-runtime-styles.js",
         "kind": "module-import",
-        "specifier": "./composer-runtime-styles.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-runtime-styles.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-runtime.js",
         "kind": "module-import",
-        "specifier": "./composer-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-service-registry.js",
         "kind": "module-import",
-        "specifier": "./composer-service-registry.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-service-registry.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-setup-verifier.js",
         "kind": "module-import",
-        "specifier": "./composer-setup-verifier.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-setup-verifier.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-site-config.js",
         "kind": "module-import",
-        "specifier": "./composer-site-config.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-site-config.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-site-model.js",
         "kind": "module-import",
-        "specifier": "./composer-site-model.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-site-model.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-site-settings-ui.js",
         "kind": "module-import",
-        "specifier": "./composer-site-settings-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-site-settings-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-system-theme-bridge.js",
         "kind": "module-import",
-        "specifier": "./composer-system-theme-bridge.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-system-theme-bridge.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-ui-motion.js",
         "kind": "module-import",
-        "specifier": "./composer-ui-motion.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-ui-motion.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-unsynced-summary.js",
         "kind": "module-import",
-        "specifier": "./composer-unsynced-summary.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-unsynced-summary.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-yaml-actions.js",
         "kind": "module-import",
-        "specifier": "./composer-yaml-actions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-yaml-actions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-yaml-drafts.js",
         "kind": "module-import",
-        "specifier": "./composer-yaml-drafts.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-yaml-drafts.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/composer-yaml-panels-controller.js",
         "kind": "module-import",
-        "specifier": "./composer-yaml-panels-controller.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./composer-yaml-panels-controller.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-content-tree-controller.js",
         "kind": "module-import",
-        "specifier": "./editor-content-tree-controller.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-content-tree-controller.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-content-tree.js",
         "kind": "module-import",
-        "specifier": "./editor-content-tree.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-content-tree.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-drafts.js",
         "kind": "module-import",
-        "specifier": "./editor-drafts.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-drafts.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-file-tree-ui.js",
         "kind": "module-import",
-        "specifier": "./editor-file-tree-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-file-tree-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-session-state.js",
         "kind": "module-import",
-        "specifier": "./editor-session-state.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-session-state.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-storage.js",
         "kind": "module-import",
-        "specifier": "./editor-storage.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-storage.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/editor-structure-panel-ui.js",
         "kind": "module-import",
-        "specifier": "./editor-structure-panel-ui.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-structure-panel-ui.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "./encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/publish/settings-store.js",
         "kind": "module-import",
-        "specifier": "./publish/settings-store.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./publish/settings-store.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/composer.js",
         "to": "assets/js/yaml.js",
         "kind": "module-import",
-        "specifier": "./yaml.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./yaml.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/content-model.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/content-model.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/content.js",
         "to": "assets/js/frontmatter-document.js",
         "kind": "module-import",
-        "specifier": "./frontmatter-document.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./frontmatter-document.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/dom-utils.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks-caret-session.js",
         "to": "assets/js/editor-blocks-selection-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-selection-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-selection-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks-code-session.js",
         "to": "assets/js/syntax-highlight.js",
         "kind": "module-import",
-        "specifier": "./syntax-highlight.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./syntax-highlight.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks-runtime.js",
         "to": "assets/js/editor-app-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-active-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-active-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-active-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-body-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-body-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-body-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-card-picker-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-card-picker-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-card-picker-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-caret-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-caret-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-caret-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-code-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-code-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-code-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-command-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-command-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-command-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-editable-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-editable-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-editable-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-focus-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-focus-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-focus-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-head-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-head-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-head-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-image-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-image-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-image-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-inline-dom-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-inline-dom-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-inline-dom-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-inline-toolbar-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-inline-toolbar-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-inline-toolbar-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-layout-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-layout-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-layout-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-link-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-link-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-link-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-list-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-list-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-list-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-math-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-math-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-math-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-menu-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-menu-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-menu-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-model.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-model.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-model.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-pointer-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-pointer-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-pointer-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-rich-text-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-rich-text-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-rich-text-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-selection-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-selection-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-selection-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-session-registry.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-session-registry.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-session-registry.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-source-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-source-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-source-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-state.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-state.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-state.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/editor-blocks-table-session.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks-table-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks-table-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/math-render.js",
         "kind": "module-import",
-        "specifier": "./math-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./math-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-blocks.js",
         "to": "assets/js/syntax-highlight.js",
         "kind": "module-import",
-        "specifier": "./syntax-highlight.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./syntax-highlight.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-boot-runtime.js",
         "to": "assets/js/editor-app-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-boot.js",
         "to": "assets/js/cache-control.js",
         "kind": "module-import",
-        "specifier": "./cache-control.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./cache-control.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-boot.js",
         "to": "assets/js/editor-boot-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-boot-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-boot-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-boot.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-drafts.js",
         "to": "assets/js/editor-storage.js",
         "kind": "module-import",
-        "specifier": "./editor-storage.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-storage.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-blocks-session.js",
         "to": "assets/js/editor-blocks.js",
         "kind": "module-import",
-        "specifier": "./editor-blocks.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-blocks.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-blocks-session.js",
         "to": "assets/js/link-cards.js",
         "kind": "module-import",
-        "specifier": "./link-cards.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./link-cards.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-content-service.js",
         "to": "assets/js/cache-control.js",
         "kind": "module-import",
-        "specifier": "./cache-control.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./cache-control.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-content-service.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-content-service.js",
         "to": "assets/js/yaml.js",
         "kind": "module-import",
-        "specifier": "./yaml.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./yaml.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-image-session.js",
         "to": "assets/js/editor-markdown-ops.js",
         "kind": "module-import",
-        "specifier": "./editor-markdown-ops.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-markdown-ops.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-image-session.js",
         "to": "assets/js/repository-deletions.js",
         "kind": "module-import",
-        "specifier": "./repository-deletions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./repository-deletions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-metadata-panel.js",
         "to": "assets/js/editor-markdown-ops.js",
         "kind": "module-import",
-        "specifier": "./editor-markdown-ops.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-markdown-ops.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-metadata-panel.js",
         "to": "assets/js/frontmatter-document.js",
         "kind": "module-import",
-        "specifier": "./frontmatter-document.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./frontmatter-document.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-runtime.js",
         "to": "assets/js/editor-app-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main-workspace-session.js",
         "to": "assets/js/editor-main-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-main-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-app-kernel.js",
         "kind": "module-import",
-        "specifier": "./editor-app-kernel.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-kernel.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-blocks-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-blocks-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-blocks-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-content-service.js",
         "kind": "module-import",
-        "specifier": "./editor-main-content-service.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-content-service.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-current-file-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-current-file-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-current-file-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-document-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-document-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-document-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-file-context-service.js",
         "kind": "module-import",
-        "specifier": "./editor-main-file-context-service.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-file-context-service.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-image-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-image-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-image-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-language-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-language-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-language-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-link-card-context.js",
         "kind": "module-import",
-        "specifier": "./editor-main-link-card-context.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-link-card-context.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-metadata-panel.js",
         "kind": "module-import",
-        "specifier": "./editor-main-metadata-panel.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-metadata-panel.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-preview-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-preview-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-preview-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-main-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-scroll-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-scroll-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-scroll-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-service-registry.js",
         "kind": "module-import",
-        "specifier": "./editor-main-service-registry.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-service-registry.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-shell-service.js",
         "kind": "module-import",
-        "specifier": "./editor-main-shell-service.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-shell-service.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-sidebar-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-sidebar-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-sidebar-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-toolbar-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-toolbar-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-toolbar-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/editor-main-workspace-session.js",
         "kind": "module-import",
-        "specifier": "./editor-main-workspace-session.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-main-workspace-session.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/hieditor.js",
         "kind": "module-import",
-        "specifier": "./hieditor.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./hieditor.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-main.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-app-runtime.js",
         "to": "assets/js/editor-app-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-app-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/components.js",
         "kind": "module-import",
-        "specifier": "./components.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./components.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/content-model.js",
         "kind": "module-import",
-        "specifier": "./content-model.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content-model.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/dom-utils.js",
         "kind": "module-import",
-        "specifier": "./dom-utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./dom-utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/editor-preview-app-runtime.js",
         "kind": "module-import",
-        "specifier": "./editor-preview-app-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./editor-preview-app-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/link-cards.js",
         "kind": "module-import",
-        "specifier": "./link-cards.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./link-cards.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/markdown.js",
         "kind": "module-import",
-        "specifier": "./markdown.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./markdown.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/math-render.js",
         "kind": "module-import",
-        "specifier": "./math-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./math-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/post-nav.js",
         "kind": "module-import",
-        "specifier": "./post-nav.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./post-nav.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/post-render.js",
         "kind": "module-import",
-        "specifier": "./post-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./post-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/syntax-highlight.js",
         "kind": "module-import",
-        "specifier": "./syntax-highlight.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./syntax-highlight.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/tags.js",
         "kind": "module-import",
-        "specifier": "./tags.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./tags.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/theme-layout.js",
         "kind": "module-import",
-        "specifier": "./theme-layout.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-layout.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/toc.js",
         "kind": "module-import",
-        "specifier": "./toc.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./toc.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/editor-preview-runtime.js",
         "to": "assets/js/typography.js",
         "kind": "module-import",
-        "specifier": "./typography.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./typography.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/encrypted-content.js",
         "to": "assets/js/frontmatter-document.js",
         "kind": "module-import",
-        "specifier": "./frontmatter-document.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./frontmatter-document.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/errors.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/hieditor.js",
         "to": "assets/js/syntax-highlight.js",
         "kind": "module-import",
-        "specifier": "./syntax-highlight.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./syntax-highlight.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/i18n.js",
         "to": "assets/i18n/en.js",
         "kind": "module-import",
-        "specifier": "../i18n/en.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../i18n/en.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/i18n.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/i18n.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "./encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/i18n.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/i18n.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/i18n.js",
         "to": "assets/js/yaml.js",
         "kind": "module-import",
-        "specifier": "./yaml.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./yaml.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/lightbox.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/link-cards.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/link-cards.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "./encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/link-cards.js",
         "to": "assets/js/post-render.js",
         "kind": "module-import",
-        "specifier": "./post-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./post-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/link-cards.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/markdown.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/markdown.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/markdown.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/post-nav.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/post-nav.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/post-render.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/publish/commit-service.js",
         "to": "assets/js/publish/transports/github-pat-transport.js",
         "kind": "dynamic-import",
-        "specifier": "./transports/github-pat-transport.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./transports/github-pat-transport.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/publish/commit-service.js",
         "to": "assets/js/publish/transports/connect-transport.js",
         "kind": "module-import",
-        "specifier": "./transports/connect-transport.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./transports/connect-transport.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/publish/propagation-watcher.js",
         "to": "assets/js/composer-markdown-save.js",
         "kind": "module-import",
-        "specifier": "../composer-markdown-save.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../composer-markdown-save.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/publish/transports/connect-transport.js",
         "to": "assets/js/publish/settings-store.js",
         "kind": "module-import",
-        "specifier": "../settings-store.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../settings-store.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/search.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/seo.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/seo.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/syntax-highlight.js",
         "to": "assets/js/vendor/highlightjs/highlight.min.js",
         "kind": "module-import",
-        "specifier": "./vendor/highlightjs/highlight.min.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./vendor/highlightjs/highlight.min.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/markdown.js",
         "kind": "module-import",
-        "specifier": "./markdown.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./markdown.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/math-render.js",
         "kind": "module-import",
-        "specifier": "./math-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./math-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/press-system-surface.mjs",
         "kind": "module-import",
-        "specifier": "./press-system-surface.mjs?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./press-system-surface.mjs?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/press-version.js",
         "kind": "module-import",
-        "specifier": "./press-version.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./press-version.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/system-updates.js",
         "to": "assets/js/vendor/fflate.browser.js",
         "kind": "module-import",
-        "specifier": "./vendor/fflate.browser.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./vendor/fflate.browser.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/tags.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/tags.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/tags.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/templates.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/templates.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/templates.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-layout.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-layout.js",
         "to": "assets/js/theme-contract-surface.mjs",
         "kind": "module-import",
-        "specifier": "./theme-contract-surface.mjs?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-contract-surface.mjs?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-layout.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-layout.js",
         "to": "assets/js/theme.js",
         "kind": "module-import",
-        "specifier": "./theme.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-manager.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-manager.js",
         "to": "assets/js/press-version.js",
         "kind": "module-import",
-        "specifier": "./press-version.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./press-version.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-manager.js",
         "to": "assets/js/product-state.js",
         "kind": "module-import",
-        "specifier": "./product-state.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./product-state.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-manager.js",
         "to": "assets/js/theme-contract-surface.mjs",
         "kind": "module-import",
-        "specifier": "./theme-contract-surface.mjs?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-contract-surface.mjs?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme-manager.js",
         "to": "assets/js/vendor/fflate.browser.js",
         "kind": "module-import",
-        "specifier": "./vendor/fflate.browser.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./vendor/fflate.browser.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme.js",
         "to": "assets/js/components.js",
         "kind": "dynamic-import",
-        "specifier": "./components.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./components.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/theme.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/toc.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/toc.js",
         "to": "assets/js/theme-regions.js",
         "kind": "module-import",
-        "specifier": "./theme-regions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./theme-regions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/js/utils.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/annotate.js",
         "kind": "dynamic-import",
-        "specifier": "./js/annotate.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/annotate.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/link-cards.js",
         "kind": "dynamic-import",
-        "specifier": "./js/link-cards.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/link-cards.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/markdown.js",
         "kind": "dynamic-import",
-        "specifier": "./js/markdown.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/markdown.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/math-render.js",
         "kind": "dynamic-import",
-        "specifier": "./js/math-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/math-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/syntax-highlight.js",
         "kind": "dynamic-import",
-        "specifier": "./js/syntax-highlight.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/syntax-highlight.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/cache-control.js",
         "kind": "module-import",
-        "specifier": "./js/cache-control.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/cache-control.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/components.js",
         "kind": "module-import",
-        "specifier": "./js/components.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/components.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/content-model.js",
         "kind": "module-import",
-        "specifier": "./js/content-model.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/content-model.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/content.js",
         "kind": "module-import",
-        "specifier": "./js/content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/dom-utils.js",
         "kind": "module-import",
-        "specifier": "./js/dom-utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/dom-utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "./js/encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/errors.js",
         "kind": "module-import",
-        "specifier": "./js/errors.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/errors.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/i18n.js",
         "kind": "module-import",
-        "specifier": "./js/i18n.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/i18n.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/masonry.js",
         "kind": "module-import",
-        "specifier": "./js/masonry.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/masonry.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/post-nav.js",
         "kind": "module-import",
-        "specifier": "./js/post-nav.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/post-nav.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/post-render.js",
         "kind": "module-import",
-        "specifier": "./js/post-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/post-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "./js/safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/search.js",
         "kind": "module-import",
-        "specifier": "./js/search.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/search.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/seo.js",
         "kind": "module-import",
-        "specifier": "./js/seo.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/seo.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/tags.js",
         "kind": "module-import",
-        "specifier": "./js/tags.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/tags.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/theme-layout.js",
         "kind": "module-import",
-        "specifier": "./js/theme-layout.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/theme-layout.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/theme.js",
         "kind": "module-import",
-        "specifier": "./js/theme.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/theme.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/toc.js",
         "kind": "module-import",
-        "specifier": "./js/toc.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/toc.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/typography.js",
         "kind": "module-import",
-        "specifier": "./js/typography.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/typography.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "./js/utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/main.js",
         "to": "assets/js/yaml.js",
         "kind": "module-import",
-        "specifier": "./js/yaml.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./js/yaml.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/link-cards.js",
         "kind": "dynamic-import",
-        "specifier": "../../../js/link-cards.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/link-cards.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/dom-utils.js",
         "kind": "module-import",
-        "specifier": "../../../js/dom-utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/dom-utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/encrypted-content.js",
         "kind": "module-import",
-        "specifier": "../../../js/encrypted-content.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/encrypted-content.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/errors.js",
         "kind": "module-import",
-        "specifier": "../../../js/errors.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/errors.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/lightbox.js",
         "kind": "module-import",
-        "specifier": "../../../js/lightbox.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/lightbox.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/post-card-html.js",
         "kind": "module-import",
-        "specifier": "../../../js/post-card-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/post-card-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/post-nav.js",
         "kind": "module-import",
-        "specifier": "../../../js/post-nav.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/post-nav.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/post-render.js",
         "kind": "module-import",
-        "specifier": "../../../js/post-render.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/post-render.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/safe-html.js",
         "kind": "module-import",
-        "specifier": "../../../js/safe-html.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/safe-html.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/tags.js",
         "kind": "module-import",
-        "specifier": "../../../js/tags.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/tags.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/templates.js",
         "kind": "module-import",
-        "specifier": "../../../js/templates.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/templates.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/theme.js",
         "kind": "module-import",
-        "specifier": "../../../js/theme.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/theme.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/typography.js",
         "kind": "module-import",
-        "specifier": "../../../js/typography.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/typography.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/modules/interactions.js",
         "to": "assets/js/utils.js",
         "kind": "module-import",
-        "specifier": "../../../js/utils.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "../../../js/utils.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.css",
         "to": "assets/themes/native/base.css",
         "kind": "css-import",
-        "specifier": "./base.css?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "./base.css?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/footer.js",
         "kind": "theme-module",
-        "specifier": "modules/footer.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/footer.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/interactions.js",
         "kind": "theme-module",
-        "specifier": "modules/interactions.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/interactions.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/layout.js",
         "kind": "theme-module",
-        "specifier": "modules/layout.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/layout.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/mainview.js",
         "kind": "theme-module",
-        "specifier": "modules/mainview.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/mainview.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/nav-tabs.js",
         "kind": "theme-module",
-        "specifier": "modules/nav-tabs.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/nav-tabs.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/search-box.js",
         "kind": "theme-module",
-        "specifier": "modules/search-box.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/search-box.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/site-card.js",
         "kind": "theme-module",
-        "specifier": "modules/site-card.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/site-card.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/tag-filter.js",
         "kind": "theme-module",
-        "specifier": "modules/tag-filter.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/tag-filter.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/modules/toc.js",
         "kind": "theme-module",
-        "specifier": "modules/toc.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "modules/toc.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "assets/themes/native/theme.json",
         "to": "assets/themes/native/theme.css",
         "kind": "theme-style",
-        "specifier": "theme.css?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "theme.css?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index_editor_preview.html",
         "to": "assets/js/editor-preview-runtime.js",
         "kind": "html-src",
-        "specifier": "assets/js/editor-preview-runtime.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/js/editor-preview-runtime.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index_editor.html",
         "to": "assets/themes/native/theme.css",
         "kind": "html-href",
-        "specifier": "assets/themes/native/theme.css?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/themes/native/theme.css?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index_editor.html",
         "to": "assets/js/composer.js",
         "kind": "html-src",
-        "specifier": "assets/js/composer.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/js/composer.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index_editor.html",
         "to": "assets/js/editor-boot.js",
         "kind": "html-src",
-        "specifier": "assets/js/editor-boot.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/js/editor-boot.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index_editor.html",
         "to": "assets/js/editor-main.js",
         "kind": "html-src",
-        "specifier": "assets/js/editor-main.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/js/editor-main.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index.html",
         "to": "assets/js/theme-boot.js",
         "kind": "html-src",
-        "specifier": "assets/js/theme-boot.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/js/theme-boot.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       },
       {
         "from": "index.html",
         "to": "assets/main.js",
         "kind": "html-src",
-        "specifier": "assets/main.js?v=press-system-v3.4.59",
-        "cacheKey": "press-system-v3.4.59"
+        "specifier": "assets/main.js?v=press-system-v3.4.60",
+        "cacheKey": "press-system-v3.4.60"
       }
     ]
   }
