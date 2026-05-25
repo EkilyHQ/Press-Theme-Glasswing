@@ -99,23 +99,13 @@ jobs:
 
       - name: Prepare demo worktree
         working-directory: source
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
-          copy_checkout_git_auth() {
-            local source_repo="$1"
-            local target_repo="$2"
-            local keys
-            keys="$(git -C "${source_repo}" config --local --name-only --get-regexp '^http\..*\.extraheader$' || true)"
-            [[ -n "${keys}" ]] || return 0
-
-            while IFS= read -r key; do
-              [[ -n "${key}" ]] || continue
-              git -C "${source_repo}" config --local --get-all "${key}" |
-                while IFS= read -r value; do
-                  git -C "${target_repo}" config --local --add "${key}" "${value}"
-                done
-            done <<< "${keys}"
+          bootstrap_remote_url() {
+            printf 'https://x-access-token:%s@github.com/%s.git' "${GITHUB_TOKEN}" "${GITHUB_REPOSITORY}"
           }
 
           git fetch origin "${DEMO_BRANCH}" || true
@@ -124,8 +114,7 @@ jobs:
           else
             mkdir -p ../demo
             git -C ../demo init
-            git -C ../demo remote add origin "$(git remote get-url origin)"
-            copy_checkout_git_auth . ../demo
+            git -C ../demo remote add origin "$(bootstrap_remote_url)"
             git -C ../demo checkout --orphan "${DEMO_BRANCH}"
           fi
 

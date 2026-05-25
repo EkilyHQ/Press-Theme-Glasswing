@@ -7,6 +7,8 @@ on:
       - Sync Demo From Press Release
     types:
       - completed
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -49,6 +51,7 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist/pages
+          include-hidden-files: true
 
       - name: Deploy to GitHub Pages
         id: deployment
