@@ -1,4 +1,4 @@
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.60';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.61';
 
 // Simple, dependency-free image lightbox for the article region
 // Usage: import { installLightbox } from './js/lightbox.js'; installLightbox({ rootRegion: ['main'] });
