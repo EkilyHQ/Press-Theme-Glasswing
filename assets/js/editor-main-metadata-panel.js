@@ -1,4 +1,4 @@
-import { normalizeDateInputValue } from './editor-markdown-ops.js?v=press-system-v3.4.58';
+import { normalizeDateInputValue } from './editor-markdown-ops.js?v=press-system-v3.4.59';
 import {
   FRONT_MATTER_FIELD_DEFS,
   buildMarkdownWithFrontMatter,
@@ -6,7 +6,7 @@ import {
   parseMarkdownFrontMatter,
   resolveFrontMatterBindings,
   valueIsPresent
-} from './frontmatter-document.js?v=press-system-v3.4.58';
+} from './frontmatter-document.js?v=press-system-v3.4.59';
 
 const fallbackTranslate = (key) => key;
 const fallbackGetCurrentLang = () => 'en';

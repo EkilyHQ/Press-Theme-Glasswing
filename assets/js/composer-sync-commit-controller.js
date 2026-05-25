@@ -1,7 +1,7 @@
 import {
   refreshSyncCommitPanelView,
   scheduleSyncCommitPanelRefreshView
-} from './composer-sync-panel.js?v=press-system-v3.4.58';
+} from './composer-sync-panel.js?v=press-system-v3.4.59';
 
 function noop() {}
 
