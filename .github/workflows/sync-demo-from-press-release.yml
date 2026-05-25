@@ -33,7 +33,7 @@ jobs:
       DEMO_BRANCH: demo
     steps:
       - name: Checkout theme source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: source
           fetch-depth: 0
