@@ -1,4 +1,4 @@
-import { createSafeHighlightFragment as defaultCreateSafeHighlightFragment, detectLanguage as defaultDetectLanguage } from './syntax-highlight.js?v=press-system-v3.4.57';
+import { createSafeHighlightFragment as defaultCreateSafeHighlightFragment, detectLanguage as defaultDetectLanguage } from './syntax-highlight.js?v=press-system-v3.4.58';
 
 const CODE_LANGUAGE_OPTIONS = [
   '', 'plain', 'text', 'raw', 'none', 'nohighlight',
