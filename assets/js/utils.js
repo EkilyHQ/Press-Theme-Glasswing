@@ -1,4 +1,4 @@
-import { getContentRoot } from './safe-html.js';
+import { getContentRoot } from './safe-html.js?v=press-system-v3.4.53';
 
 export {
   getContentRoot,
@@ -6,7 +6,7 @@ export {
   sanitizeImageUrl,
   resolveImageSrc,
   setSafeHtml
-} from './safe-html.js';
+} from './safe-html.js?v=press-system-v3.4.53';
 
 // General utilities.
 export function escapeHtml(text) {

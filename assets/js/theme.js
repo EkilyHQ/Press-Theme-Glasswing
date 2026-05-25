@@ -1,10 +1,10 @@
-import { t, getAvailableLangs, getLanguageLabel, getCurrentLang, switchLanguage, ensureLanguageBundle } from './i18n.js?v=press-system-v3.4.52';
-import { getThemeRegion } from './theme-regions.js';
+import { t, getAvailableLangs, getLanguageLabel, getCurrentLang, switchLanguage, ensureLanguageBundle } from './i18n.js?v=press-system-v3.4.53';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.53';
 
 const PACK_LINK_ID = 'theme-pack';
 const THEME_CONTROLS_BOUND = Symbol('pressThemeControlsBound');
 const THEME_CONTROLS_I18N_BOUND = Symbol('pressThemeControlsI18nBound');
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.52';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.53';
 const THEME_PACK_KEY = 'themePack';
 const THEME_PACK_PENDING_KEY = 'themePackPending';
 const COMPONENTS_READY = Symbol('pressComponentsReady');
@@ -39,7 +39,7 @@ function ensurePressComponents() {
   }
   try {
     if (!registry[COMPONENTS_READY]) {
-      registry[COMPONENTS_READY] = import('./components.js').catch((err) => {
+      registry[COMPONENTS_READY] = import('./components.js?v=press-system-v3.4.53').catch((err) => {
         console.warn('[theme] Failed to load press components', err);
         registry[COMPONENTS_READY] = null;
         return null;
@@ -47,7 +47,7 @@ function ensurePressComponents() {
     }
     return registry[COMPONENTS_READY];
   } catch (_) {
-    return import('./components.js').catch((err) => {
+    return import('./components.js?v=press-system-v3.4.53').catch((err) => {
       console.warn('[theme] Failed to load press components', err);
       return null;
     });
