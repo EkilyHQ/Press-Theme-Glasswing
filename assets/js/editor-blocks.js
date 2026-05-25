@@ -1,30 +1,30 @@
-import { createPressMathRenderer } from './math-render.js?v=press-system-v3.4.55';
-import { createSafeHighlightFragment as createRuntimeSafeHighlightFragment } from './syntax-highlight.js?v=press-system-v3.4.55';
-import { createEditorBlocksRuntime } from './editor-blocks-runtime.js?v=press-system-v3.4.55';
-import { createEditorBlocksSessionRegistry } from './editor-blocks-session-registry.js?v=press-system-v3.4.55';
-import { createEditorBlocksLayoutSession } from './editor-blocks-layout-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksBodySession } from './editor-blocks-body-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksStateController } from './editor-blocks-state.js?v=press-system-v3.4.55';
-import { createEditorBlocksMenuSession } from './editor-blocks-menu-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksHeadSession } from './editor-blocks-head-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksCommandSession } from './editor-blocks-command-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksRichTextSession } from './editor-blocks-rich-text-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksEditableSession } from './editor-blocks-editable-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksInlineDomSession } from './editor-blocks-inline-dom-session.js?v=press-system-v3.4.55';
-import { CARET_POINT_MEASURE_LIMIT, createEditorBlocksCaretSession } from './editor-blocks-caret-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksFocusSession } from './editor-blocks-focus-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksPointerSession } from './editor-blocks-pointer-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksActiveSession } from './editor-blocks-active-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksInlineToolbarSession } from './editor-blocks-inline-toolbar-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksLinkSession } from './editor-blocks-link-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksMathSession } from './editor-blocks-math-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksTableSession } from './editor-blocks-table-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksCardPickerSession } from './editor-blocks-card-picker-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksImageSession } from './editor-blocks-image-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksCodeSession } from './editor-blocks-code-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksSourceSession } from './editor-blocks-source-session.js?v=press-system-v3.4.55';
-import { createEditorBlocksListSession } from './editor-blocks-list-session.js?v=press-system-v3.4.55';
+import { createPressMathRenderer } from './math-render.js?v=press-system-v3.4.56';
+import { createSafeHighlightFragment as createRuntimeSafeHighlightFragment } from './syntax-highlight.js?v=press-system-v3.4.56';
+import { createEditorBlocksRuntime } from './editor-blocks-runtime.js?v=press-system-v3.4.56';
+import { createEditorBlocksSessionRegistry } from './editor-blocks-session-registry.js?v=press-system-v3.4.56';
+import { createEditorBlocksLayoutSession } from './editor-blocks-layout-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksBodySession } from './editor-blocks-body-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksStateController } from './editor-blocks-state.js?v=press-system-v3.4.56';
+import { createEditorBlocksMenuSession } from './editor-blocks-menu-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksHeadSession } from './editor-blocks-head-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksCommandSession } from './editor-blocks-command-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksRichTextSession } from './editor-blocks-rich-text-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksEditableSession } from './editor-blocks-editable-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksInlineDomSession } from './editor-blocks-inline-dom-session.js?v=press-system-v3.4.56';
+import { CARET_POINT_MEASURE_LIMIT, createEditorBlocksCaretSession } from './editor-blocks-caret-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksFocusSession } from './editor-blocks-focus-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksPointerSession } from './editor-blocks-pointer-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksActiveSession } from './editor-blocks-active-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksInlineToolbarSession } from './editor-blocks-inline-toolbar-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksLinkSession } from './editor-blocks-link-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksMathSession } from './editor-blocks-math-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksTableSession } from './editor-blocks-table-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksCardPickerSession } from './editor-blocks-card-picker-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksImageSession } from './editor-blocks-image-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksCodeSession } from './editor-blocks-code-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksSourceSession } from './editor-blocks-source-session.js?v=press-system-v3.4.56';
+import { createEditorBlocksListSession } from './editor-blocks-list-session.js?v=press-system-v3.4.56';
 import {
   applyInlineLinkToRuns,
   applyInlineMathToRuns,
@@ -77,7 +77,7 @@ import {
   summarizeListType,
   tableColumnCount,
   toggleInlineMarkOnRuns
-} from './editor-blocks-model.js?v=press-system-v3.4.55';
+} from './editor-blocks-model.js?v=press-system-v3.4.56';
 
 export {
   applyInlineLinkToRuns,
@@ -105,7 +105,7 @@ export {
   splitListItemsAtEmptyItem,
   splitTextBlockIntoParagraph,
   toggleInlineMarkOnRuns
-} from './editor-blocks-model.js?v=press-system-v3.4.55';
+} from './editor-blocks-model.js?v=press-system-v3.4.56';
 function createFallbackSelectionSession() {
   return createEditorBlocksSelectionSession();
 }
