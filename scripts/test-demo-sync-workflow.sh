@@ -75,6 +75,11 @@ if ! grep -F 'assets/press-system.json' "${script}" >/dev/null; then
   exit 1
 fi
 
+if ! grep -F 'assets/press-runtime-manifest.json' "${script}" >/dev/null; then
+  echo "demo sync script must copy the Press runtime asset manifest when present" >&2
+  exit 1
+fi
+
 if ! grep -F 'wwwroot/index.yaml' "${script}" >/dev/null; then
   echo "demo sync script must generate demo content index data" >&2
   exit 1
@@ -140,6 +145,9 @@ create_release_payload() {
   printf '<!doctype html>\n' > "${payload}/index_editor.html"
   printf '<!doctype html>\n' > "${payload}/index_editor_preview.html"
   printf '{"schemaVersion":1,"type":"press-system","version":"0.0.0","tag":"v0.0.0","upgradeFrom":{"ranges":[],"allowUnknownSource":true,"message":""}}\n' > "${payload}/assets/press-system.json"
+  if [[ "${index_mode}" != "without-runtime-manifest" ]]; then
+    printf '{"schemaVersion":1,"type":"press-runtime-assets","version":"0.0.0","tag":"v0.0.0","cacheKey":"press-system-v0.0.0","strategy":"query-param","entries":[]}\n' > "${payload}/assets/press-runtime-manifest.json"
+  fi
   printf 'console.log("main");\n' > "${payload}/assets/main.js"
   printf '{"name":"Native","version":"0.0.0","contractVersion":1,"engines":{"press":">=0.0.0 <1.0.0"}}\n' > "${payload}/assets/themes/native/theme.json"
   printf 'body {}\n' > "${payload}/assets/themes/native/theme.css"
@@ -162,14 +170,33 @@ if [[ -e "${tmp_dir}/demo/wwwroot/post/stale/en.md" ]]; then
   exit 1
 fi
 
-create_release_payload press-system-v0.0.1 symlink
-(cd "${tmp_dir}" && zip -qry symlink-system.zip press-system-v0.0.1)
+if ! grep -F '"type":"press-runtime-assets"' "${tmp_dir}/demo/assets/press-runtime-manifest.json" >/dev/null; then
+  echo "demo sync script must copy the Press runtime asset manifest" >&2
+  exit 1
+fi
+
+create_release_payload press-system-v0.0.1 without-runtime-manifest
+(cd "${tmp_dir}" && zip -qr legacy-press-system.zip press-system-v0.0.1)
+
+bash "${script}" \
+  --demo-root "${tmp_dir}/demo" \
+  --theme-root theme \
+  --archive "${tmp_dir}/legacy-press-system.zip" \
+  --tag v0.0.1
+
+if [[ -f "${tmp_dir}/demo/assets/press-runtime-manifest.json" ]]; then
+  echo "demo sync script must remove stale runtime manifests when syncing older Press releases" >&2
+  exit 1
+fi
+
+create_release_payload press-system-v0.0.2 symlink
+(cd "${tmp_dir}" && zip -qry symlink-system.zip press-system-v0.0.2)
 
 if bash "${script}" \
   --demo-root "${tmp_dir}/symlink-demo" \
   --theme-root theme \
   --archive "${tmp_dir}/symlink-system.zip" \
-  --tag v0.0.1 >"${tmp_dir}/symlink.out" 2>"${tmp_dir}/symlink.err"; then
+  --tag v0.0.2 >"${tmp_dir}/symlink.out" 2>"${tmp_dir}/symlink.err"; then
   echo "demo sync script must reject symlink payload files" >&2
   exit 1
 fi
