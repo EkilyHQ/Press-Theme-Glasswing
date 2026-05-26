@@ -29,6 +29,7 @@ jobs:
       DISPATCH_ASSET_NAME: ${{ github.event.client_payload.asset_name }}
       DISPATCH_ASSET_SIZE: ${{ github.event.client_payload.asset_size }}
       DISPATCH_ASSET_SHA256: ${{ github.event.client_payload.asset_sha256 }}
+      DISPATCH_RELEASE_INTENT_SOURCE: ${{ github.event.client_payload.release_intent.source }}
       PRESS_RELEASE_TOKEN: ${{ secrets.PRESS_RELEASE_TOKEN || github.token }}
       DEMO_BRANCH: demo
     steps:
@@ -54,35 +55,53 @@ jobs:
             gh api "repos/${PRESS_REPOSITORY}/releases/latest" > ../dist/press-release.json
           fi
 
-          export DISPATCH_ASSET_NAME DISPATCH_ASSET_SIZE DISPATCH_ASSET_SHA256
-          node <<'NODE' > ../dist/press-release-env.txt
-          const fs = require('fs');
-          const release = JSON.parse(fs.readFileSync('../dist/press-release.json', 'utf8'));
-          const payloadName = process.env.DISPATCH_ASSET_NAME || '';
-          const assets = Array.isArray(release.assets) ? release.assets : [];
-          const candidates = assets.filter((asset) => {
-            const name = String(asset.name || '');
-            if (payloadName) return name === payloadName;
-            return /^press-system-v\d+\.\d+\.\d+\.zip$/.test(name);
-          });
-          if (candidates.length !== 1) {
-            throw new Error(`expected exactly one Press system package asset, found ${candidates.length}`);
-          }
-          const asset = candidates[0];
-          const body = String(release.body || '');
-          const digest = String(asset.digest || process.env.DISPATCH_ASSET_SHA256 || '').replace(/^sha256:/i, '')
-            || ((body.match(/SHA-256:\s*`?([a-fA-F0-9]{64})`?/) || [])[1] || '');
-          const size = Number(asset.size || process.env.DISPATCH_ASSET_SIZE || 0);
-          const lines = [
-            `tag=${release.tag_name || ''}`,
-            `asset_name=${asset.name || ''}`,
-            `asset_url=${asset.browser_download_url || ''}`,
-            `asset_size=${Number.isFinite(size) ? size : 0}`,
-            `asset_sha256=${digest}`,
-            `html_url=${release.html_url || ''}`
-          ];
-          process.stdout.write(`${lines.join('\n')}\n`);
-          NODE
+          release_tag="$(node -p "require('../dist/press-release.json').tag_name || ''")"
+          payload_intent_source="${DISPATCH_RELEASE_INTENT_SOURCE:-}"
+          canonical_intent_source=""
+          if [[ -n "${release_tag}" ]]; then
+            canonical_intent_source="https://raw.githubusercontent.com/${PRESS_REPOSITORY}/release-artifacts/${release_tag}/release-intent.json"
+          fi
+          if [[ -n "${payload_intent_source}" && "${payload_intent_source}" != "${canonical_intent_source}" ]]; then
+            echo "dispatch release_intent.source must match ${canonical_intent_source}" >&2
+            exit 1
+          fi
+
+          if [[ -n "${canonical_intent_source}" ]]; then
+            if curl --fail-with-body --location --silent --show-error \
+              --header "Authorization: Bearer ${PRESS_RELEASE_TOKEN}" \
+              --output ../dist/release-intent.json \
+              "${canonical_intent_source}"; then
+              echo "Resolved Press release intent ${canonical_intent_source}."
+            else
+              rm -f ../dist/release-intent.json
+              if [[ -n "${payload_intent_source}" ]]; then
+                echo "dispatch declared a release intent, but the canonical manifest could not be fetched." >&2
+                exit 1
+              fi
+              canonical_system_release_source="https://raw.githubusercontent.com/${PRESS_REPOSITORY}/release-artifacts/${release_tag}/system-release.json"
+              if curl --fail-with-body --location --silent --show-error \
+                --header "Authorization: Bearer ${PRESS_RELEASE_TOKEN}" \
+                --output ../dist/system-release.json \
+                "${canonical_system_release_source}"; then
+                if node -e "const fs=require('fs'); const m=JSON.parse(fs.readFileSync('../dist/system-release.json','utf8')); process.exit(m.intent && m.intent.url ? 0 : 1);"; then
+                  echo "system-release.json declares release intent, but the canonical manifest could not be fetched." >&2
+                  exit 1
+                fi
+              fi
+              echo "No canonical release intent manifest available for ${release_tag}; using legacy release metadata."
+            fi
+          fi
+
+          PRESS_TARGET_REPOSITORY="${GITHUB_REPOSITORY}" \
+          PRESS_RELEASE_TARGET_CATEGORY="themeDemo" \
+          PRESS_RELEASE_TARGET_REF="demo" \
+          PRESS_RELEASE_TARGET_PATH="assets/press-system.json" \
+          PRESS_RELEASE_TARGET_TYPE="press-system-manifest" \
+          PRESS_RELEASE_TARGET_RECONCILER="theme-demo-runtime-sync" \
+          node scripts/resolve-press-system-release.js \
+            --release ../dist/press-release.json \
+            --release-intent ../dist/release-intent.json \
+            --out ../dist/press-release-env.txt
 
           while IFS='=' read -r key value; do
             [[ -n "${key}" ]] || continue

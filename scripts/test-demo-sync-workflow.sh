@@ -36,6 +36,36 @@ if ! grep -F 'scripts/sync-demo-from-press-release.sh' "${workflow}" >/dev/null;
   exit 1
 fi
 
+if ! grep -F 'scripts/resolve-press-system-release.js' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must resolve Press release intent before downloading the system package" >&2
+  exit 1
+fi
+
+if ! grep -F 'DISPATCH_RELEASE_INTENT_SOURCE' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must prefer release_intent.source from dispatch payloads" >&2
+  exit 1
+fi
+
+if ! grep -F 'canonical_intent_source="https://raw.githubusercontent.com/${PRESS_REPOSITORY}/release-artifacts/${release_tag}/release-intent.json"' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must fall back to the immutable release-intent path for scheduled runs" >&2
+  exit 1
+fi
+
+if ! grep -F 'payload_intent_source' "${workflow}" >/dev/null || ! grep -F 'dispatch release_intent.source must match' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must treat dispatch release_intent.source as a canonical-source consistency check only" >&2
+  exit 1
+fi
+
+if ! grep -F 'system-release.json declares release intent' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must fail when system-release.json declares an intent that cannot be fetched" >&2
+  exit 1
+fi
+
+if ! grep -F 'PRESS_RELEASE_TARGET_RECONCILER="theme-demo-runtime-sync"' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must validate the theme demo release intent target kind" >&2
+  exit 1
+fi
+
 if ! grep -F 'git push origin "HEAD:${DEMO_BRANCH}"' "${workflow}" >/dev/null; then
   echo "demo sync workflow must push the generated site to the demo branch" >&2
   exit 1
@@ -171,6 +201,8 @@ for (const post of data.posts) {
   }
 }
 NODE
+
+node scripts/test-release-intent-resolution.js
 
 tmp_dir="$(mktemp -d)"
 cleanup() {
