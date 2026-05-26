@@ -1,5 +1,5 @@
 // DOM-related pure helpers (no side effects)
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.61';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.62';
 
 // Read-only media preference: prefers-reduced-motion
 export function prefersReducedMotion() {

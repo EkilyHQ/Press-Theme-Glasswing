@@ -1,7 +1,7 @@
-import { mdParse } from './markdown.js?v=press-system-v3.4.61';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.61';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.61';
-import { t } from './i18n.js?v=press-system-v3.4.61';
+import { mdParse } from './markdown.js?v=press-system-v3.4.62';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.62';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.62';
+import { t } from './i18n.js?v=press-system-v3.4.62';
 import {
   compareSemver,
   isUpgradeAllowed,
@@ -10,9 +10,9 @@ import {
   normalizeSemver,
   normalizeUpgradeFrom,
   semverToTag
-} from './press-version.js?v=press-system-v3.4.61';
-import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.61';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.61';
+} from './press-version.js?v=press-system-v3.4.62';
+import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.62';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.62';
 
 const TEXT_EXTENSIONS = new Set([
   '.js', '.mjs', '.cjs', '.ts', '.json', '.yaml', '.yml', '.md', '.txt', '.html', '.css', '.svg', '.xml',
