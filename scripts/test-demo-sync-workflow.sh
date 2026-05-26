@@ -41,6 +41,11 @@ if ! grep -F 'scripts/resolve-press-system-release.js' "${workflow}" >/dev/null;
   exit 1
 fi
 
+if ! grep -F 'scripts/write-press-system-lock.js' "${workflow}" >/dev/null || ! grep -F 'demo/press-system-lock.json' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must write a deterministic Press system lockfile into the demo branch" >&2
+  exit 1
+fi
+
 if ! grep -F 'DISPATCH_RELEASE_INTENT_SOURCE' "${workflow}" >/dev/null; then
   echo "demo sync workflow must prefer release_intent.source from dispatch payloads" >&2
   exit 1
@@ -58,6 +63,11 @@ fi
 
 if ! grep -F 'system-release.json declares release intent' "${workflow}" >/dev/null; then
   echo "demo sync workflow must fail when system-release.json declares an intent that cannot be fetched" >&2
+  exit 1
+fi
+
+if ! grep -F 'refusing legacy fallback' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must fail when it cannot prove a release has no intent" >&2
   exit 1
 fi
 
@@ -203,6 +213,7 @@ for (const post of data.posts) {
 NODE
 
 node scripts/test-release-intent-resolution.js
+node scripts/test-press-system-lock.js
 
 tmp_dir="$(mktemp -d)"
 cleanup() {
