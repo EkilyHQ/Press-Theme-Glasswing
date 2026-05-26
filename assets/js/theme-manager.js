@@ -1,6 +1,6 @@
-import { t } from './i18n.js?v=press-system-v3.4.62';
-import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.62';
-import { getProductStateThemeEntry, loadProductState } from './product-state.js?v=press-system-v3.4.62';
+import { t } from './i18n.js?v=press-system-v3.4.63';
+import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.63';
+import { getProductStateThemeEntry, loadProductState } from './product-state.js?v=press-system-v3.4.63';
 import {
   PRESS_THEME_CONTRACT,
   getDefaultThemeStyles,
@@ -12,8 +12,8 @@ import {
   getThemeArchiveAllowedExtensions,
   getThemeTextExtensions,
   isPressThemeContractVersionSupported
-} from './theme-contract-surface.mjs?v=press-system-v3.4.62';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.62';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.63';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.63';
 
 const THEME_ROOT = 'assets/themes';
 const REQUIRED_CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
