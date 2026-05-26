@@ -1,5 +1,5 @@
-import { parseFrontMatter, stripFrontMatter, stripMarkdownToText } from './content.js?v=press-system-v3.4.63';
-import { sanitizeUrl } from './safe-html.js?v=press-system-v3.4.63';
+import { parseFrontMatter, stripFrontMatter, stripMarkdownToText } from './content.js?v=press-system-v3.4.64';
+import { sanitizeUrl } from './safe-html.js?v=press-system-v3.4.64';
 
 const VIDEO_EXT_RE = /\.(mp4|mov|webm|ogg)(\?.*)?$/i;
 

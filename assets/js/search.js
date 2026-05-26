@@ -1,4 +1,4 @@
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.63';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.64';
 
 const SEARCH_BOUND = Symbol('pressSearchBound');
 const SEARCH_EVENTS_BOUND = Symbol('pressSearchEventsBound');
