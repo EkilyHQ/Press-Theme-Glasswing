@@ -1,4 +1,4 @@
-import { createBrowserEditorAppRuntime } from './editor-app-runtime.js?v=press-system-v3.4.108';
+import { createBrowserEditorAppRuntime } from './editor-app-runtime.js?v=press-system-v3.4.109';
 
 const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
 const THEME_PACK_HREF_GLOBAL = '__themePackHref';

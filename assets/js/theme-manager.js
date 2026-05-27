@@ -1,12 +1,12 @@
-import { t } from './i18n.js?v=press-system-v3.4.108';
-import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.108';
+import { t } from './i18n.js?v=press-system-v3.4.109';
+import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.109';
 import {
   getThemeManagerOfficialCatalogStatus as getOfficialCatalogStatusForRuntime,
   getThemeManagerProductStateStatus as getProductStateStatusForRuntime,
   loadThemeManagerOfficialCatalog as loadOfficialCatalogForRuntime,
   loadThemeManagerProductState as loadProductStateForRuntime,
   loadThemeManagerRegistry as loadRegistryForRuntime
-} from './theme-manager-data.js?v=press-system-v3.4.108';
+} from './theme-manager-data.js?v=press-system-v3.4.109';
 import {
   applyThemeManagerSummary,
   clearPendingSiteThemeFallback,
@@ -15,7 +15,7 @@ import {
   stageSiteThemePack,
   stageThemeArchiveWithRuntime,
   stageThemeUninstallWithRuntime
-} from './theme-manager-staging.js?v=press-system-v3.4.108';
+} from './theme-manager-staging.js?v=press-system-v3.4.109';
 import {
   createThemeManagerElements,
   renderThemeManagerAvailableThemes,
@@ -24,7 +24,7 @@ import {
   setActiveThemeManagerView,
   setThemeManagerBusy as setBusy,
   setThemeManagerStatus as setStatus
-} from './theme-manager-view.js?v=press-system-v3.4.108';
+} from './theme-manager-view.js?v=press-system-v3.4.109';
 
 export {
   collectThemeArchiveEntries,
@@ -34,8 +34,8 @@ export {
   normalizeThemeReleaseManifest,
   sanitizeThemeSlug,
   verifyThemeAsset
-} from './theme-package-core.js?v=press-system-v3.4.108';
-export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.108';
+} from './theme-package-core.js?v=press-system-v3.4.109';
+export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.109';
 
 function createThemeManagerState() {
   return {

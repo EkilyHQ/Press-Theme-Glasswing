@@ -1,6 +1,6 @@
-import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.108';
-import { CARET_POINT_MEASURE_LIMIT, createEditorBlocksCaretSession } from './editor-blocks-caret-session.js?v=press-system-v3.4.108';
-import { createEditorBlocksInlineDomSession } from './editor-blocks-inline-dom-session.js?v=press-system-v3.4.108';
+import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.109';
+import { CARET_POINT_MEASURE_LIMIT, createEditorBlocksCaretSession } from './editor-blocks-caret-session.js?v=press-system-v3.4.109';
+import { createEditorBlocksInlineDomSession } from './editor-blocks-inline-dom-session.js?v=press-system-v3.4.109';
 import {
   appendInlineRun,
   linkTitleForRun,
@@ -9,7 +9,7 @@ import {
   parseInlineRuns,
   sanitizeEditorLinkHref,
   serializeInlineRuns
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.108';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.109';
 
 function createFallbackSelectionSession(documentRef = null) {
   let windowRef = null;
