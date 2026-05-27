@@ -1,18 +1,18 @@
-import './cache-control.js?v=press-system-v3.4.64';
-import { getManualMarkdownSaveState } from './composer-markdown-save.js?v=press-system-v3.4.64';
+import './cache-control.js?v=press-system-v3.4.108';
+import { getManualMarkdownSaveState } from './composer-markdown-save.js?v=press-system-v3.4.108';
 import {
   fetchConfigWithYamlFallback,
   parseYAML
-} from './yaml.js?v=press-system-v3.4.64';
-import { escapeHtml } from './utils.js?v=press-system-v3.4.64';
-import { t, getAvailableLangs, getLanguageLabel } from './i18n.js?v=press-system-v3.4.64';
-import { buildEditorContentTree, findEditorContentTreeNode, flattenEditorContentTree } from './editor-content-tree.js?v=press-system-v3.4.64';
+} from './yaml.js?v=press-system-v3.4.108';
+import { escapeHtml } from './utils.js?v=press-system-v3.4.108';
+import { t, getAvailableLangs, getLanguageLabel } from './i18n.js?v=press-system-v3.4.108';
+import { buildEditorContentTree, findEditorContentTreeNode, flattenEditorContentTree } from './editor-content-tree.js?v=press-system-v3.4.108';
 import {
   decryptMarkdownDocument,
   encryptMarkdownDocument,
   parseEncryptedMarkdownEnvelope
-} from './encrypted-content.js?v=press-system-v3.4.64';
-import { createComposerPublishStateService } from './composer-publish-state-service.js?v=press-system-v3.4.64';
+} from './encrypted-content.js?v=press-system-v3.4.108';
+import { createComposerPublishStateService } from './composer-publish-state-service.js?v=press-system-v3.4.108';
 import {
   cloneIndexMetadataValue,
   computeIndexDiff,
@@ -26,7 +26,7 @@ import {
   prepareIndexState,
   prepareTabsState,
   safeString
-} from './composer-index-tabs-model.js?v=press-system-v3.4.64';
+} from './composer-index-tabs-model.js?v=press-system-v3.4.108';
 import {
   cloneSiteState,
   computeSiteDiff,
@@ -34,60 +34,61 @@ import {
   prepareSiteState,
   toSiteYaml,
   writeYamlValue
-} from './composer-site-model.js?v=press-system-v3.4.64';
+} from './composer-site-model.js?v=press-system-v3.4.108';
 import {
   createScopedStorageKey,
   resolveEditorStorageScope
-} from './editor-storage.js?v=press-system-v3.4.64';
-import { createScopedDraftStore } from './editor-drafts.js?v=press-system-v3.4.64';
-import { createEditorSessionStateStore } from './editor-session-state.js?v=press-system-v3.4.64';
+} from './editor-storage.js?v=press-system-v3.4.108';
+import { createScopedDraftStore } from './editor-drafts.js?v=press-system-v3.4.108';
+import { createEditorSessionStateStore } from './editor-session-state.js?v=press-system-v3.4.108';
 import {
   COMPOSER_RUNTIME_EVENTS,
   createComposerRuntime
-} from './composer-runtime.js?v=press-system-v3.4.64';
-import { createComposerServiceRegistry } from './composer-service-registry.js?v=press-system-v3.4.64';
-import { createComposerServiceLifecycle } from './composer-app-services.js?v=press-system-v3.4.64';
-import { createComposerFilePanelController } from './composer-file-panel-controller.js?v=press-system-v3.4.64';
-import { createComposerPublishService } from './composer-publish-service.js?v=press-system-v3.4.64';
-import { createComposerNotificationController } from './composer-notifications.js?v=press-system-v3.4.64';
-import { createComposerDialogController } from './composer-dialogs.js?v=press-system-v3.4.64';
-import { createComposerRemoteSyncController } from './composer-remote-sync.js?v=press-system-v3.4.64';
-import { createComposerDiffUi } from './composer-diff-ui.js?v=press-system-v3.4.64';
-import { createComposerOrderDiffUi } from './composer-order-diff-ui.js?v=press-system-v3.4.64';
-import { createComposerIndexTabsUi } from './composer-index-tabs-ui.js?v=press-system-v3.4.64';
-import { createComposerSiteSettingsUi } from './composer-site-settings-ui.js?v=press-system-v3.4.64';
-import { createComposerYamlPanelsController } from './composer-yaml-panels-controller.js?v=press-system-v3.4.64';
-import { createComposerMarkdownAssetManager } from './composer-markdown-assets.js?v=press-system-v3.4.64';
-import { createComposerEditorShell } from './composer-editor-shell.js?v=press-system-v3.4.64';
-import { createComposerEditorDetailPanelController } from './composer-editor-detail-panel-controller.js?v=press-system-v3.4.64';
-import { createComposerPathTools } from './composer-path-tools.js?v=press-system-v3.4.64';
-import { createComposerContentMutationController } from './composer-content-mutations.js?v=press-system-v3.4.64';
-import { createComposerSetupVerifier } from './composer-setup-verifier.js?v=press-system-v3.4.64';
-import { createComposerModeController, isComposerSystemMode } from './composer-mode-controller.js?v=press-system-v3.4.64';
-import { createComposerUnsyncedSummaryController } from './composer-unsynced-summary.js?v=press-system-v3.4.64';
-import { injectComposerRuntimeStyles } from './composer-runtime-styles.js?v=press-system-v3.4.64';
-import { createComposerSystemThemeBridge } from './composer-system-theme-bridge.js?v=press-system-v3.4.64';
+} from './composer-runtime.js?v=press-system-v3.4.108';
+import { createComposerServiceRegistry } from './composer-service-registry.js?v=press-system-v3.4.108';
+import { createComposerServiceLifecycle } from './composer-app-services.js?v=press-system-v3.4.108';
+import { createComposerActionDispatcher } from './composer-action-dispatcher.js?v=press-system-v3.4.108';
+import { createComposerFilePanelController } from './composer-file-panel-controller.js?v=press-system-v3.4.108';
+import { createComposerPublishService } from './composer-publish-service.js?v=press-system-v3.4.108';
+import { createComposerNotificationController } from './composer-notifications.js?v=press-system-v3.4.108';
+import { createComposerDialogController } from './composer-dialogs.js?v=press-system-v3.4.108';
+import { createComposerRemoteSyncController } from './composer-remote-sync.js?v=press-system-v3.4.108';
+import { createComposerDiffUi } from './composer-diff-ui.js?v=press-system-v3.4.108';
+import { createComposerOrderDiffUi } from './composer-order-diff-ui.js?v=press-system-v3.4.108';
+import { createComposerIndexTabsUi } from './composer-index-tabs-ui.js?v=press-system-v3.4.108';
+import { createComposerSiteSettingsUi } from './composer-site-settings-ui.js?v=press-system-v3.4.108';
+import { createComposerYamlPanelsController } from './composer-yaml-panels-controller.js?v=press-system-v3.4.108';
+import { createComposerMarkdownAssetManager } from './composer-markdown-assets.js?v=press-system-v3.4.108';
+import { createComposerEditorShell } from './composer-editor-shell.js?v=press-system-v3.4.108';
+import { createComposerEditorDetailPanelController } from './composer-editor-detail-panel-controller.js?v=press-system-v3.4.108';
+import { createComposerPathTools } from './composer-path-tools.js?v=press-system-v3.4.108';
+import { createComposerContentMutationController } from './composer-content-mutations.js?v=press-system-v3.4.108';
+import { createComposerSetupVerifier } from './composer-setup-verifier.js?v=press-system-v3.4.108';
+import { createComposerModeController, isComposerSystemMode } from './composer-mode-controller.js?v=press-system-v3.4.108';
+import { createComposerUnsyncedSummaryController } from './composer-unsynced-summary.js?v=press-system-v3.4.108';
+import { injectComposerRuntimeStyles } from './composer-runtime-styles.js?v=press-system-v3.4.108';
+import { createComposerSystemThemeBridge } from './composer-system-theme-bridge.js?v=press-system-v3.4.108';
 import {
   bindComposerWorkspaceUi,
   initializeComposerApp
-} from './composer-bootstrap.js?v=press-system-v3.4.64';
+} from './composer-bootstrap.js?v=press-system-v3.4.108';
 import {
   createComposerUiMotionController
-} from './composer-ui-motion.js?v=press-system-v3.4.64';
+} from './composer-ui-motion.js?v=press-system-v3.4.108';
 import {
   applyInferredRepoConfig,
   createComposerSiteConfigController,
   inferRepoConfigFromGitHubPagesUrl
-} from './composer-site-config.js?v=press-system-v3.4.64';
-import { createComposerYamlActions } from './composer-yaml-actions.js?v=press-system-v3.4.64';
-import { createEditorContentTreeController } from './editor-content-tree-controller.js?v=press-system-v3.4.64';
-import { createComposerMarkdownLoader } from './composer-markdown-loader.js?v=press-system-v3.4.64';
-import { createComposerMarkdownActionsUi } from './composer-markdown-actions-ui.js?v=press-system-v3.4.64';
-import { createComposerMarkdownActionsController } from './composer-markdown-actions.js?v=press-system-v3.4.64';
-import { createComposerMarkdownDraftController } from './composer-markdown-drafts.js?v=press-system-v3.4.64';
-import { createComposerMarkdownSessionController } from './composer-markdown-session.js?v=press-system-v3.4.64';
-import { createComposerMarkdownWorkspaceController } from './composer-markdown-workspace.js?v=press-system-v3.4.64';
-import { createComposerYamlDraftController } from './composer-yaml-drafts.js?v=press-system-v3.4.64';
+} from './composer-site-config.js?v=press-system-v3.4.108';
+import { createComposerYamlActions } from './composer-yaml-actions.js?v=press-system-v3.4.108';
+import { createEditorContentTreeController } from './editor-content-tree-controller.js?v=press-system-v3.4.108';
+import { createComposerMarkdownLoader } from './composer-markdown-loader.js?v=press-system-v3.4.108';
+import { createComposerMarkdownActionsUi } from './composer-markdown-actions-ui.js?v=press-system-v3.4.108';
+import { createComposerMarkdownActionsController } from './composer-markdown-actions.js?v=press-system-v3.4.108';
+import { createComposerMarkdownDraftController } from './composer-markdown-drafts.js?v=press-system-v3.4.108';
+import { createComposerMarkdownSessionController } from './composer-markdown-session.js?v=press-system-v3.4.108';
+import { createComposerMarkdownWorkspaceController } from './composer-markdown-workspace.js?v=press-system-v3.4.108';
+import { createComposerYamlDraftController } from './composer-yaml-drafts.js?v=press-system-v3.4.108';
 import {
   computeTextSignature,
   createDiscardedMarkdownProtectionState,
@@ -99,12 +100,12 @@ import {
   isMarkdownTabProtected,
   normalizeMarkdownContent,
   setMarkdownProtectionState
-} from './composer-markdown-state.js?v=press-system-v3.4.64';
-import { createEditorFileTreeUi } from './editor-file-tree-ui.js?v=press-system-v3.4.64';
-import { createEditorStructurePanelUi } from './editor-structure-panel-ui.js?v=press-system-v3.4.64';
+} from './composer-markdown-state.js?v=press-system-v3.4.108';
+import { createEditorFileTreeUi } from './editor-file-tree-ui.js?v=press-system-v3.4.108';
+import { createEditorStructurePanelUi } from './editor-structure-panel-ui.js?v=press-system-v3.4.108';
 import {
   CONNECT_PUBLISH_PRESETS
-} from './publish/settings-store.js?v=press-system-v3.4.64';
+} from './publish/settings-store.js?v=press-system-v3.4.108';
 
 const PREFERRED_LANG_ORDER = ['en', 'chs', 'cht-tw', 'cht-hk', 'ja'];
 const LANG_CODE_PATTERN = /^[a-z]{2,3}(?:-[a-z0-9]+)*$/i;
@@ -352,8 +353,10 @@ export function createComposerController(editorRuntime = createComposerRuntime()
     getStateSlice,
     setStateSlice,
     notifyComposerChange,
-    updateUnsyncedSummary,
-    refreshEditorContentTree
+    updateUnsyncedSummary: () => composerActions.dispatch('composer.system-theme.changed', {
+      options: { preserveStructure: true }
+    }),
+    refreshEditorContentTree: (options) => composerActions.dispatch('editor.tree.refresh', { options })
   });
   const composerPublishStateService = createComposerPublishStateService({
     safeString,
@@ -456,8 +459,10 @@ export function createComposerController(editorRuntime = createComposerRuntime()
     pushEditorCurrentFileInfo,
     updateMarkdownPushButton,
     updateComposerMarkdownDraftIndicators,
-    refreshEditorContentTree,
-    updateUnsyncedSummary,
+    refreshEditorContentTree: () => {},
+    updateUnsyncedSummary: () => composerActions.dispatch('markdown.draft.changed', {
+      options: { preserveStructure: true }
+    }),
     showToast,
     t,
     consoleRef: composerLogger,
@@ -1253,8 +1258,12 @@ export function createComposerController(editorRuntime = createComposerRuntime()
     getUnsyncedSummaryController().updateModeDirtyIndicators(summaryEntries);
   }
 
-  function updateUnsyncedSummary(options = {}) {
+  function rawUpdateUnsyncedSummary(options = {}) {
     return getUnsyncedSummaryController().updateUnsyncedSummary(options);
+  }
+
+  function updateUnsyncedSummary(options = {}) {
+    return composerActions.dispatch('composer.summary.refresh', { options });
   }
 
   function findDynamicTabByPath(path) {
@@ -1273,6 +1282,10 @@ export function createComposerController(editorRuntime = createComposerRuntime()
   }
 
   function applyLocalPostCommitState(files = []) {
+    return composerActions.dispatch('publish.completed', { files });
+  }
+
+  function rawApplyLocalPostCommitState(files = []) {
     return composerPublishStateService.applyLocalPostCommitState(files);
   }
 
@@ -1490,30 +1503,34 @@ export function createComposerController(editorRuntime = createComposerRuntime()
   });
   const { bindVerifySetup } = composerSetupVerifier;
 
-  function scheduleAutoDraft(kind) {
+  function rawScheduleYamlAutoDraft(kind) {
     composerYamlDraftController.scheduleAutoDraft(kind);
   }
 
-  function clearDraftStorage(kind) {
+  function rawClearDraftStorage(kind) {
     composerYamlDraftController.clearDraftStorage(kind);
   }
 
-  function notifyComposerChange(kind, options = {}) {
-    const diff = recomputeDiff(kind);
+  function rawRecomputeYamlDiff(kind) {
+    return recomputeDiff(kind);
+  }
+
+  function rawApplyYamlDiffMarkers(kind) {
+    const diff = composerStateStore.getDiff(kind) || recomputeDiff(kind);
     if (kind === 'tabs') applyTabsDiffMarkers(diff);
     else if (kind === 'site') applySiteDiffMarkers(diff);
     else applyIndexDiffMarkers(diff);
-    refreshFileDirtyBadges();
-    if (!options.skipAutoSave) scheduleAutoDraft(kind);
+    return diff;
+  }
+
+  function rawApplySiteConfigForYamlChange(kind) {
     if (kind === 'site') {
       try { applyComposerEffectiveSiteConfig(getStateSlice('site') || {}); } catch (_) {}
     }
+  }
 
-    updateUnsyncedSummary();
+  function rawRefreshOrderPreviewForYamlChange(kind) {
     if ((kind === 'index' || kind === 'tabs') && getComposerOrderPreviewActiveKind() === kind) updateComposerOrderPreview(kind);
-    refreshEditorContentTree({
-      preserveStructure: shouldPreserveEditorStructureForMode(getCurrentComposerMode())
-    });
   }
 
   function rebuildIndexUI(preserveOpen = true) {
@@ -1562,6 +1579,55 @@ export function createComposerController(editorRuntime = createComposerRuntime()
     handleDiscard: handleComposerDiscard,
     handleRefresh: handleComposerRefresh
   } = composerYamlActions;
+
+  const composerActions = createComposerActionDispatcher({
+    handlers: {
+      applyMode: ({ mode, options = {} }) => rawApplyMode(mode, options),
+      selectComposerFile: ({ name, options = {} }) => rawSelectComposerFile(name, options),
+      recomputeYamlDiff: ({ kind }) => rawRecomputeYamlDiff(kind),
+      applyYamlDiffMarkers: ({ kind }) => rawApplyYamlDiffMarkers(kind),
+      refreshFileDirtyBadges: () => refreshFileDirtyBadges(),
+      scheduleYamlAutoDraft: ({ kind, options = {} }) => {
+        if (!options.skipAutoSave) rawScheduleYamlAutoDraft(kind);
+      },
+      applySiteConfig: ({ kind }) => rawApplySiteConfigForYamlChange(kind),
+      refreshUnsyncedSummary: ({ options = {} }) => rawUpdateUnsyncedSummary(options),
+      refreshOrderPreview: ({ kind }) => rawRefreshOrderPreviewForYamlChange(kind),
+      refreshEditorTree: (payload, context) => {
+        if (context && context.action && context.action.type === 'composer.yaml.changed') {
+          rawRefreshEditorContentTree({
+            preserveStructure: shouldPreserveEditorStructureForMode(getCurrentComposerMode())
+          });
+          return;
+        }
+        rawRefreshEditorContentTree(payload && payload.options ? payload.options : {});
+      },
+      clearYamlDraftStorage: ({ kind }) => rawClearDraftStorage(kind),
+      applyLocalPostCommitState: ({ files = [] }) => rawApplyLocalPostCommitState(files)
+    },
+    availableServices: [
+      'modeController',
+      'filePanelController',
+      'stateStore',
+      'yamlDraftController',
+      'diffUi',
+      'siteConfigController',
+      'unsyncedSummaryController',
+      'orderPreview',
+      'editorTree',
+      'systemThemeBridge',
+      'markdownDraftController',
+      'publishStateService'
+    ]
+  });
+
+  function clearDraftStorage(kind) {
+    return composerActions.dispatch('composer.yaml.draft.cleared', { kind });
+  }
+
+  function notifyComposerChange(kind, options = {}) {
+    return composerActions.dispatch('composer.yaml.changed', { kind, options });
+  }
 
   function getMarkdownSessionController() {
     return composerServices.getMarkdownSessionController();
@@ -1623,16 +1689,30 @@ export function createComposerController(editorRuntime = createComposerRuntime()
     return composerPublishStateService.getTrackedPublishContentRoot();
   }
 
-  function applyMode(mode, options = {}) {
+  function rawApplyMode(mode, options = {}) {
     composerServices.applyMode(mode, options);
+  }
+
+  function applyMode(mode, options = {}) {
+    return composerActions.dispatch('composer.mode.apply', { mode, options });
   }
 
   function getInitialComposerFile() {
     return composerFilePanelController.getInitialComposerFile();
   }
 
+  function rawSelectComposerFile(name, options = {}) {
+    if (options && options.persist === false) {
+      return composerFilePanelController.applyComposerFile(name, options);
+    }
+    return composerFilePanelController.setComposerFile(name, options);
+  }
+
   function applyComposerFile(name, options = {}) {
-    return composerFilePanelController.applyComposerFile(name, options);
+    return composerActions.dispatch('composer.file.select', {
+      name,
+      options: { ...options, persist: false }
+    });
   }
 
   // Apply initial state as early as possible to avoid flash on reload
@@ -1939,8 +2019,12 @@ export function createComposerController(editorRuntime = createComposerRuntime()
     return editorContentTreeController.selectNodeForTab(tab, options);
   }
 
-  function refreshEditorContentTree(options = {}) {
+  function rawRefreshEditorContentTree(options = {}) {
     editorContentTreeController.refresh(options);
+  }
+
+  function refreshEditorContentTree(options = {}) {
+    return composerActions.dispatch('editor.tree.refresh', { options });
   }
 
   function handleEditorTreeSelection(nodeId) {
@@ -1980,6 +2064,7 @@ export function createComposerController(editorRuntime = createComposerRuntime()
 
   function start() {
     composerServiceLifecycle.assertReady();
+    composerActions.assertReady();
     initializeComposerApp({
       documentRef: composerDocument,
       onDocumentReady: editorRuntime.onDocumentReady,
@@ -2051,7 +2136,7 @@ export function createComposerController(editorRuntime = createComposerRuntime()
           applyMode,
           initSystemThemeBridge: () => composerSystemThemeBridge.init(),
           setComposerFile: (name, options = {}) => {
-            composerFilePanelController.setComposerFile(name, options);
+            composerActions.dispatch('composer.file.select', { name, options });
           },
           getInitialComposerFile,
           getActiveComposerFile,

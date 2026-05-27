@@ -1,4 +1,4 @@
-import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.64';
+import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.108';
 
 function noop() {}
 
