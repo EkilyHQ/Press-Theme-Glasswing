@@ -1,4 +1,4 @@
-import { normalizeMarkdownEditorView } from './editor-main-runtime.js?v=press-system-v3.4.109';
+import { normalizeMarkdownEditorView } from './editor-main-runtime.js?v=press-system-v3.4.110';
 
 const noop = () => {};
 

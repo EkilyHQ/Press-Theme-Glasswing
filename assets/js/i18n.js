@@ -9,12 +9,12 @@
 //   Legacy per-language files like `index.<lang>.yaml` and `tabs.<lang>.yaml` are also supported.
 // - Friendly language names come from assets/i18n/languages.json (or the language module's metadata).
 
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.109';
-import { isEncryptedMarkdown } from './encrypted-content.js?v=press-system-v3.4.109';
-import { getContentRoot } from './utils.js?v=press-system-v3.4.109';
-import { parseYAML } from './yaml.js?v=press-system-v3.4.109';
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.109';
-import enTranslations, { languageMeta as enLanguageMeta } from '../i18n/en.js?v=press-system-v3.4.109';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.110';
+import { isEncryptedMarkdown } from './encrypted-content.js?v=press-system-v3.4.110';
+import { getContentRoot } from './utils.js?v=press-system-v3.4.110';
+import { parseYAML } from './yaml.js?v=press-system-v3.4.110';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.110';
+import enTranslations, { languageMeta as enLanguageMeta } from '../i18n/en.js?v=press-system-v3.4.110';
 
 // Content fetch cache modes are normalized by cache-control.js.
 

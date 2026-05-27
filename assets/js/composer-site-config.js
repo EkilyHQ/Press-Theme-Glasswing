@@ -3,7 +3,7 @@ import {
   fetchTrackedSiteConfig,
   mergeYamlConfig,
   resolveSiteRepoConfig
-} from './yaml.js?v=press-system-v3.4.109';
+} from './yaml.js?v=press-system-v3.4.110';
 
 export function inferRepoConfigFromGitHubPagesUrl(locationLike) {
   let protocol = '';
