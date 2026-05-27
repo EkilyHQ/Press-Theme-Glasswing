@@ -1,12 +1,13 @@
-import { t } from './i18n.js?v=press-system-v3.4.110';
-import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.110';
+import { t } from './i18n.js?v=press-system-v3.4.111';
+import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.111';
+import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.111';
 import {
   getThemeManagerOfficialCatalogStatus as getOfficialCatalogStatusForRuntime,
   getThemeManagerProductStateStatus as getProductStateStatusForRuntime,
   loadThemeManagerOfficialCatalog as loadOfficialCatalogForRuntime,
   loadThemeManagerProductState as loadProductStateForRuntime,
   loadThemeManagerRegistry as loadRegistryForRuntime
-} from './theme-manager-data.js?v=press-system-v3.4.110';
+} from './theme-manager-data.js?v=press-system-v3.4.111';
 import {
   applyThemeManagerSummary,
   clearPendingSiteThemeFallback,
@@ -15,7 +16,7 @@ import {
   stageSiteThemePack,
   stageThemeArchiveWithRuntime,
   stageThemeUninstallWithRuntime
-} from './theme-manager-staging.js?v=press-system-v3.4.110';
+} from './theme-manager-staging.js?v=press-system-v3.4.111';
 import {
   createThemeManagerElements,
   renderThemeManagerAvailableThemes,
@@ -24,7 +25,7 @@ import {
   setActiveThemeManagerView,
   setThemeManagerBusy as setBusy,
   setThemeManagerStatus as setStatus
-} from './theme-manager-view.js?v=press-system-v3.4.110';
+} from './theme-manager-view.js?v=press-system-v3.4.111';
 
 export {
   collectThemeArchiveEntries,
@@ -34,8 +35,8 @@ export {
   normalizeThemeReleaseManifest,
   sanitizeThemeSlug,
   verifyThemeAsset
-} from './theme-package-core.js?v=press-system-v3.4.110';
-export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.110';
+} from './theme-package-core.js?v=press-system-v3.4.111';
+export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.111';
 
 function createThemeManagerState() {
   return {
@@ -168,39 +169,34 @@ function initThemeManagerWithRuntime(runtime, options = {}) {
   const state = runtime.state;
   const { elements, optionsRef } = state;
   const documentRef = runtime.getDocument();
+  const effects = createDomEffects({ documentRef });
   if (options && typeof options.onStateChange === 'function') state.listeners.add(options.onStateChange);
   if (options && typeof options.getCurrentThemePack === 'function') optionsRef.getCurrentThemePack = options.getCurrentThemePack;
   if (options && typeof options.setSiteThemePack === 'function') optionsRef.setSiteThemePack = options.setSiteThemePack;
   if (state.initialized) return;
   state.initialized = true;
 
-  if (documentRef && typeof documentRef.getElementById === 'function') {
-    elements.root = documentRef.getElementById('mode-themes');
-    elements.status = documentRef.getElementById('themeManagerStatus');
-    elements.tabs = typeof documentRef.querySelectorAll === 'function'
-      ? Array.from(documentRef.querySelectorAll('[data-theme-manager-view]'))
-      : [];
-    elements.views = typeof documentRef.querySelectorAll === 'function'
-      ? Array.from(documentRef.querySelectorAll('[data-theme-manager-panel]'))
-      : [];
-    elements.installedList = documentRef.getElementById('themeManagerInstalledList');
-    elements.availableList = documentRef.getElementById('themeManagerAvailableList');
-    elements.pendingSection = documentRef.getElementById('themeManagerPendingSection');
-    elements.pendingList = documentRef.getElementById('themeManagerFileList');
-    elements.fileInput = documentRef.getElementById('themeImportFileInput');
-    elements.headerImportButton = documentRef.getElementById('btnThemeImport');
-    elements.inlineImportButton = documentRef.getElementById('btnThemeImportInline');
-    elements.refreshCatalogButton = documentRef.getElementById('btnThemeRefreshCatalog');
-    elements.clearButton = documentRef.getElementById('btnThemeClearStaged');
-  }
+  elements.root = effects.getElementById('mode-themes');
+  elements.status = effects.getElementById('themeManagerStatus');
+  elements.tabs = effects.querySelectorAll('[data-theme-manager-view]');
+  elements.views = effects.querySelectorAll('[data-theme-manager-panel]');
+  elements.installedList = effects.getElementById('themeManagerInstalledList');
+  elements.availableList = effects.getElementById('themeManagerAvailableList');
+  elements.pendingSection = effects.getElementById('themeManagerPendingSection');
+  elements.pendingList = effects.getElementById('themeManagerFileList');
+  elements.fileInput = effects.getElementById('themeImportFileInput');
+  elements.headerImportButton = effects.getElementById('btnThemeImport');
+  elements.inlineImportButton = effects.getElementById('btnThemeImportInline');
+  elements.refreshCatalogButton = effects.getElementById('btnThemeRefreshCatalog');
+  elements.clearButton = effects.getElementById('btnThemeClearStaged');
 
   elements.tabs.forEach((button) => {
-    button.addEventListener('click', () => setActiveThemeManagerView(runtime, button.dataset.themeManagerView));
+    effects.on(button, 'click', () => setActiveThemeManagerView(runtime, button.dataset.themeManagerView));
   });
-  if (elements.headerImportButton) elements.headerImportButton.addEventListener('click', () => openImportPicker(runtime));
-  if (elements.inlineImportButton) elements.inlineImportButton.addEventListener('click', () => openImportPicker(runtime));
+  if (elements.headerImportButton) effects.on(elements.headerImportButton, 'click', () => openImportPicker(runtime));
+  if (elements.inlineImportButton) effects.on(elements.inlineImportButton, 'click', () => openImportPicker(runtime));
   if (elements.fileInput) {
-    elements.fileInput.addEventListener('change', (event) => {
+    effects.on(elements.fileInput, 'change', (event) => {
       const input = event && event.target ? event.target : elements.fileInput;
       const file = input && input.files && input.files[0] ? input.files[0] : null;
       if (input) input.value = '';
@@ -208,7 +204,7 @@ function initThemeManagerWithRuntime(runtime, options = {}) {
     });
   }
   if (elements.refreshCatalogButton) {
-    elements.refreshCatalogButton.addEventListener('click', async () => {
+    effects.on(elements.refreshCatalogButton, 'click', async () => {
       if (runtime.state.busy) return;
       setBusy(runtime, true);
       try {
@@ -228,7 +224,7 @@ function initThemeManagerWithRuntime(runtime, options = {}) {
     });
   }
   if (elements.clearButton) {
-    elements.clearButton.addEventListener('click', () => clearThemeManagerStateWithRuntime(runtime, { keepStatus: false }));
+    effects.on(elements.clearButton, 'click', () => clearThemeManagerStateWithRuntime(runtime, { keepStatus: false }));
   }
 
   setActiveThemeManagerView(runtime, 'installed');

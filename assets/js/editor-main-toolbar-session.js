@@ -1,5 +1,5 @@
-import { createEditorMainToolbarCardPicker } from './editor-main-toolbar-card-picker.js?v=press-system-v3.4.110';
-import { createEditorMainToolbarTextActions } from './editor-main-toolbar-text-actions.js?v=press-system-v3.4.110';
+import { createEditorMainToolbarCardPicker } from './editor-main-toolbar-card-picker.js?v=press-system-v3.4.111';
+import { createEditorMainToolbarTextActions } from './editor-main-toolbar-text-actions.js?v=press-system-v3.4.111';
 
 const noop = () => {};
 const fallbackTranslate = (key) => key;

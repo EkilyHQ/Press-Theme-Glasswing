@@ -1,4 +1,4 @@
-import { COMPOSER_SERVICE_PLAN, COMPOSER_SERVICE_SLOTS } from './composer-app-services.js?v=press-system-v3.4.110';
+import { COMPOSER_SERVICE_PLAN, COMPOSER_SERVICE_SLOTS } from './composer-app-services.js?v=press-system-v3.4.111';
 
 function createEmptyServices() {
   return COMPOSER_SERVICE_SLOTS.reduce((result, name) => {
