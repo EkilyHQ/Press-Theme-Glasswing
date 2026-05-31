@@ -1,6 +1,6 @@
-import { createComposerDragList } from './composer-drag-list.js?v=press-system-v3.4.112';
-import { createComposerIndexTabsLanguageMenu } from './composer-index-tabs-language-menu.js?v=press-system-v3.4.112';
-import { createComposerIndexVersionList } from './composer-index-version-list.js?v=press-system-v3.4.112';
+import { createComposerDragList } from './composer-drag-list.js?v=press-system-v3.4.113';
+import { createComposerIndexTabsLanguageMenu } from './composer-index-tabs-language-menu.js?v=press-system-v3.4.113';
+import { createComposerIndexVersionList } from './composer-index-version-list.js?v=press-system-v3.4.113';
 
 export function createComposerIndexTabsUi(options = {}) {
   const documentRef = options.documentRef || null;

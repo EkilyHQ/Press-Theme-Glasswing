@@ -10,7 +10,7 @@ import {
   sanitizeThemeSlug,
   themeFilesFromManifest,
   verifyThemeAsset
-} from './theme-package-core.js?v=press-system-v3.4.112';
+} from './theme-package-core.js?v=press-system-v3.4.113';
 
 const THEME_ROOT = 'assets/themes';
 

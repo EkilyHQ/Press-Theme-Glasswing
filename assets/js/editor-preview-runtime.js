@@ -1,26 +1,26 @@
-import './components.js?v=press-system-v3.4.112';
-import { mdParse } from './markdown.js?v=press-system-v3.4.112';
-import { createContentModel } from './content-model.js?v=press-system-v3.4.112';
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.112';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.112';
-import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from './post-render.js?v=press-system-v3.4.112';
-import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.112';
-import { applyLangHints } from './typography.js?v=press-system-v3.4.112';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.112';
-import { initSyntaxHighlighting } from './syntax-highlight.js?v=press-system-v3.4.112';
-import { setupAnchors, setupTOC } from './toc.js?v=press-system-v3.4.112';
-import { initI18n, t, withLangParam } from './i18n.js?v=press-system-v3.4.112';
-import { renderPostNav } from './post-nav.js?v=press-system-v3.4.112';
-import { renderTagSidebar } from './tags.js?v=press-system-v3.4.112';
-import { getArticleTitleFromMain } from './dom-utils.js?v=press-system-v3.4.112';
-import { createThemeLayoutController, createThemeI18nContext } from './theme-layout.js?v=press-system-v3.4.112';
-import { createEditorPreviewAppRuntime } from './editor-preview-app-runtime.js?v=press-system-v3.4.112';
+import './components.js?v=press-system-v3.4.113';
+import { mdParse } from './markdown.js?v=press-system-v3.4.113';
+import { createContentModel } from './content-model.js?v=press-system-v3.4.113';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.113';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.113';
+import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from './post-render.js?v=press-system-v3.4.113';
+import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.113';
+import { applyLangHints } from './typography.js?v=press-system-v3.4.113';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.113';
+import { initSyntaxHighlighting } from './syntax-highlight.js?v=press-system-v3.4.113';
+import { setupAnchors, setupTOC } from './toc.js?v=press-system-v3.4.113';
+import { initI18n, t, withLangParam } from './i18n.js?v=press-system-v3.4.113';
+import { renderPostNav } from './post-nav.js?v=press-system-v3.4.113';
+import { renderTagSidebar } from './tags.js?v=press-system-v3.4.113';
+import { getArticleTitleFromMain } from './dom-utils.js?v=press-system-v3.4.113';
+import { createThemeLayoutController, createThemeI18nContext } from './theme-layout.js?v=press-system-v3.4.113';
+import { createEditorPreviewAppRuntime } from './editor-preview-app-runtime.js?v=press-system-v3.4.113';
 
 const RENDER_MESSAGE = 'press-editor-preview-render';
 const READY_MESSAGE = 'press-editor-preview-ready';
 const RENDERED_MESSAGE = 'press-editor-preview-rendered';
 const ERROR_MESSAGE = 'press-editor-preview-error';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.112';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.113';
 
 export function createEditorPreviewRuntimeController(
   previewRuntime = createEditorPreviewAppRuntime(),

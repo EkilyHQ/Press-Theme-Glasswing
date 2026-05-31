@@ -1,4 +1,4 @@
-import { PRESS_GITHUB_SITE_PROVIDER } from '../../provider-adapters.js?v=press-system-v3.4.112';
+import { PRESS_GITHUB_SITE_PROVIDER } from '../../provider-adapters.js?v=press-system-v3.4.113';
 
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
@@ -169,5 +169,14 @@ export async function createFineGrainedTokenCommit(token, { owner, name, branch,
   };
 
   reportStatus('Creating commit...');
-  await githubGraphqlRequest(token, commitMutation, { input: mutationInput }, fetchImpl, provider);
+  const commitData = await githubGraphqlRequest(token, commitMutation, { input: mutationInput }, fetchImpl, provider);
+  const createdCommit = commitData && commitData.createCommitOnBranch && commitData.createCommitOnBranch.commit;
+  return {
+    ok: true,
+    provider: 'github',
+    transport: 'pat',
+    branchName,
+    expectedHeadOid,
+    commit: createdCommit && createdCommit.oid ? { oid: createdCommit.oid } : null
+  };
 }
