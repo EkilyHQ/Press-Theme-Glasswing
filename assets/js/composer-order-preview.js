@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.117';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.118';
 
 function noop() {}
 
