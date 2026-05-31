@@ -3,7 +3,7 @@
 import {
   inlineRenderedTextLength,
   normalizeEditableMarkdownText
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.114';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.115';
 import {
   editableListItems,
   isMergeableListBlock,
@@ -11,10 +11,10 @@ import {
   listBlockItems,
   listItemHasNestedChildren,
   listItemText
-} from './editor-blocks-list-model.js?v=press-system-v3.4.114';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.115';
 import {
   editableTableData
-} from './editor-blocks-table-model.js?v=press-system-v3.4.114';
+} from './editor-blocks-table-model.js?v=press-system-v3.4.115';
 
 function makeFlowBlock(type, raw, data = {}) {
   return {

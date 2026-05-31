@@ -2,10 +2,10 @@
 
 import {
   serializeList
-} from './editor-blocks-list-model.js?v=press-system-v3.4.114';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.115';
 import {
   serializeTable
-} from './editor-blocks-table-model.js?v=press-system-v3.4.114';
+} from './editor-blocks-table-model.js?v=press-system-v3.4.115';
 
 function serializeImage(data = {}) {
   const alt = String(data.alt || '');
