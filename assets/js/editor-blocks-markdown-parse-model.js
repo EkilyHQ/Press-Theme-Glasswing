@@ -5,16 +5,16 @@ import {
   makeBlock,
   normalizeText,
   splitBlankLineUnits
-} from './editor-blocks-block-core-model.js?v=press-system-v3.4.115';
+} from './editor-blocks-block-core-model.js?v=press-system-v3.4.116';
 import {
   dedentIndentedListSource,
   isListItemLine,
   parseListBlock,
   parseListLineInfo
-} from './editor-blocks-list-model.js?v=press-system-v3.4.115';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.116';
 import {
   parseTableBlock
-} from './editor-blocks-table-model.js?v=press-system-v3.4.115';
+} from './editor-blocks-table-model.js?v=press-system-v3.4.116';
 
 function isFrontMatterFence(line) {
   return /^---\s*$/.test(String(line || ''));

@@ -1,7 +1,7 @@
 import {
   createConnectPublishCommit,
   ensureConnectPublishGrant as authorizeConnectPublishGrant
-} from './transports/connect-transport.js?v=press-system-v3.4.115';
+} from './transports/connect-transport.js?v=press-system-v3.4.116';
 
 export async function ensurePublishGrant({
   connect,
@@ -61,6 +61,28 @@ function normalizeConnectPublishJob(value) {
     }
     if ((error && error.upstreamCode) || source.upstreamCode) {
       out.error.upstreamCode = safeString(error && error.upstreamCode || source.upstreamCode);
+    }
+  }
+  const propagation = source.propagation && typeof source.propagation === 'object' ? source.propagation : null;
+  if (propagation && safeString(propagation.source || 'connect').trim() === 'connect') {
+    const propagationState = safeString(propagation.state).trim();
+    if (propagationState) {
+      out.propagation = {
+        source: 'connect',
+        state: propagationState
+      };
+      for (const key of ['markerPath', 'markerUrl', 'startedAt', 'updatedAt', 'observedAt', 'timedOutAt', 'lastAttemptAt']) {
+        if (propagation[key] != null) out.propagation[key] = safeString(propagation[key]);
+      }
+      if (propagation.attemptCount != null) out.propagation.attemptCount = Number(propagation.attemptCount) || 0;
+      const propagationError = propagation.error && typeof propagation.error === 'object' ? propagation.error : null;
+      const propagationErrorCode = safeString(propagationError && propagationError.code || propagation.errorCode).trim();
+      if (propagationErrorCode) {
+        out.propagation.error = {
+          code: propagationErrorCode,
+          message: safeString(propagationError && propagationError.message || propagation.errorMessage)
+        };
+      }
     }
   }
   return out;
@@ -149,7 +171,7 @@ export async function publishCommit({
   }
 
   emitPublishState(onPublishState, 'committing');
-  const { createFineGrainedTokenCommit } = await import('./transports/github-pat-transport.js?v=press-system-v3.4.115');
+  const { createFineGrainedTokenCommit } = await import('./transports/github-pat-transport.js?v=press-system-v3.4.116');
   const payload = await createFineGrainedTokenCommit(transport && transport.token, {
     owner,
     name,
