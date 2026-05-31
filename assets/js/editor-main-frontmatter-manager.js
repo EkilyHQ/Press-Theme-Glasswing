@@ -1,4 +1,4 @@
-import { normalizeDateInputValue } from './editor-markdown-ops.js?v=press-system-v3.4.116';
+import { normalizeDateInputValue } from './editor-markdown-ops.js?v=press-system-v3.4.117';
 import {
   FRONT_MATTER_FIELD_DEFS,
   buildMarkdownWithFrontMatter,
@@ -6,7 +6,7 @@ import {
   parseMarkdownFrontMatter,
   resolveFrontMatterBindings,
   valueIsPresent
-} from './frontmatter-document.js?v=press-system-v3.4.116';
+} from './frontmatter-document.js?v=press-system-v3.4.117';
 
 const FRONT_MATTER_SECTION_DESCRIPTIONS = [
   {

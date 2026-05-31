@@ -1,5 +1,5 @@
-import { createMarkdownBlocksEditor } from './editor-blocks.js?v=press-system-v3.4.116';
-import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.116';
+import { createMarkdownBlocksEditor } from './editor-blocks.js?v=press-system-v3.4.117';
+import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.117';
 
 const noop = () => {};
 const fallbackTranslate = (key) => key;
@@ -107,6 +107,13 @@ export function createEditorMainBlocksSession(options = {}) {
   const hydrateLinkCards = typeof options.hydrateLinkCards === 'function'
     ? options.hydrateLinkCards
     : hydrateInternalLinkCards;
+  const onDiagnostic = typeof options.onDiagnostic === 'function'
+    ? options.onDiagnostic
+    : (diagnostic) => {
+      if (runtime && typeof runtime.warn === 'function') {
+        runtime.warn('Editor blocks session diagnostic', diagnostic);
+      }
+    };
 
   let blocksEditor = null;
   let boundCardEntries = false;
@@ -204,7 +211,8 @@ export function createEditorMainBlocksSession(options = {}) {
       hydrateCard,
       requestImageUpload,
       canDeleteImageResource,
-      requestImageDelete
+      requestImageDelete,
+      onDiagnostic
     });
     bindCardEntries();
     return blocksEditor;
@@ -251,6 +259,19 @@ export function createEditorMainBlocksSession(options = {}) {
     return false;
   };
 
+  const dispose = () => {
+    const editor = blocksEditor;
+    blocksEditor = null;
+    boundCardEntries = false;
+    if (editor && typeof editor.dispose === 'function') {
+      try {
+        editor.dispose();
+        return true;
+      } catch (_) {}
+    }
+    return false;
+  };
+
   return {
     initialize,
     getEditor,
@@ -258,6 +279,7 @@ export function createEditorMainBlocksSession(options = {}) {
     syncIfVisible,
     requestLayout,
     focus,
+    dispose,
     setCardEntries,
     labels: createBlockLabels(translate)
   };

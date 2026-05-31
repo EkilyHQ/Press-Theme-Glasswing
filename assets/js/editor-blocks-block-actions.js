@@ -2,26 +2,26 @@ import {
   editableListItems,
   isMergeableListBlock,
   listBlockItems
-} from './editor-blocks-list-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.117';
 import {
   isBlockEmptyForBackspace,
   mergeTextBlockIntoPrevious,
   mergeTextBlockIntoPreviousList,
   splitTextBlockIntoParagraph
-} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.117';
 import {
   makeBlock
-} from './editor-blocks-block-core-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-block-core-model.js?v=press-system-v3.4.117';
 import {
   autofixMarkdownSourceBlock
-} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.117';
 import {
   editableVisibleText,
   isEditableBackspaceAtEmptyStart,
   isEditableSelectionAtStart,
   isEditableSelectionOnBlankLine,
   splitEditableTextAtSelection
-} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.116';
+} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.117';
 
 const plainKey = (event, key) => event
   && event.key === key

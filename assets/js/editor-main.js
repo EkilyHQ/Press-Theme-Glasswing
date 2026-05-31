@@ -1,24 +1,24 @@
-import { createHiEditor } from './hieditor.js?v=press-system-v3.4.116';
-import { resolveImageSrc } from './safe-html.js?v=press-system-v3.4.116';
-import { t, withLangParam, getCurrentLang, normalizeLangKey } from './i18n.js?v=press-system-v3.4.116';
-import { createEditorMainMetadataPanel } from './editor-main-metadata-panel.js?v=press-system-v3.4.116';
-import { createEditorMainPreviewSession } from './editor-main-preview-session.js?v=press-system-v3.4.116';
-import { createEditorMainCurrentFileSession } from './editor-main-current-file-session.js?v=press-system-v3.4.116';
-import { createEditorMainSidebarSession } from './editor-main-sidebar-session.js?v=press-system-v3.4.116';
-import { createEditorMainToolbarSession } from './editor-main-toolbar-session.js?v=press-system-v3.4.116';
-import { createEditorMainImageSession } from './editor-main-image-session.js?v=press-system-v3.4.116';
-import { createEditorMainLinkCardContext } from './editor-main-link-card-context.js?v=press-system-v3.4.116';
-import { createEditorMainWorkspaceSession } from './editor-main-workspace-session.js?v=press-system-v3.4.116';
-import { createEditorMainBlocksSession } from './editor-main-blocks-session.js?v=press-system-v3.4.116';
-import { createEditorMainDocumentSession } from './editor-main-document-session.js?v=press-system-v3.4.116';
-import { createEditorMainContentService } from './editor-main-content-service.js?v=press-system-v3.4.116';
-import { createEditorMainFileContextService } from './editor-main-file-context-service.js?v=press-system-v3.4.116';
-import { createEditorMainLanguageSession } from './editor-main-language-session.js?v=press-system-v3.4.116';
-import { createEditorMainScrollSession } from './editor-main-scroll-session.js?v=press-system-v3.4.116';
-import { createEditorMainServiceRegistry } from './editor-main-service-registry.js?v=press-system-v3.4.116';
-import { createEditorMainShellService } from './editor-main-shell-service.js?v=press-system-v3.4.116';
-import { createEditorMainRuntime } from './editor-main-runtime.js?v=press-system-v3.4.116';
-import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.116';
+import { createHiEditor } from './hieditor.js?v=press-system-v3.4.117';
+import { resolveImageSrc } from './safe-html.js?v=press-system-v3.4.117';
+import { t, withLangParam, getCurrentLang, normalizeLangKey } from './i18n.js?v=press-system-v3.4.117';
+import { createEditorMainMetadataPanel } from './editor-main-metadata-panel.js?v=press-system-v3.4.117';
+import { createEditorMainPreviewSession } from './editor-main-preview-session.js?v=press-system-v3.4.117';
+import { createEditorMainCurrentFileSession } from './editor-main-current-file-session.js?v=press-system-v3.4.117';
+import { createEditorMainSidebarSession } from './editor-main-sidebar-session.js?v=press-system-v3.4.117';
+import { createEditorMainToolbarSession } from './editor-main-toolbar-session.js?v=press-system-v3.4.117';
+import { createEditorMainImageSession } from './editor-main-image-session.js?v=press-system-v3.4.117';
+import { createEditorMainLinkCardContext } from './editor-main-link-card-context.js?v=press-system-v3.4.117';
+import { createEditorMainWorkspaceSession } from './editor-main-workspace-session.js?v=press-system-v3.4.117';
+import { createEditorMainBlocksSession } from './editor-main-blocks-session.js?v=press-system-v3.4.117';
+import { createEditorMainDocumentSession } from './editor-main-document-session.js?v=press-system-v3.4.117';
+import { createEditorMainContentService } from './editor-main-content-service.js?v=press-system-v3.4.117';
+import { createEditorMainFileContextService } from './editor-main-file-context-service.js?v=press-system-v3.4.117';
+import { createEditorMainLanguageSession } from './editor-main-language-session.js?v=press-system-v3.4.117';
+import { createEditorMainScrollSession } from './editor-main-scroll-session.js?v=press-system-v3.4.117';
+import { createEditorMainServiceRegistry } from './editor-main-service-registry.js?v=press-system-v3.4.117';
+import { createEditorMainShellService } from './editor-main-shell-service.js?v=press-system-v3.4.117';
+import { createEditorMainRuntime } from './editor-main-runtime.js?v=press-system-v3.4.117';
+import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.117';
 
 const FORCE_MARKDOWN_WRAP = true;
 
@@ -240,6 +240,11 @@ export function createEditorMainFeatures() {
           linkCardContext: context.linkCardContext,
           resolveImageSrc: context.resolveEditorImageSrc
         }));
+      },
+      dispose(context) {
+        if (context.blocksSession && typeof context.blocksSession.dispose === 'function') {
+          context.blocksSession.dispose();
+        }
       }
     },
     {

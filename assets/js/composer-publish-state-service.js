@@ -1,8 +1,8 @@
-import { createStagingRegistry } from './composer-staging.js?v=press-system-v3.4.116';
-import { createIndexPublishMetadataEnricher } from './composer-index-publish-metadata.js?v=press-system-v3.4.116';
-import { createContentCommitStagingProvider } from './composer-content-staging.js?v=press-system-v3.4.116';
-import { createSeoStagingProvider } from './composer-seo-staging.js?v=press-system-v3.4.116';
-import { createPostCommitStateApplier } from './composer-post-commit-state.js?v=press-system-v3.4.116';
+import { createStagingRegistry, normalizeStagingWarning } from './composer-staging.js?v=press-system-v3.4.117';
+import { createIndexPublishMetadataEnricher } from './composer-index-publish-metadata.js?v=press-system-v3.4.117';
+import { createContentCommitStagingProvider } from './composer-content-staging.js?v=press-system-v3.4.117';
+import { createSeoStagingProvider } from './composer-seo-staging.js?v=press-system-v3.4.117';
+import { createPostCommitStateApplier } from './composer-post-commit-state.js?v=press-system-v3.4.117';
 
 function noop() {}
 
@@ -152,7 +152,9 @@ export function createComposerPublishStateService(options = {}) {
     });
     const files = Array.isArray(providerResult.files) ? providerResult.files : [];
     const seoFiles = files.filter(file => file && file.kind === 'seo');
-    return { files, seoFiles, warnings: providerResult.warnings || [] };
+    const warnings = (Array.isArray(providerResult.warnings) ? providerResult.warnings : [])
+      .map(warning => normalizeStagingWarning(warning));
+    return { files, seoFiles, warnings };
   }
 
   function getTrackedPublishContentRoot() {

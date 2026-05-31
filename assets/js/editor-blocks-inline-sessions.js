@@ -1,8 +1,8 @@
-import { createEditorBlocksRichTextSession } from './editor-blocks-rich-text-session.js?v=press-system-v3.4.116';
-import { createEditorBlocksInlineToolbarSession } from './editor-blocks-inline-toolbar-session.js?v=press-system-v3.4.116';
-import { createEditorBlocksInlineCommandSession } from './editor-blocks-inline-command-session.js?v=press-system-v3.4.116';
-import { createEditorBlocksLinkSession } from './editor-blocks-link-session.js?v=press-system-v3.4.116';
-import { createEditorBlocksMathSession } from './editor-blocks-math-session.js?v=press-system-v3.4.116';
+import { createEditorBlocksRichTextSession } from './editor-blocks-rich-text-session.js?v=press-system-v3.4.117';
+import { createEditorBlocksInlineToolbarSession } from './editor-blocks-inline-toolbar-session.js?v=press-system-v3.4.117';
+import { createEditorBlocksInlineCommandSession } from './editor-blocks-inline-command-session.js?v=press-system-v3.4.117';
+import { createEditorBlocksLinkSession } from './editor-blocks-link-session.js?v=press-system-v3.4.117';
+import { createEditorBlocksMathSession } from './editor-blocks-math-session.js?v=press-system-v3.4.117';
 import {
   caretRectForEditable,
   inlineMarkedDomRangeFromPointerEvent,
@@ -16,7 +16,7 @@ import {
   selectionMathInEditable,
   shouldInsertBlankBlockOnEnter,
   textRangeForDomNode
-} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.116';
+} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.117';
 import {
   applyInlineLinkToRuns,
   applyInlineMathToRuns,
@@ -32,7 +32,7 @@ import {
   sanitizeEditorLinkHref,
   sanitizeEditorLinkTitle,
   toggleInlineMarkOnRuns
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.117';
 
 export function createEditorBlocksInlineSessions(options = {}) {
   const {

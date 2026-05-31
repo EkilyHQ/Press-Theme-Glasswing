@@ -23,7 +23,7 @@ export {
   sanitizeEditorLinkTitle,
   serializeInlineRuns,
   toggleInlineMarkOnRuns
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.117';
 
 export {
   convertListTailItemAfterEmptyToParagraph,
@@ -52,7 +52,7 @@ export {
   serializeList,
   splitListItemsAtEmptyItem,
   summarizeListType
-} from './editor-blocks-list-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.117';
 
 export {
   editableTableData,
@@ -61,7 +61,7 @@ export {
   parseTableBlock,
   serializeTable,
   tableColumnCount
-} from './editor-blocks-table-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-table-model.js?v=press-system-v3.4.117';
 
 export {
   isBlockEmptyForBackspace,
@@ -71,7 +71,7 @@ export {
   mergeTextBlockIntoPrevious,
   mergeTextBlockIntoPreviousList,
   splitTextBlockIntoParagraph
-} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.117';
 
 export {
   BLOCK_TYPES,
@@ -80,13 +80,13 @@ export {
   makeBlock,
   normalizeText,
   splitBlankLineUnits
-} from './editor-blocks-block-core-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-block-core-model.js?v=press-system-v3.4.117';
 
 export {
   autofixMarkdownSourceBlock,
   parseMarkdownBlocks
-} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.117';
 
 export {
   serializeMarkdownBlocks
-} from './editor-blocks-markdown-serialize-model.js?v=press-system-v3.4.116';
+} from './editor-blocks-markdown-serialize-model.js?v=press-system-v3.4.117';
