@@ -1,6 +1,6 @@
-import { createEditorMainPreviewAssets } from './editor-main-preview-assets.js?v=press-system-v3.4.111';
-import { createEditorMainPreviewThemePicker } from './editor-main-preview-theme-picker.js?v=press-system-v3.4.111';
-import { createEditorMainPreviewViewport } from './editor-main-preview-viewport.js?v=press-system-v3.4.111';
+import { createEditorMainPreviewAssets } from './editor-main-preview-assets.js?v=press-system-v3.4.112';
+import { createEditorMainPreviewThemePicker } from './editor-main-preview-theme-picker.js?v=press-system-v3.4.112';
+import { createEditorMainPreviewViewport } from './editor-main-preview-viewport.js?v=press-system-v3.4.112';
 
 const PREVIEW_RENDER_MESSAGE = 'press-editor-preview-render';
 const PREVIEW_READY_MESSAGE = 'press-editor-preview-ready';

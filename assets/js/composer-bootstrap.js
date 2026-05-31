@@ -1,5 +1,5 @@
-import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.111';
-import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.111';
+import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.112';
+import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.112';
 
 function noop() {}
 

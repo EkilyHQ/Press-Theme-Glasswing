@@ -1,9 +1,9 @@
-import { mdParse } from './markdown.js?v=press-system-v3.4.111';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.111';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.111';
-import { t } from './i18n.js?v=press-system-v3.4.111';
-import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.111';
-import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.111';
+import { mdParse } from './markdown.js?v=press-system-v3.4.112';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.112';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.112';
+import { t } from './i18n.js?v=press-system-v3.4.112';
+import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.112';
+import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.112';
 import {
   isUpgradeAllowed,
   loadPressSystemManifest,
@@ -11,9 +11,9 @@ import {
   normalizeSemver,
   normalizeUpgradeFrom,
   semverToTag
-} from './press-version.js?v=press-system-v3.4.111';
-import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.111';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.111';
+} from './press-version.js?v=press-system-v3.4.112';
+import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.112';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.112';
 
 const TEXT_EXTENSIONS = new Set([
   '.js', '.mjs', '.cjs', '.ts', '.json', '.yaml', '.yml', '.md', '.txt', '.html', '.css', '.svg', '.xml',

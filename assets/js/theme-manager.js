@@ -1,13 +1,13 @@
-import { t } from './i18n.js?v=press-system-v3.4.111';
-import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.111';
-import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.111';
+import { t } from './i18n.js?v=press-system-v3.4.112';
+import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.112';
+import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.112';
 import {
   getThemeManagerOfficialCatalogStatus as getOfficialCatalogStatusForRuntime,
   getThemeManagerProductStateStatus as getProductStateStatusForRuntime,
   loadThemeManagerOfficialCatalog as loadOfficialCatalogForRuntime,
   loadThemeManagerProductState as loadProductStateForRuntime,
   loadThemeManagerRegistry as loadRegistryForRuntime
-} from './theme-manager-data.js?v=press-system-v3.4.111';
+} from './theme-manager-data.js?v=press-system-v3.4.112';
 import {
   applyThemeManagerSummary,
   clearPendingSiteThemeFallback,
@@ -16,7 +16,7 @@ import {
   stageSiteThemePack,
   stageThemeArchiveWithRuntime,
   stageThemeUninstallWithRuntime
-} from './theme-manager-staging.js?v=press-system-v3.4.111';
+} from './theme-manager-staging.js?v=press-system-v3.4.112';
 import {
   createThemeManagerElements,
   renderThemeManagerAvailableThemes,
@@ -25,7 +25,7 @@ import {
   setActiveThemeManagerView,
   setThemeManagerBusy as setBusy,
   setThemeManagerStatus as setStatus
-} from './theme-manager-view.js?v=press-system-v3.4.111';
+} from './theme-manager-view.js?v=press-system-v3.4.112';
 
 export {
   collectThemeArchiveEntries,
@@ -35,8 +35,8 @@ export {
   normalizeThemeReleaseManifest,
   sanitizeThemeSlug,
   verifyThemeAsset
-} from './theme-package-core.js?v=press-system-v3.4.111';
-export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.111';
+} from './theme-package-core.js?v=press-system-v3.4.112';
+export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.112';
 
 function createThemeManagerState() {
   return {

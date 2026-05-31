@@ -1,4 +1,4 @@
-import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.111';
+import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.112';
 import {
   CARET_POINT_MEASURE_LIMIT,
   CARET_TEXT_NODE_FILTER,
@@ -7,9 +7,9 @@ import {
   textareaTextOffsetDetailsFromPoint as measureTextareaTextOffsetDetailsFromPoint,
   textareaTextOffsetFromPoint as measureTextareaTextOffsetFromPoint,
   visualLineRects as measureVisualLineRects
-} from './editor-blocks-caret-measurement.js?v=press-system-v3.4.111';
+} from './editor-blocks-caret-measurement.js?v=press-system-v3.4.112';
 
-export { CARET_POINT_MEASURE_LIMIT } from './editor-blocks-caret-measurement.js?v=press-system-v3.4.111';
+export { CARET_POINT_MEASURE_LIMIT } from './editor-blocks-caret-measurement.js?v=press-system-v3.4.112';
 
 function createFallbackSelectionSession() {
   return createEditorBlocksSelectionSession();
