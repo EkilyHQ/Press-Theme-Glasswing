@@ -1,7 +1,7 @@
 import {
   animateEditorSystemPanelContent as animateSystemPanelContent,
   showEditorSystemPanel as showComposerSystemPanel
-} from './composer-system-panel.js?v=press-system-v3.4.113';
+} from './composer-system-panel.js?v=press-system-v3.4.114';
 
 export function createComposerEditorShell(options = {}) {
   const documentRef = options.documentRef || null;

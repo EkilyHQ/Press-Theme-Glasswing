@@ -2,7 +2,7 @@ import {
   createEventEffects,
   createStorageEffects,
   resolveStorageEffect
-} from './editor-effects.js?v=press-system-v3.4.113';
+} from './editor-effects.js?v=press-system-v3.4.114';
 
 function noop() {}
 

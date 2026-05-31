@@ -4,7 +4,7 @@ import {
   hasMarkdownDraftContent,
   isEncryptedMarkdownDraftEntry,
   normalizeMarkdownContent
-} from './composer-markdown-state.js?v=press-system-v3.4.113';
+} from './composer-markdown-state.js?v=press-system-v3.4.114';
 
 const noop = () => {};
 

@@ -3,7 +3,7 @@
 import {
   inlineRenderedTextLength,
   normalizeEditableMarkdownText
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.113';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.114';
 
 function lineWithoutTerminator(line) {
   return String(line || '').replace(/\n$/, '');

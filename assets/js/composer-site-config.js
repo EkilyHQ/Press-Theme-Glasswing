@@ -3,8 +3,8 @@ import {
   fetchTrackedSiteConfig,
   mergeYamlConfig,
   resolveSiteRepoConfig
-} from './yaml.js?v=press-system-v3.4.113';
-import { PRESS_GITHUB_SITE_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.113';
+} from './yaml.js?v=press-system-v3.4.114';
+import { PRESS_GITHUB_SITE_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.114';
 
 export function inferRepoConfigFromGitHubPagesUrl(locationLike) {
   return PRESS_GITHUB_SITE_PROVIDER.inferRepositoryFromPublishedUrl(locationLike);

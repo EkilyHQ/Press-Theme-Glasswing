@@ -1,5 +1,5 @@
-import { t } from './i18n.js?v=press-system-v3.4.113';
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.113';
+import { t } from './i18n.js?v=press-system-v3.4.114';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.114';
 
 function getRegionReader(options = {}) {
   return options && typeof options.getRegion === 'function' ? options.getRegion : getThemeRegion;
