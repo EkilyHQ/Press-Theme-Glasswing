@@ -191,8 +191,8 @@ const releaseWorkflow = fs.readFileSync('.github/workflows/theme-release.yml', '
 if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(data.slug || '')) {
   throw new Error('demo site data must define a safe slug');
 }
-if (!theme.engines || theme.engines.press !== '>=3.4.0 <4.0.0') {
-  throw new Error('theme/theme.json must declare engines.press for Press compatibility');
+if (!theme.engines || theme.engines.press !== '>=3.4.121 <4.0.0') {
+  throw new Error('theme/theme.json must declare engines.press for Press v3.4.121 compatibility');
 }
 if (!releaseWorkflow.includes('themeManifest.engines') || !releaseWorkflow.includes('engines,')) {
   throw new Error('theme release workflow must copy theme engines into theme-release.json');

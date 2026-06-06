@@ -554,7 +554,8 @@ function setupThemeControls(params = {}) {
   if (!tools) return false;
   try {
     const mount = params.mountThemeControls || mountThemeControls;
-    if (typeof mount === 'function') mount({ host: tools, variant: 'glasswing' });
+    const themeContext = params.themeContext || params.context || activeThemeContext;
+    if (typeof mount === 'function') mount({ host: tools, variant: 'glasswing', themeContext });
   } catch (_) {}
   try {
     const applyTheme = params.applySavedTheme || applySavedTheme;
@@ -612,10 +613,12 @@ let activeRegions = {};
 let activeShell = null;
 let activeWindow = null;
 let activeSiteConfig = {};
+let activeThemeContext = null;
 
 export function mount(context = {}) {
   const doc = getDocument(context);
   activeWindow = getWindow(context);
+  activeThemeContext = context && typeof context === 'object' ? context : null;
   if (!doc || !doc.body) return context;
 
   const shell = ensureElement(doc.body, '[data-theme-root="glasswing"]', () => {
