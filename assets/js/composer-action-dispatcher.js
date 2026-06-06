@@ -2,7 +2,7 @@ import {
   COMPOSER_ACTION_PLAN,
   getComposerActionPlan,
   validateComposerActionPlan
-} from './composer-action-contract.js?v=press-system-v3.4.118';
+} from './composer-action-contract.js?v=press-system-v3.4.119';
 
 function normalizeActionPlan(plan) {
   const failures = validateComposerActionPlan(plan);

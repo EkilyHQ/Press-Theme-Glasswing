@@ -1,21 +1,21 @@
-import { createPressMathRenderer } from './math-render.js?v=press-system-v3.4.118';
-import { createEditorBlocksRuntime } from './editor-blocks-runtime.js?v=press-system-v3.4.118';
-import { createEditorBlocksSessionRegistry } from './editor-blocks-session-registry.js?v=press-system-v3.4.118';
-import { createEditorBlocksBlockActions } from './editor-blocks-block-actions.js?v=press-system-v3.4.118';
-import { createEditorBlocksControlFactory } from './editor-blocks-control-factory.js?v=press-system-v3.4.118';
-import { createEditorBlocksLayoutSession } from './editor-blocks-layout-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksBodySession } from './editor-blocks-body-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksStateController } from './editor-blocks-state.js?v=press-system-v3.4.118';
-import { createEditorBlocksMenuSession } from './editor-blocks-menu-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksHeadSession } from './editor-blocks-head-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksCommandSession } from './editor-blocks-command-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksEditableSession } from './editor-blocks-editable-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.118';
-import { CARET_POINT_MEASURE_LIMIT } from './editor-blocks-caret-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksFocusPointerSessions } from './editor-blocks-focus-pointer-sessions.js?v=press-system-v3.4.118';
-import { createEditorBlocksActiveSession } from './editor-blocks-active-session.js?v=press-system-v3.4.118';
-import { createEditorBlocksInlineSessions } from './editor-blocks-inline-sessions.js?v=press-system-v3.4.118';
-import { createEditorBlocksBlockTypeSessions } from './editor-blocks-block-type-sessions.js?v=press-system-v3.4.118';
+import { createPressMathRenderer } from './math-render.js?v=press-system-v3.4.119';
+import { createEditorBlocksRuntime } from './editor-blocks-runtime.js?v=press-system-v3.4.119';
+import { createEditorBlocksSessionRegistry } from './editor-blocks-session-registry.js?v=press-system-v3.4.119';
+import { createEditorBlocksBlockActions } from './editor-blocks-block-actions.js?v=press-system-v3.4.119';
+import { createEditorBlocksControlFactory } from './editor-blocks-control-factory.js?v=press-system-v3.4.119';
+import { createEditorBlocksLayoutSession } from './editor-blocks-layout-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksBodySession } from './editor-blocks-body-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksStateController } from './editor-blocks-state.js?v=press-system-v3.4.119';
+import { createEditorBlocksMenuSession } from './editor-blocks-menu-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksHeadSession } from './editor-blocks-head-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksCommandSession } from './editor-blocks-command-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksEditableSession } from './editor-blocks-editable-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksSelectionSession } from './editor-blocks-selection-session.js?v=press-system-v3.4.119';
+import { CARET_POINT_MEASURE_LIMIT } from './editor-blocks-caret-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksFocusPointerSessions } from './editor-blocks-focus-pointer-sessions.js?v=press-system-v3.4.119';
+import { createEditorBlocksActiveSession } from './editor-blocks-active-session.js?v=press-system-v3.4.119';
+import { createEditorBlocksInlineSessions } from './editor-blocks-inline-sessions.js?v=press-system-v3.4.119';
+import { createEditorBlocksBlockTypeSessions } from './editor-blocks-block-type-sessions.js?v=press-system-v3.4.119';
 import {
   closestElement,
   createCaretSession,
@@ -25,25 +25,25 @@ import {
   nodeContains,
   placeCaretAtTextOffset,
   setPlainContentEditableValue
-} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.118';
+} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.119';
 import {
   normalizeEditableMarkdownText
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.119';
 import {
   defaultListItems,
   editableListItems
-} from './editor-blocks-list-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.119';
 import {
   makeBlankBlock,
   makeBlock,
   splitBlankLineUnits
-} from './editor-blocks-block-core-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-block-core-model.js?v=press-system-v3.4.119';
 import {
   parseMarkdownBlocks
-} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.119';
 import {
   serializeMarkdownBlocks
-} from './editor-blocks-markdown-serialize-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-markdown-serialize-model.js?v=press-system-v3.4.119';
 
 export {
   applyInlineLinkToRuns,
@@ -54,7 +54,7 @@ export {
   removeInlineMarkAroundOffset,
   serializeInlineRuns,
   toggleInlineMarkOnRuns
-} from './editor-blocks-inline-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-inline-model.js?v=press-system-v3.4.119';
 
 export {
   convertListTailItemAfterEmptyToParagraph,
@@ -65,7 +65,7 @@ export {
   patchListItem,
   patchListItemType,
   splitListItemsAtEmptyItem
-} from './editor-blocks-list-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.119';
 
 export {
   isBlockEmptyForBackspace,
@@ -74,16 +74,16 @@ export {
   mergeTextBlockIntoPrevious,
   mergeTextBlockIntoPreviousList,
   splitTextBlockIntoParagraph
-} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.119';
 
 export {
   autofixMarkdownSourceBlock,
   parseMarkdownBlocks
-} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-markdown-parse-model.js?v=press-system-v3.4.119';
 
 export {
   serializeMarkdownBlocks
-} from './editor-blocks-markdown-serialize-model.js?v=press-system-v3.4.118';
+} from './editor-blocks-markdown-serialize-model.js?v=press-system-v3.4.119';
 
 export function createMarkdownBlocksEditor(root, options = {}) {
   if (!root) return null;
