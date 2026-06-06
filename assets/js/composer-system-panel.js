@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.119';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.120';
 
 export function animateEditorSystemPanelContent({
   documentRef = null,

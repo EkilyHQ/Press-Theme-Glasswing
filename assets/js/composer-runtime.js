@@ -1,4 +1,4 @@
-import { createBrowserEditorAppRuntime } from './editor-app-runtime.js?v=press-system-v3.4.119';
+import { createBrowserEditorAppRuntime } from './editor-app-runtime.js?v=press-system-v3.4.120';
 
 const CONTENT_ROOT_GLOBAL = '__press_content_root';
 const SITE_REPO_GLOBAL = '__press_site_repo';
@@ -182,8 +182,7 @@ export function createComposerRuntime(options = {}) {
 
   function initializeEditorSessionState({
     editorSessionStateStore = null,
-    editorStateVersion = null,
-    legacySystemTreeNodeId = 'system'
+    editorStateVersion = null
   } = {}) {
     hasEditorStateV3Snapshot = false;
     try {
@@ -195,14 +194,6 @@ export function createComposerRuntime(options = {}) {
     } catch (_) {
       hasEditorStateV3Snapshot = false;
     }
-    try {
-      if (!hasEditorStateV3Snapshot
-        && editorSessionStateStore
-        && typeof editorSessionStateStore.readLegacySystemTreeExpanded === 'function'
-        && editorSessionStateStore.readLegacySystemTreeExpanded()) {
-        expandedEditorTreeNodeIds.add(String(legacySystemTreeNodeId || 'system'));
-      }
-    } catch (_) {}
     return hasEditorStateV3Snapshot;
   }
 

@@ -1,4 +1,4 @@
-import { createComposerActionDispatcher } from './composer-action-dispatcher.js?v=press-system-v3.4.119';
+import { createComposerActionDispatcher } from './composer-action-dispatcher.js?v=press-system-v3.4.120';
 
 export const COMPOSER_ACTION_EFFECT_SERVICES = Object.freeze([
   'modeController',

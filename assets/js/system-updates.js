@@ -1,11 +1,11 @@
-import { mdParse } from './markdown.js?v=press-system-v3.4.119';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.119';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.119';
-import { t } from './i18n.js?v=press-system-v3.4.119';
-import { bindEventEffect } from './editor-effects.js?v=press-system-v3.4.119';
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.119';
-import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.119';
-import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.119';
+import { mdParse } from './markdown.js?v=press-system-v3.4.120';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.120';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.120';
+import { t } from './i18n.js?v=press-system-v3.4.120';
+import { bindEventEffect } from './editor-effects.js?v=press-system-v3.4.120';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.120';
+import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.120';
+import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.120';
 import {
   isUpgradeAllowed,
   loadPressSystemManifest,
@@ -13,9 +13,9 @@ import {
   normalizeSemver,
   normalizeUpgradeFrom,
   semverToTag
-} from './press-version.js?v=press-system-v3.4.119';
-import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.119';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.119';
+} from './press-version.js?v=press-system-v3.4.120';
+import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.120';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.120';
 
 const TEXT_EXTENSIONS = new Set([
   '.js', '.mjs', '.cjs', '.ts', '.json', '.yaml', '.yml', '.md', '.txt', '.html', '.css', '.svg', '.xml',

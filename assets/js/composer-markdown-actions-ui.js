@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.119';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.120';
 
 const MARKDOWN_PUSH_LABEL_KEYS = {
   default: 'editor.composer.markdown.push.labelDefault',

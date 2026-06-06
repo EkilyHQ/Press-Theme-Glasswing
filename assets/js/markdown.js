@@ -1,6 +1,6 @@
-import { resolveImageSrc, sanitizeUrl } from './safe-html.js?v=press-system-v3.4.119';
-import { escapeHtml, escapeMarkdown } from './utils.js?v=press-system-v3.4.119';
-import { stripFrontMatter } from './content.js?v=press-system-v3.4.119';
+import { resolveImageSrc, sanitizeUrl } from './safe-html.js?v=press-system-v3.4.120';
+import { escapeHtml, escapeMarkdown } from './utils.js?v=press-system-v3.4.120';
+import { stripFrontMatter } from './content.js?v=press-system-v3.4.120';
 
 const DEFAULT_PARSE_LIMITS = {
   maxDepth: 8,

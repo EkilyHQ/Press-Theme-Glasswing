@@ -1,6 +1,6 @@
-import { CARET_POINT_MEASURE_LIMIT } from './editor-blocks-caret-session.js?v=press-system-v3.4.119';
-import { createEditorBlocksFocusSession } from './editor-blocks-focus-session.js?v=press-system-v3.4.119';
-import { createEditorBlocksPointerSession } from './editor-blocks-pointer-session.js?v=press-system-v3.4.119';
+import { CARET_POINT_MEASURE_LIMIT } from './editor-blocks-caret-session.js?v=press-system-v3.4.120';
+import { createEditorBlocksFocusSession } from './editor-blocks-focus-session.js?v=press-system-v3.4.120';
+import { createEditorBlocksPointerSession } from './editor-blocks-pointer-session.js?v=press-system-v3.4.120';
 
 function noop() {}
 

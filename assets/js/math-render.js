@@ -1,5 +1,5 @@
 const KATEX_VENDOR_BASE = './vendor/katex/';
-const KATEX_VENDOR_CACHE_KEY = 'press-system-v3.4.119';
+const KATEX_VENDOR_CACHE_KEY = 'press-system-v3.4.120';
 
 function appendVendorCacheKey(url) {
   const cacheKey = String(KATEX_VENDOR_CACHE_KEY || '').trim();
