@@ -1,4 +1,4 @@
-import { parseEncryptedMarkdownEnvelope } from './encrypted-content.js?v=press-system-v3.4.123';
+import { parseEncryptedMarkdownEnvelope } from './encrypted-content.js?v=press-system-v3.4.124';
 
 export function createPostCommitStateApplier({
   stagingRegistry,
@@ -35,6 +35,7 @@ export function createPostCommitStateApplier({
   updateDynamicTabDirtyState = () => {},
   removeMarkdownAsset = () => {},
   removeMarkdownAssetDeletion = () => {},
+  clearContentModelMigration = () => {},
   updateUnsyncedSummary = () => {}
 } = {}) {
   function apply(files = []) {
@@ -178,6 +179,9 @@ export function createPostCommitStateApplier({
         }
       }
     });
+    if (files.some(file => file && file.kind === 'content-model-migration')) {
+      clearContentModelMigration();
+    }
     updateUnsyncedSummary();
     updateMarkdownPushButton(getActiveDynamicTab());
     updateMarkdownDiscardButton(getActiveDynamicTab());

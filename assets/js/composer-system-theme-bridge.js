@@ -1,5 +1,5 @@
-import { createSystemUpdatesController } from './system-updates.js?v=press-system-v3.4.123';
-import { createThemeManagerController } from './theme-manager.js?v=press-system-v3.4.123';
+import { createSystemUpdatesController } from './system-updates.js?v=press-system-v3.4.124';
+import { createThemeManagerController } from './theme-manager.js?v=press-system-v3.4.124';
 
 export function createComposerSystemThemeBridge(options = {}) {
   const consoleRef = options.consoleRef || null;
@@ -13,9 +13,13 @@ export function createComposerSystemThemeBridge(options = {}) {
   const getStagedThemeCommitFiles = typeof options.getStagedThemeCommitFiles === 'function'
     ? options.getStagedThemeCommitFiles
     : () => (themeManager && typeof themeManager.getCommitFiles === 'function' ? themeManager.getCommitFiles() : []);
+  const getStagedContentCommitFiles = typeof options.getStagedContentCommitFiles === 'function'
+    ? options.getStagedContentCommitFiles
+    : () => [];
   const systemUpdates = options.systemUpdatesController || createSystemUpdatesController({
     localStorageRef,
     getStagedThemeCommitFiles,
+    getStagedContentCommitFiles,
     getCurrentThemePack
   });
   let initialized = false;
