@@ -1,4 +1,4 @@
-import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.121';
+import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.122';
 import {
   PRESS_THEME_CONTRACT,
   getDefaultThemeStyles,
@@ -10,8 +10,8 @@ import {
   getThemeArchiveAllowedExtensions,
   getThemeTextExtensions,
   isPressThemeContractVersionSupported
-} from './theme-contract-surface.mjs?v=press-system-v3.4.121';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.121';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.122';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.122';
 
 export const REQUIRED_THEME_CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 
@@ -301,11 +301,12 @@ export function normalizeThemeRegistry(input) {
     if (seen.has(value)) return;
     seen.add(value);
     const builtIn = value === 'native' || entry.builtIn === true;
+    const contractVersion = Number(entry.contractVersion);
     const item = {
       value,
       label: safeString(entry.label || entry.name || value) || value,
       version: safeString(entry.version || ''),
-      contractVersion: Number.isFinite(Number(entry.contractVersion)) ? Number(entry.contractVersion) : REQUIRED_THEME_CONTRACT_VERSION,
+      contractVersion: Number.isFinite(contractVersion) && contractVersion > 0 ? Math.floor(contractVersion) : 0,
       engines: normalizeThemeEngines(entry.engines),
       builtIn,
       removable: builtIn ? false : entry.removable !== false,
@@ -314,6 +315,7 @@ export function normalizeThemeRegistry(input) {
       files: normalizeFileList(entry.files)
     };
     if (builtIn) {
+      item.contractVersion = REQUIRED_THEME_CONTRACT_VERSION;
       item.source = { type: 'builtin' };
       item.removable = false;
     }

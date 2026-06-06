@@ -1,4 +1,4 @@
-import { createEditorAppRuntime } from './editor-app-runtime.js?v=press-system-v3.4.121';
+import { createEditorAppRuntime } from './editor-app-runtime.js?v=press-system-v3.4.122';
 
 const TRANSLATE_GLOBAL = '__press_t';
 

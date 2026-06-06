@@ -1,5 +1,5 @@
-import { withLangParam, t } from './i18n.js?v=press-system-v3.4.121';
-import { escapeHtml } from './utils.js?v=press-system-v3.4.121';
+import { withLangParam, t } from './i18n.js?v=press-system-v3.4.122';
+import { escapeHtml } from './utils.js?v=press-system-v3.4.122';
 
 export function renderPostNav(container, postsIndex, postname) {
   try {

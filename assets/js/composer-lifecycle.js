@@ -1,6 +1,6 @@
-import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.121';
-import { initializeComposerApp } from './composer-bootstrap.js?v=press-system-v3.4.121';
-import { injectComposerRuntimeStyles } from './composer-runtime-styles.js?v=press-system-v3.4.121';
+import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.122';
+import { initializeComposerApp } from './composer-bootstrap.js?v=press-system-v3.4.122';
+import { injectComposerRuntimeStyles } from './composer-runtime-styles.js?v=press-system-v3.4.122';
 
 export function createComposerLifecycle(options = {}) {
   const documentRef = options.documentRef || null;

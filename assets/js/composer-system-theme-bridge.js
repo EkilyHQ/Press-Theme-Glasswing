@@ -1,5 +1,5 @@
-import { createSystemUpdatesController } from './system-updates.js?v=press-system-v3.4.121';
-import { createThemeManagerController } from './theme-manager.js?v=press-system-v3.4.121';
+import { createSystemUpdatesController } from './system-updates.js?v=press-system-v3.4.122';
+import { createThemeManagerController } from './theme-manager.js?v=press-system-v3.4.122';
 
 export function createComposerSystemThemeBridge(options = {}) {
   const consoleRef = options.consoleRef || null;
@@ -8,8 +8,16 @@ export function createComposerSystemThemeBridge(options = {}) {
   const notifyComposerChange = typeof options.notifyComposerChange === 'function' ? options.notifyComposerChange : (() => {});
   const updateUnsyncedSummary = typeof options.updateUnsyncedSummary === 'function' ? options.updateUnsyncedSummary : (() => {});
   const refreshEditorContentTree = typeof options.refreshEditorContentTree === 'function' ? options.refreshEditorContentTree : (() => {});
-  const systemUpdates = options.systemUpdatesController || createSystemUpdatesController();
+  const localStorageRef = options.localStorageRef || null;
   const themeManager = options.themeManagerController || createThemeManagerController();
+  const getStagedThemeCommitFiles = typeof options.getStagedThemeCommitFiles === 'function'
+    ? options.getStagedThemeCommitFiles
+    : () => (themeManager && typeof themeManager.getCommitFiles === 'function' ? themeManager.getCommitFiles() : []);
+  const systemUpdates = options.systemUpdatesController || createSystemUpdatesController({
+    localStorageRef,
+    getStagedThemeCommitFiles,
+    getCurrentThemePack
+  });
   let initialized = false;
 
   function getSystemSummaryEntries() {

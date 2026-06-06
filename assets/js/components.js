@@ -1,6 +1,6 @@
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.121';
-import { escapeHtml } from './utils.js?v=press-system-v3.4.121';
-export { renderPressPostCardHtml } from './post-card-html.js?v=press-system-v3.4.121';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.122';
+import { escapeHtml } from './utils.js?v=press-system-v3.4.122';
+export { renderPressPostCardHtml } from './post-card-html.js?v=press-system-v3.4.122';
 
 const safe = (value) => escapeHtml(String(value ?? '')) || '';
 const asBool = (value) => value === true || value === 'true' || value === '';

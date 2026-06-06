@@ -1,14 +1,14 @@
-import { t } from './i18n.js?v=press-system-v3.4.121';
-import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.121';
-import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.121';
-import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.121';
+import { t } from './i18n.js?v=press-system-v3.4.122';
+import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.122';
+import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.122';
+import { createThemeInstallService } from './theme-install-service.js?v=press-system-v3.4.122';
 import {
   getThemeManagerOfficialCatalogStatus as getOfficialCatalogStatusForRuntime,
   getThemeManagerProductStateStatus as getProductStateStatusForRuntime,
   loadThemeManagerOfficialCatalog as loadOfficialCatalogForRuntime,
   loadThemeManagerProductState as loadProductStateForRuntime,
   loadThemeManagerRegistry as loadRegistryForRuntime
-} from './theme-manager-data.js?v=press-system-v3.4.121';
+} from './theme-manager-data.js?v=press-system-v3.4.122';
 import {
   applyThemeManagerSummary,
   clearPendingSiteThemeFallback,
@@ -17,7 +17,7 @@ import {
   stageSiteThemePack,
   stageThemeArchiveWithRuntime,
   stageThemeUninstallWithRuntime
-} from './theme-manager-staging.js?v=press-system-v3.4.121';
+} from './theme-manager-staging.js?v=press-system-v3.4.122';
 import {
   createThemeManagerElements,
   renderThemeManagerAvailableThemes,
@@ -26,7 +26,7 @@ import {
   setActiveThemeManagerView,
   setThemeManagerBusy as setBusy,
   setThemeManagerStatus as setStatus
-} from './theme-manager-view.js?v=press-system-v3.4.121';
+} from './theme-manager-view.js?v=press-system-v3.4.122';
 
 export {
   collectThemeArchiveEntries,
@@ -36,8 +36,8 @@ export {
   normalizeThemeReleaseManifest,
   sanitizeThemeSlug,
   verifyThemeAsset
-} from './theme-package-core.js?v=press-system-v3.4.121';
-export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.121';
+} from './theme-package-core.js?v=press-system-v3.4.122';
+export { OFFICIAL_THEME_CATALOG_URL } from './theme-manager-data.js?v=press-system-v3.4.122';
 
 function createThemeManagerState() {
   return {
