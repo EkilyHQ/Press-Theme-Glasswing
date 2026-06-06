@@ -1,10 +1,10 @@
-import './cache-control.js?v=press-system-v3.4.122';
+import './cache-control.js?v=press-system-v3.4.123';
 import {
   fetchConfigWithYamlFallback,
   parseYAML
-} from './yaml.js?v=press-system-v3.4.122';
-import { escapeHtml } from './utils.js?v=press-system-v3.4.122';
-import { t, getAvailableLangs, getLanguageLabel } from './i18n.js?v=press-system-v3.4.122';
+} from './yaml.js?v=press-system-v3.4.123';
+import { escapeHtml } from './utils.js?v=press-system-v3.4.123';
+import { t, getAvailableLangs, getLanguageLabel } from './i18n.js?v=press-system-v3.4.123';
 import {
   cloneIndexMetadataValue,
   computeIndexDiff,
@@ -18,7 +18,7 @@ import {
   prepareIndexState,
   prepareTabsState,
   safeString
-} from './composer-index-tabs-model.js?v=press-system-v3.4.122';
+} from './composer-index-tabs-model.js?v=press-system-v3.4.123';
 import {
   cloneSiteState,
   computeSiteDiff,
@@ -26,42 +26,42 @@ import {
   prepareSiteState,
   toSiteYaml,
   writeYamlValue
-} from './composer-site-model.js?v=press-system-v3.4.122';
+} from './composer-site-model.js?v=press-system-v3.4.123';
 import {
   createScopedStorageKey,
   resolveEditorStorageScope
-} from './editor-storage.js?v=press-system-v3.4.122';
-import { createScopedDraftStore } from './editor-drafts.js?v=press-system-v3.4.122';
-import { createEditorSessionStateStore } from './editor-session-state.js?v=press-system-v3.4.122';
+} from './editor-storage.js?v=press-system-v3.4.123';
+import { createScopedDraftStore } from './editor-drafts.js?v=press-system-v3.4.123';
+import { createEditorSessionStateStore } from './editor-session-state.js?v=press-system-v3.4.123';
 import {
   COMPOSER_RUNTIME_EVENTS,
   createComposerRuntime
-} from './composer-runtime.js?v=press-system-v3.4.122';
-import { createComposerActionEffects } from './composer-action-effects.js?v=press-system-v3.4.122';
-import { createComposerControllerGraph } from './composer-controller-graph.js?v=press-system-v3.4.122';
-import { createComposerFilePanelController } from './composer-file-panel-controller.js?v=press-system-v3.4.122';
-import { createComposerNotificationController } from './composer-notifications.js?v=press-system-v3.4.122';
-import { createComposerDialogController } from './composer-dialogs.js?v=press-system-v3.4.122';
-import { createComposerPathTools } from './composer-path-tools.js?v=press-system-v3.4.122';
-import { createComposerContentMutationController } from './composer-content-mutations.js?v=press-system-v3.4.122';
-import { createComposerSetupVerifier } from './composer-setup-verifier.js?v=press-system-v3.4.122';
-import { createComposerModeController, isComposerSystemMode } from './composer-mode-controller.js?v=press-system-v3.4.122';
-import { createComposerUnsyncedSummaryController } from './composer-unsynced-summary.js?v=press-system-v3.4.122';
-import { createComposerSystemThemeBridge } from './composer-system-theme-bridge.js?v=press-system-v3.4.122';
+} from './composer-runtime.js?v=press-system-v3.4.123';
+import { createComposerActionEffects } from './composer-action-effects.js?v=press-system-v3.4.123';
+import { createComposerControllerGraph } from './composer-controller-graph.js?v=press-system-v3.4.123';
+import { createComposerFilePanelController } from './composer-file-panel-controller.js?v=press-system-v3.4.123';
+import { createComposerNotificationController } from './composer-notifications.js?v=press-system-v3.4.123';
+import { createComposerDialogController } from './composer-dialogs.js?v=press-system-v3.4.123';
+import { createComposerPathTools } from './composer-path-tools.js?v=press-system-v3.4.123';
+import { createComposerContentMutationController } from './composer-content-mutations.js?v=press-system-v3.4.123';
+import { createComposerSetupVerifier } from './composer-setup-verifier.js?v=press-system-v3.4.123';
+import { createComposerModeController, isComposerSystemMode } from './composer-mode-controller.js?v=press-system-v3.4.123';
+import { createComposerUnsyncedSummaryController } from './composer-unsynced-summary.js?v=press-system-v3.4.123';
+import { createComposerSystemThemeBridge } from './composer-system-theme-bridge.js?v=press-system-v3.4.123';
 import {
   createComposerUiMotionController
-} from './composer-ui-motion.js?v=press-system-v3.4.122';
+} from './composer-ui-motion.js?v=press-system-v3.4.123';
 import {
   applyInferredRepoConfig,
   createComposerSiteConfigController,
   inferRepoConfigFromGitHubPagesUrl
-} from './composer-site-config.js?v=press-system-v3.4.122';
-import { createComposerMarkdownFeature } from './composer-markdown-feature.js?v=press-system-v3.4.122';
-import { createComposerEditorWorkspaceFeature } from './composer-editor-workspace-feature.js?v=press-system-v3.4.122';
-import { createComposerYamlSiteFeature } from './composer-yaml-site-feature.js?v=press-system-v3.4.122';
-import { createComposerPublishSyncFeature } from './composer-publish-sync-feature.js?v=press-system-v3.4.122';
-import { createComposerMarkdownSessionController } from './composer-markdown-session.js?v=press-system-v3.4.122';
-import { createComposerMarkdownWorkspaceController } from './composer-markdown-workspace.js?v=press-system-v3.4.122';
+} from './composer-site-config.js?v=press-system-v3.4.123';
+import { createComposerMarkdownFeature } from './composer-markdown-feature.js?v=press-system-v3.4.123';
+import { createComposerEditorWorkspaceFeature } from './composer-editor-workspace-feature.js?v=press-system-v3.4.123';
+import { createComposerYamlSiteFeature } from './composer-yaml-site-feature.js?v=press-system-v3.4.123';
+import { createComposerPublishSyncFeature } from './composer-publish-sync-feature.js?v=press-system-v3.4.123';
+import { createComposerMarkdownSessionController } from './composer-markdown-session.js?v=press-system-v3.4.123';
+import { createComposerMarkdownWorkspaceController } from './composer-markdown-workspace.js?v=press-system-v3.4.123';
 
 const PREFERRED_LANG_ORDER = ['en', 'chs', 'cht-tw', 'cht-hk', 'ja'];
 const LANG_CODE_PATTERN = /^[a-z]{2,3}(?:-[a-z0-9]+)*$/i;

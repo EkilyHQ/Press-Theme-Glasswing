@@ -1,9 +1,9 @@
-import { configureFetchCachePolicy as configureFetchCachePolicyDefault } from './cache-control.js?v=press-system-v3.4.122';
-import { loadContentJsonWithRaw as loadContentJsonWithRawDefault } from './i18n.js?v=press-system-v3.4.122';
+import { configureFetchCachePolicy as configureFetchCachePolicyDefault } from './cache-control.js?v=press-system-v3.4.123';
+import { loadContentJsonWithRaw as loadContentJsonWithRawDefault } from './i18n.js?v=press-system-v3.4.123';
 import {
   fetchConfigWithYamlFallback as fetchConfigWithYamlFallbackDefault,
   fetchMergedSiteConfig as fetchMergedSiteConfigDefault
-} from './yaml.js?v=press-system-v3.4.122';
+} from './yaml.js?v=press-system-v3.4.123';
 
 const noop = () => {};
 

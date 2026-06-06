@@ -1,8 +1,8 @@
-import { createComposerServiceRegistry } from './composer-service-registry.js?v=press-system-v3.4.122';
-import { createComposerServiceLifecycle } from './composer-app-services.js?v=press-system-v3.4.122';
-import { createComposerMarkdownWorkspaceFacade } from './composer-markdown-workspace-facade.js?v=press-system-v3.4.122';
-import { createComposerLifecycle } from './composer-lifecycle.js?v=press-system-v3.4.122';
-import { bindComposerWorkspaceUi } from './composer-bootstrap.js?v=press-system-v3.4.122';
+import { createComposerServiceRegistry } from './composer-service-registry.js?v=press-system-v3.4.123';
+import { createComposerServiceLifecycle } from './composer-app-services.js?v=press-system-v3.4.123';
+import { createComposerMarkdownWorkspaceFacade } from './composer-markdown-workspace-facade.js?v=press-system-v3.4.123';
+import { createComposerLifecycle } from './composer-lifecycle.js?v=press-system-v3.4.123';
+import { bindComposerWorkspaceUi } from './composer-bootstrap.js?v=press-system-v3.4.123';
 
 const noop = () => {};
 const NOOP_LOGGER = Object.freeze({

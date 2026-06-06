@@ -1,4 +1,4 @@
-import { createComposerSiteSettingsLanguageMenu } from './composer-site-settings-language-menu.js?v=press-system-v3.4.122';
+import { createComposerSiteSettingsLanguageMenu } from './composer-site-settings-language-menu.js?v=press-system-v3.4.123';
 
 const noop = () => {};
 

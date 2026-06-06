@@ -1,7 +1,7 @@
-import { renderTags, escapeHtml, formatDisplayDate, cardImageSrc, fallbackCover, getContentRoot } from './utils.js?v=press-system-v3.4.122';
-import { extractExcerpt, computeReadTime, parseFrontMatter } from './content.js?v=press-system-v3.4.122';
-import { isEncryptedMarkdown, stripEncryptedBodyForPublicUse } from './encrypted-content.js?v=press-system-v3.4.122';
-import { hydrateCardCovers } from './post-render.js?v=press-system-v3.4.122';
+import { renderTags, escapeHtml, formatDisplayDate, cardImageSrc, fallbackCover, getContentRoot } from './utils.js?v=press-system-v3.4.123';
+import { extractExcerpt, computeReadTime, parseFrontMatter } from './content.js?v=press-system-v3.4.123';
+import { isEncryptedMarkdown, stripEncryptedBodyForPublicUse } from './encrypted-content.js?v=press-system-v3.4.123';
+import { hydrateCardCovers } from './post-render.js?v=press-system-v3.4.123';
 
 const DEFAULT_STRINGS = {
   'ui.loading': 'Loading…',

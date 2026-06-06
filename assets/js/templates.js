@@ -1,7 +1,7 @@
 // Template renderers (pure functions returning HTML strings)
-import { t } from './i18n.js?v=press-system-v3.4.122';
-import { computeReadTime } from './content.js?v=press-system-v3.4.122';
-import { escapeHtml, renderTags, formatDisplayDate } from './utils.js?v=press-system-v3.4.122';
+import { t } from './i18n.js?v=press-system-v3.4.123';
+import { computeReadTime } from './content.js?v=press-system-v3.4.123';
+import { escapeHtml, renderTags, formatDisplayDate } from './utils.js?v=press-system-v3.4.123';
 
 // Render a metadata card (title/date/read time/tags) for a post
 export function renderPostMetaCard(title, meta, markdown) {

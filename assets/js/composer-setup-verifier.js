@@ -1,4 +1,4 @@
-import { PRESS_GITHUB_SITE_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.122';
+import { PRESS_GITHUB_SITE_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.123';
 
 export function createComposerSetupVerifier(options = {}) {
   const documentRef = options.documentRef || null;
