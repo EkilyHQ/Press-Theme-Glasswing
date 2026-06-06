@@ -2,8 +2,8 @@ import {
   CONNECT_PUBLISH_BASE_URL_STORAGE_KEY,
   getDefaultConnectPublishBaseUrl,
   normalizeConnectPublishBaseUrl
-} from './publish/settings-store.js?v=press-system-v3.4.120';
-import { createScopedStorageKey, resolveEditorStorageScope } from './editor-storage.js?v=press-system-v3.4.120';
+} from './publish/settings-store.js?v=press-system-v3.4.121';
+import { createScopedStorageKey, resolveEditorStorageScope } from './editor-storage.js?v=press-system-v3.4.121';
 
 export const CONNECT_PRODUCT_STATE_PATH = '/api/product-state';
 export const CONNECT_SYSTEM_RELEASE_PATH = '/api/press/system-release';

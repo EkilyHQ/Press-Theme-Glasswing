@@ -1,8 +1,8 @@
-import { createStagingRegistry, normalizeStagingWarning } from './composer-staging.js?v=press-system-v3.4.120';
-import { createIndexPublishMetadataEnricher } from './composer-index-publish-metadata.js?v=press-system-v3.4.120';
-import { createContentCommitStagingProvider } from './composer-content-staging.js?v=press-system-v3.4.120';
-import { createSeoStagingProvider } from './composer-seo-staging.js?v=press-system-v3.4.120';
-import { createPostCommitStateApplier } from './composer-post-commit-state.js?v=press-system-v3.4.120';
+import { createStagingRegistry, normalizeStagingWarning } from './composer-staging.js?v=press-system-v3.4.121';
+import { createIndexPublishMetadataEnricher } from './composer-index-publish-metadata.js?v=press-system-v3.4.121';
+import { createContentCommitStagingProvider } from './composer-content-staging.js?v=press-system-v3.4.121';
+import { createSeoStagingProvider } from './composer-seo-staging.js?v=press-system-v3.4.121';
+import { createPostCommitStateApplier } from './composer-post-commit-state.js?v=press-system-v3.4.121';
 
 function noop() {}
 

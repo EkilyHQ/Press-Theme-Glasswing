@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.120';
+} from './theme.js?v=press-system-v3.4.121';
 import {
   t,
   withLangParam,
@@ -13,19 +13,20 @@ import {
   ensureLanguageBundle,
   getAvailableLangs,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.120';
+} from './i18n.js?v=press-system-v3.4.121';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.120';
+} from './theme-regions.js?v=press-system-v3.4.121';
 import {
   PRESS_THEME_CONTRACT,
+  isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.120';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.121';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -42,8 +43,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.120';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.120';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.121';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.121';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',
@@ -120,7 +121,7 @@ export function createThemeI18nContext() {
 function validateManifestContract(pack, manifest) {
   if (!isThemeDevMode()) return;
   const contractVersion = manifest && manifest.contractVersion;
-  if (contractVersion !== CONTRACT_VERSION) {
+  if (!isPressThemeContractVersionSupported(contractVersion)) {
     themeDevWarn(`Theme "${pack}" declares unsupported contract version`, contractVersion);
   }
   if (!manifest.version) {
@@ -514,6 +515,7 @@ async function mountPack(pack, allowFallback = true, options = {}) {
   };
 
   if (!isCurrentMountGeneration(mountGeneration, options)) return null;
+  regionController.setThemeLayoutContext(context);
   applyManifestStyles(pack, manifest);
 
   for (const { entry, mod } of loadedModules) {

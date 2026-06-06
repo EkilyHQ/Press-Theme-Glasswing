@@ -1,16 +1,16 @@
-import { installLightbox } from '../../../js/lightbox.js?v=press-system-v3.4.120';
-import { sanitizeImageUrl, setSafeHtml } from '../../../js/safe-html.js?v=press-system-v3.4.120';
-import { slugifyTab, escapeHtml, getQueryVariable, renderTags, cardImageSrc, fallbackCover, formatDisplayDate, formatBytes, renderSkeletonArticle } from '../../../js/utils.js?v=press-system-v3.4.120';
-import { attachHoverTooltip } from '../../../js/tags.js?v=press-system-v3.4.120';
-import { prefersReducedMotion, getArticleTitleFromMain } from '../../../js/dom-utils.js?v=press-system-v3.4.120';
-import { renderPostMetaCard, renderOutdatedCard } from '../../../js/templates.js?v=press-system-v3.4.120';
-import { showErrorOverlay } from '../../../js/errors.js?v=press-system-v3.4.120';
-import { renderPostNav } from '../../../js/post-nav.js?v=press-system-v3.4.120';
-import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from '../../../js/post-render.js?v=press-system-v3.4.120';
-import { applyLangHints } from '../../../js/typography.js?v=press-system-v3.4.120';
-import { renderPressPostCardHtml } from '../../../js/post-card-html.js?v=press-system-v3.4.120';
-import { mountThemeControls, applySavedTheme, bindThemeToggle, bindThemePackPicker, bindPostEditor } from '../../../js/theme.js?v=press-system-v3.4.120';
-import { isEncryptedMarkdown, stripEncryptedBodyForPublicUse } from '../../../js/encrypted-content.js?v=press-system-v3.4.120';
+import { installLightbox } from '../../../js/lightbox.js?v=press-system-v3.4.121';
+import { sanitizeImageUrl, setSafeHtml } from '../../../js/safe-html.js?v=press-system-v3.4.121';
+import { slugifyTab, escapeHtml, getQueryVariable, renderTags, cardImageSrc, fallbackCover, formatDisplayDate, formatBytes, renderSkeletonArticle } from '../../../js/utils.js?v=press-system-v3.4.121';
+import { attachHoverTooltip } from '../../../js/tags.js?v=press-system-v3.4.121';
+import { prefersReducedMotion, getArticleTitleFromMain } from '../../../js/dom-utils.js?v=press-system-v3.4.121';
+import { renderPostMetaCard, renderOutdatedCard } from '../../../js/templates.js?v=press-system-v3.4.121';
+import { showErrorOverlay } from '../../../js/errors.js?v=press-system-v3.4.121';
+import { renderPostNav } from '../../../js/post-nav.js?v=press-system-v3.4.121';
+import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from '../../../js/post-render.js?v=press-system-v3.4.121';
+import { applyLangHints } from '../../../js/typography.js?v=press-system-v3.4.121';
+import { renderPressPostCardHtml } from '../../../js/post-card-html.js?v=press-system-v3.4.121';
+import { mountThemeControls, applySavedTheme, bindThemeToggle, bindThemePackPicker, bindPostEditor } from '../../../js/theme.js?v=press-system-v3.4.121';
+import { isEncryptedMarkdown, stripEncryptedBodyForPublicUse } from '../../../js/encrypted-content.js?v=press-system-v3.4.121';
 
 const defaultWindow = typeof window !== 'undefined' ? window : undefined;
 const defaultDocument = typeof document !== 'undefined' ? document : undefined;
@@ -21,9 +21,9 @@ function getRuntimeLinkCardsCache(runtimeState = null) {
 
 function loadNativeLinkCardsModule(runtimeState = null) {
   const cache = getRuntimeLinkCardsCache(runtimeState);
-  if (!cache) return import('../../../js/link-cards.js?v=press-system-v3.4.120');
+  if (!cache) return import('../../../js/link-cards.js?v=press-system-v3.4.121');
   if (!cache.modulePromise) {
-    cache.modulePromise = import('../../../js/link-cards.js?v=press-system-v3.4.120').catch((err) => {
+    cache.modulePromise = import('../../../js/link-cards.js?v=press-system-v3.4.121').catch((err) => {
       cache.modulePromise = null;
       throw err;
     });
@@ -407,7 +407,7 @@ function setupThemeControlsNative(params = {}) {
   const bindToggle = typeof params.bindThemeToggle === 'function' ? params.bindThemeToggle : bindThemeToggle;
   const bindEditor = typeof params.bindPostEditor === 'function' ? params.bindPostEditor : bindPostEditor;
   const bindPack = typeof params.bindThemePackPicker === 'function' ? params.bindThemePackPicker : bindThemePackPicker;
-  try { mount(); } catch (_) {}
+  try { mount({ contractVersion: params.contractVersion, themeContext: params.themeContext || params.context }); } catch (_) {}
   try { apply(); } catch (_) {}
   try { bindToggle(); } catch (_) {}
   try { bindEditor(); } catch (_) {}
@@ -1424,11 +1424,15 @@ function resetThemeControlsNative(params = {}, documentRef = defaultDocument) {
   const refreshLang = typeof params.refreshLanguageSelector === 'function' ? params.refreshLanguageSelector : (() => {});
   if (documentRef) {
     try {
-      const tools = documentRef.getElementById('tools');
-      if (tools && tools.parentElement) tools.parentElement.removeChild(tools);
+      const controls = documentRef.querySelector('press-theme-controls');
+      if (controls && controls.parentElement) controls.parentElement.removeChild(controls);
+      else {
+        const tools = documentRef.getElementById('tools');
+        if (tools && tools.parentElement) tools.parentElement.removeChild(tools);
+      }
     } catch (_) {}
   }
-  try { mount(); } catch (_) {}
+  try { mount({ contractVersion: params.contractVersion, themeContext: params.themeContext || params.context }); } catch (_) {}
   try { applyTheme(); } catch (_) {}
   try { bindToggle(); } catch (_) {}
   try { bindPack(); } catch (_) {}
