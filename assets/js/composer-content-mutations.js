@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.124';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.125';
 
 export function createComposerContentMutationController(options = {}) {
   const documentRef = options.documentRef || null;

@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.124';
+} from './theme.js?v=press-system-v3.4.125';
 import {
   t,
   withLangParam,
@@ -13,20 +13,20 @@ import {
   ensureLanguageBundle,
   getAvailableLangs,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.124';
+} from './i18n.js?v=press-system-v3.4.125';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.124';
+} from './theme-regions.js?v=press-system-v3.4.125';
 import {
   PRESS_THEME_CONTRACT,
   isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.124';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.125';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -43,8 +43,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.124';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.124';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.125';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.125';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',

@@ -1,14 +1,14 @@
-import { getManualMarkdownSaveState } from './composer-markdown-save.js?v=press-system-v3.4.124';
+import { getManualMarkdownSaveState } from './composer-markdown-save.js?v=press-system-v3.4.125';
 import {
   decryptMarkdownDocument,
   encryptMarkdownDocument,
   parseEncryptedMarkdownEnvelope
-} from './encrypted-content.js?v=press-system-v3.4.124';
-import { createComposerMarkdownAssetManager } from './composer-markdown-assets.js?v=press-system-v3.4.124';
-import { createComposerMarkdownActionsUi } from './composer-markdown-actions-ui.js?v=press-system-v3.4.124';
-import { createComposerMarkdownActionsController } from './composer-markdown-actions.js?v=press-system-v3.4.124';
-import { createComposerMarkdownDraftController } from './composer-markdown-drafts.js?v=press-system-v3.4.124';
-import { createComposerMarkdownLoader } from './composer-markdown-loader.js?v=press-system-v3.4.124';
+} from './encrypted-content.js?v=press-system-v3.4.125';
+import { createComposerMarkdownAssetManager } from './composer-markdown-assets.js?v=press-system-v3.4.125';
+import { createComposerMarkdownActionsUi } from './composer-markdown-actions-ui.js?v=press-system-v3.4.125';
+import { createComposerMarkdownActionsController } from './composer-markdown-actions.js?v=press-system-v3.4.125';
+import { createComposerMarkdownDraftController } from './composer-markdown-drafts.js?v=press-system-v3.4.125';
+import { createComposerMarkdownLoader } from './composer-markdown-loader.js?v=press-system-v3.4.125';
 import {
   computeTextSignature,
   createDiscardedMarkdownProtectionState,
@@ -20,7 +20,7 @@ import {
   isMarkdownTabProtected,
   normalizeMarkdownContent,
   setMarkdownProtectionState
-} from './composer-markdown-state.js?v=press-system-v3.4.124';
+} from './composer-markdown-state.js?v=press-system-v3.4.125';
 
 const noop = () => {};
 

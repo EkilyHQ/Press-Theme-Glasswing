@@ -1,8 +1,8 @@
-import { createCommitFileCollector } from './composer-staging.js?v=press-system-v3.4.124';
+import { createCommitFileCollector } from './composer-staging.js?v=press-system-v3.4.125';
 import {
   listLocalMarkdownAssetReferences,
   planManagedContentDeletions
-} from './repository-deletions.js?v=press-system-v3.4.124';
+} from './repository-deletions.js?v=press-system-v3.4.125';
 
 export function createContentCommitStagingProvider({
   getDynamicEditorTabs = () => new Map(),

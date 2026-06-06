@@ -1,6 +1,6 @@
-import { createComposerPublishStateService } from './composer-publish-state-service.js?v=press-system-v3.4.124';
-import { createComposerPublishService } from './composer-publish-service.js?v=press-system-v3.4.124';
-import { createComposerRemoteSyncController } from './composer-remote-sync.js?v=press-system-v3.4.124';
+import { createComposerPublishStateService } from './composer-publish-state-service.js?v=press-system-v3.4.125';
+import { createComposerPublishService } from './composer-publish-service.js?v=press-system-v3.4.125';
+import { createComposerRemoteSyncController } from './composer-remote-sync.js?v=press-system-v3.4.125';
 
 const noop = () => {};
 

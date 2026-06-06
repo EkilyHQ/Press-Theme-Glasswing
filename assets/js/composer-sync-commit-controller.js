@@ -1,8 +1,8 @@
 import {
   refreshSyncCommitPanelView,
   scheduleSyncCommitPanelRefreshView
-} from './composer-sync-panel.js?v=press-system-v3.4.124';
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.124';
+} from './composer-sync-panel.js?v=press-system-v3.4.125';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.125';
 
 function noop() {}
 

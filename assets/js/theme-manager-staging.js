@@ -1,13 +1,13 @@
 import {
   loadThemeManagerRegistry as loadRegistryForRuntime
-} from './theme-manager-data.js?v=press-system-v3.4.124';
+} from './theme-manager-data.js?v=press-system-v3.4.125';
 import {
   renderThemeManagerPendingFiles,
   setThemeManagerStatus as setStatus
-} from './theme-manager-view.js?v=press-system-v3.4.124';
+} from './theme-manager-view.js?v=press-system-v3.4.125';
 import {
   sanitizeThemeSlug
-} from './theme-package-core.js?v=press-system-v3.4.124';
+} from './theme-package-core.js?v=press-system-v3.4.125';
 
 export function notifyThemeManagerStateChange(runtime) {
   runtime.state.listeners.forEach((listener) => {
