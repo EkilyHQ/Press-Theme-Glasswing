@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.125';
+} from './theme.js?v=press-system-v3.4.126';
 import {
   t,
   withLangParam,
@@ -13,20 +13,20 @@ import {
   ensureLanguageBundle,
   getAvailableLangs,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.125';
+} from './i18n.js?v=press-system-v3.4.126';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.125';
+} from './theme-regions.js?v=press-system-v3.4.126';
 import {
   PRESS_THEME_CONTRACT,
   isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.125';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.126';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -43,8 +43,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.125';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.125';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.126';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.126';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',
@@ -505,6 +505,7 @@ async function mountPack(pack, allowFallback = true, options = {}) {
     document: document,
     i18n: createThemeI18nContext(),
     regions: createThemeRegionRegistry(),
+    features: options.features || null,
     pack,
     manifest,
     theme: createThemeApi(pack, manifest),
@@ -560,6 +561,9 @@ async function ensureThemeLayoutWithState(themeLayoutState, options = {}) {
   }
   const cachedContext = themeLayoutState.regionController.getThemeLayoutContext();
   if (cachedContext && document.body.dataset.themeLayout === pack) {
+    if (options && Object.prototype.hasOwnProperty.call(options, 'features')) {
+      cachedContext.features = options.features || null;
+    }
     return cachedContext;
   }
   if (themeLayoutState.layoutPromise && themeLayoutState.activePack === pack) {

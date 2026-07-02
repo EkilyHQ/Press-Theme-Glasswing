@@ -1,4 +1,4 @@
-import { buildEditorContentTree } from './editor-content-tree.js?v=press-system-v3.4.125';
+import { buildEditorContentTree } from './editor-content-tree.js?v=press-system-v3.4.126';
 
 export function createComposerEditorTreeState(options = {}) {
   const preferredLangs = Array.isArray(options.preferredLangs) ? options.preferredLangs : [];

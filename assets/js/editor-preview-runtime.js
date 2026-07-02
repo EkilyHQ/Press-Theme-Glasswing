@@ -1,26 +1,27 @@
-import './components.js?v=press-system-v3.4.125';
-import { mdParse } from './markdown.js?v=press-system-v3.4.125';
-import { createContentModel } from './content-model.js?v=press-system-v3.4.125';
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.125';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.125';
-import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from './post-render.js?v=press-system-v3.4.125';
-import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.125';
-import { applyLangHints } from './typography.js?v=press-system-v3.4.125';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.125';
-import { initSyntaxHighlighting } from './syntax-highlight.js?v=press-system-v3.4.125';
-import { setupAnchors, setupTOC } from './toc.js?v=press-system-v3.4.125';
-import { initI18n, t, withLangParam } from './i18n.js?v=press-system-v3.4.125';
-import { renderPostNav } from './post-nav.js?v=press-system-v3.4.125';
-import { renderTagSidebar } from './tags.js?v=press-system-v3.4.125';
-import { getArticleTitleFromMain } from './dom-utils.js?v=press-system-v3.4.125';
-import { createThemeLayoutController, createThemeI18nContext } from './theme-layout.js?v=press-system-v3.4.125';
-import { createEditorPreviewAppRuntime } from './editor-preview-app-runtime.js?v=press-system-v3.4.125';
+import './components.js?v=press-system-v3.4.126';
+import { mdParse } from './markdown.js?v=press-system-v3.4.126';
+import { createContentModel } from './content-model.js?v=press-system-v3.4.126';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.126';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.126';
+import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from './post-render.js?v=press-system-v3.4.126';
+import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.126';
+import { applyLangHints } from './typography.js?v=press-system-v3.4.126';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.126';
+import { initSyntaxHighlighting } from './syntax-highlight.js?v=press-system-v3.4.126';
+import { setupAnchors, setupTOC } from './toc.js?v=press-system-v3.4.126';
+import { initI18n, t, withLangParam } from './i18n.js?v=press-system-v3.4.126';
+import { renderPostNav } from './post-nav.js?v=press-system-v3.4.126';
+import { renderTagSidebar } from './tags.js?v=press-system-v3.4.126';
+import { getArticleTitleFromMain } from './dom-utils.js?v=press-system-v3.4.126';
+import { createThemeLayoutController, createThemeI18nContext } from './theme-layout.js?v=press-system-v3.4.126';
+import { createEditorPreviewAppRuntime } from './editor-preview-app-runtime.js?v=press-system-v3.4.126';
+import { createSiteFeatureContext } from './site-features.js?v=press-system-v3.4.126';
 
 const RENDER_MESSAGE = 'press-editor-preview-render';
 const READY_MESSAGE = 'press-editor-preview-ready';
 const RENDERED_MESSAGE = 'press-editor-preview-rendered';
 const ERROR_MESSAGE = 'press-editor-preview-error';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.125';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.126';
 
 export function createEditorPreviewRuntimeController(
   previewRuntime = createEditorPreviewAppRuntime(),
@@ -237,7 +238,7 @@ function applyPreviewLangHints(container) {
   });
 }
 
-function createRuntimeContext({ payload, containers, content }) {
+function createRuntimeContext({ payload, containers, content, features }) {
   const layout = themeLayout.getThemeLayoutContext();
   return {
     document: previewRuntime.documentRef,
@@ -250,6 +251,7 @@ function createRuntimeContext({ payload, containers, content }) {
       navigate() { return false; }
     },
     i18n: createThemeI18nContext(),
+    features,
     content,
     regions: layout && layout.regions,
     containers,
@@ -290,7 +292,13 @@ async function renderPreview(payload = {}) {
   applyPreviewColorMode(payload.siteConfig || {});
   try {
     const reset = previewRuntime.shouldResetThemePack(requestedPack);
-    const layout = await themeLayout.ensureThemeLayout({ pack: requestedPack, persist: false, reset });
+    const features = createSiteFeatureContext(payload.siteConfig || {});
+    const layout = await themeLayout.ensureThemeLayout({
+      pack: requestedPack,
+      persist: false,
+      reset,
+      features
+    });
     if (!isCurrentPreviewRender(requestId)) return;
     const activePack = previewRuntime.setActiveThemePack((layout && layout.pack) || previewRuntime.getThemeLayoutPackFallback() || requestedPack);
     const markdown = String(payload.markdown || '');
@@ -316,12 +324,13 @@ async function renderPreview(payload = {}) {
     const main = containers.mainElement || previewRuntime.getBody();
     const allowedLocations = new Set(Array.isArray(payload.allowedLocations) ? payload.allowedLocations : []);
     const locationAliasMap = new Map(Array.isArray(payload.locationAliases) ? payload.locationAliases : []);
-    const ctx = createRuntimeContext({ payload, containers, content });
+    const ctx = createRuntimeContext({ payload, containers, content, features });
     const result = await Promise.resolve(callThemeEffect('renderPostView', {
       view: 'post',
       containers,
       ctx,
       content,
+      features,
       markdownHtml: output.post,
       tocHtml: output.toc,
       rawMarkdown: markdown,

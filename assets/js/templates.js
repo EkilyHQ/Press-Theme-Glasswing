@@ -1,10 +1,10 @@
 // Template renderers (pure functions returning HTML strings)
-import { t } from './i18n.js?v=press-system-v3.4.125';
-import { computeReadTime } from './content.js?v=press-system-v3.4.125';
-import { escapeHtml, renderTags, formatDisplayDate } from './utils.js?v=press-system-v3.4.125';
+import { t } from './i18n.js?v=press-system-v3.4.126';
+import { computeReadTime } from './content.js?v=press-system-v3.4.126';
+import { escapeHtml, renderTags, formatDisplayDate } from './utils.js?v=press-system-v3.4.126';
 
 // Render a metadata card (title/date/read time/tags) for a post
-export function renderPostMetaCard(title, meta, markdown) {
+export function renderPostMetaCard(title, meta, markdown, options = {}) {
   try {
     const safeTitle = escapeHtml(String(title || ''));
     const aiFlag = !!(meta && (meta.ai || meta.aiGenerated || meta.llm));
@@ -54,7 +54,8 @@ export function renderPostMetaCard(title, meta, markdown) {
       }
     } catch (_) {}
     const excerptHtml = (meta && meta.excerpt) ? `<div class="post-meta-excerpt">${escapeHtml(String(meta.excerpt))}</div>` : '';
-    const tags = meta ? renderTags(meta.tag) : '';
+    const showTags = !options || options.showTags !== false;
+    const tags = showTags && meta ? renderTags(meta.tag) : '';
     return `<section class="post-meta-card" aria-label="Post meta">
       <div class="post-meta-title">${aiIcon}${safeTitle}</div>
       <button type="button" class="post-meta-copy" aria-label="${t('ui.copyLink')}" title="${t('ui.copyLink')}">${t('ui.copyLink')}</button>

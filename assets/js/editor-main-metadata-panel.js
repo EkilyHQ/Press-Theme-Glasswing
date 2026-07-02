@@ -1,6 +1,6 @@
-import { createFrontMatterLabelWidthSync } from './editor-main-frontmatter-label-width.js?v=press-system-v3.4.125';
-import { createEditorMainFrontMatterManager } from './editor-main-frontmatter-manager.js?v=press-system-v3.4.125';
-import { createEditorMainTabsMetadataManager } from './editor-main-tabs-metadata-manager.js?v=press-system-v3.4.125';
+import { createFrontMatterLabelWidthSync } from './editor-main-frontmatter-label-width.js?v=press-system-v3.4.126';
+import { createEditorMainFrontMatterManager } from './editor-main-frontmatter-manager.js?v=press-system-v3.4.126';
+import { createEditorMainTabsMetadataManager } from './editor-main-tabs-metadata-manager.js?v=press-system-v3.4.126';
 
 const fallbackTranslate = (key) => key;
 const fallbackGetCurrentLang = () => 'en';

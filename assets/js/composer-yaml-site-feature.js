@@ -1,14 +1,14 @@
-import { createComposerYamlSerialization } from './composer-yaml-serialization.js?v=press-system-v3.4.125';
-import { createComposerDiffUi } from './composer-diff-ui.js?v=press-system-v3.4.125';
-import { createComposerOrderDiffUi } from './composer-order-diff-ui.js?v=press-system-v3.4.125';
-import { createComposerIndexTabsUi } from './composer-index-tabs-ui.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsUi } from './composer-site-settings-ui.js?v=press-system-v3.4.125';
-import { createComposerYamlPanelsController } from './composer-yaml-panels-controller.js?v=press-system-v3.4.125';
-import { createComposerYamlActions } from './composer-yaml-actions.js?v=press-system-v3.4.125';
-import { createComposerYamlDraftController } from './composer-yaml-drafts.js?v=press-system-v3.4.125';
+import { createComposerYamlSerialization } from './composer-yaml-serialization.js?v=press-system-v3.4.126';
+import { createComposerDiffUi } from './composer-diff-ui.js?v=press-system-v3.4.126';
+import { createComposerOrderDiffUi } from './composer-order-diff-ui.js?v=press-system-v3.4.126';
+import { createComposerIndexTabsUi } from './composer-index-tabs-ui.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsUi } from './composer-site-settings-ui.js?v=press-system-v3.4.126';
+import { createComposerYamlPanelsController } from './composer-yaml-panels-controller.js?v=press-system-v3.4.126';
+import { createComposerYamlActions } from './composer-yaml-actions.js?v=press-system-v3.4.126';
+import { createComposerYamlDraftController } from './composer-yaml-drafts.js?v=press-system-v3.4.126';
 import {
   CONNECT_PUBLISH_PRESETS
-} from './publish/settings-store.js?v=press-system-v3.4.125';
+} from './publish/settings-store.js?v=press-system-v3.4.126';
 
 const ANNOTATE_DISCUSSION_CATEGORY_PRESETS = [
   { value: 'General', label: 'General' }
@@ -31,6 +31,7 @@ const SITE_FIELD_LABEL_MAP = {
   themeMode: { i18nKey: 'editor.composer.site.fields.themeMode' },
   themePack: { i18nKey: 'editor.composer.site.fields.themePack' },
   themeOverride: { i18nKey: 'editor.composer.site.fields.themeOverride' },
+  features: { i18nKey: 'editor.composer.site.sections.publicChrome.title', fallback: 'Public chrome' },
   showAllPosts: { i18nKey: 'editor.composer.site.fields.showAllPosts' },
   landingTab: { i18nKey: 'editor.composer.site.fields.landingTab' },
   repo: { i18nKey: 'editor.composer.site.fields.repo' },

@@ -1,9 +1,10 @@
 // seo.js - Dynamic SEO meta tag management for client-side routing
 // This maintains SEO benefits while keeping the "no compilation needed" philosophy
 
-import { getCurrentLang, DEFAULT_LANG } from './i18n.js?v=press-system-v3.4.125';
-import { getAvailableLangs } from './i18n.js?v=press-system-v3.4.125';
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.125';
+import { getCurrentLang, DEFAULT_LANG } from './i18n.js?v=press-system-v3.4.126';
+import { getAvailableLangs } from './i18n.js?v=press-system-v3.4.126';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.126';
+import { isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.126';
 
 function ensureTrailingSlash(value) {
   const str = String(value == null ? '' : value).trim();
@@ -534,13 +535,15 @@ function updateStructuredData(options, siteConfig = {}) {
       "author": {
         "@type": "Person",
         "name": author
-      },
-      "potentialAction": {
+      }
+    };
+    if (isSiteFeatureEnabled(siteConfig, 'search')) {
+      structuredData.potentialAction = {
         "@type": "SearchAction",
         "target": `${defaultUrl}?tab=search&q={search_term_string}`,
         "query-input": "required name=search_term_string"
-      }
-    };
+      };
+    }
   }
 
   // Add new structured data

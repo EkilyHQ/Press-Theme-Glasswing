@@ -1,14 +1,14 @@
-import { createComposerSiteSettingsControls } from './composer-site-settings-controls.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsConfigGrids } from './composer-site-settings-config-grids.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsLinkList } from './composer-site-settings-link-list.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsLocalizedFields } from './composer-site-settings-localized-fields.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsRepoSection } from './composer-site-settings-repo-section.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsSchema } from './composer-site-settings-schema.js?v=press-system-v3.4.125';
-import { createComposerSiteSettingsSingleGrids } from './composer-site-settings-single-grids.js?v=press-system-v3.4.125';
+import { createComposerSiteSettingsControls } from './composer-site-settings-controls.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsConfigGrids } from './composer-site-settings-config-grids.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsLinkList } from './composer-site-settings-link-list.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsLocalizedFields } from './composer-site-settings-localized-fields.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsRepoSection } from './composer-site-settings-repo-section.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsSchema } from './composer-site-settings-schema.js?v=press-system-v3.4.126';
+import { createComposerSiteSettingsSingleGrids } from './composer-site-settings-single-grids.js?v=press-system-v3.4.126';
 import {
   cleanupComposerSiteSettingsSectionNav,
   createComposerSiteSettingsSectionNav
-} from './composer-site-settings-section-nav.js?v=press-system-v3.4.125';
+} from './composer-site-settings-section-nav.js?v=press-system-v3.4.126';
 
 export function createComposerSiteSettingsUi(options = {}) {
   const noop = () => {};
@@ -252,6 +252,7 @@ export function createComposerSiteSettingsUi(options = {}) {
       renderAnnotateGrid,
       renderAssetWarningsGrid,
       renderBehaviorGrid,
+      renderPublicChromeGrid,
       renderThemeGrid
     } = createComposerSiteSettingsConfigGrids({
       documentRef,
@@ -337,6 +338,13 @@ export function createComposerSiteSettingsUi(options = {}) {
       siteSettingsSchema.subsections.behavior.description
     );
     renderBehaviorGrid(behaviorSubsection);
+
+    const publicChromeSubsection = createConfigSubsection(
+      siteConfigSection,
+      siteSettingsSchema.subsections.publicChrome.title,
+      siteSettingsSchema.subsections.publicChrome.description
+    );
+    renderPublicChromeGrid(publicChromeSubsection);
 
     const themeSubsection = createConfigSubsection(
       siteConfigSection,

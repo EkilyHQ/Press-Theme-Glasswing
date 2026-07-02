@@ -1,10 +1,10 @@
-import { createSafeHighlightFragment as createRuntimeSafeHighlightFragment } from './syntax-highlight.js?v=press-system-v3.4.125';
-import { createEditorBlocksCardPickerSession } from './editor-blocks-card-picker-session.js?v=press-system-v3.4.125';
-import { createEditorBlocksImageSession } from './editor-blocks-image-session.js?v=press-system-v3.4.125';
-import { createEditorBlocksCodeSession } from './editor-blocks-code-session.js?v=press-system-v3.4.125';
-import { createEditorBlocksTableSession } from './editor-blocks-table-session.js?v=press-system-v3.4.125';
-import { createEditorBlocksSourceSession } from './editor-blocks-source-session.js?v=press-system-v3.4.125';
-import { createEditorBlocksListSession } from './editor-blocks-list-session.js?v=press-system-v3.4.125';
+import { createSafeHighlightFragment as createRuntimeSafeHighlightFragment } from './syntax-highlight.js?v=press-system-v3.4.126';
+import { createEditorBlocksCardPickerSession } from './editor-blocks-card-picker-session.js?v=press-system-v3.4.126';
+import { createEditorBlocksImageSession } from './editor-blocks-image-session.js?v=press-system-v3.4.126';
+import { createEditorBlocksCodeSession } from './editor-blocks-code-session.js?v=press-system-v3.4.126';
+import { createEditorBlocksTableSession } from './editor-blocks-table-session.js?v=press-system-v3.4.126';
+import { createEditorBlocksSourceSession } from './editor-blocks-source-session.js?v=press-system-v3.4.126';
+import { createEditorBlocksListSession } from './editor-blocks-list-session.js?v=press-system-v3.4.126';
 import {
   caretRectForEditable,
   codeEditableText,
@@ -21,7 +21,7 @@ import {
   placeCaretAtVisualLine,
   splitEditableTextAtSelection,
   textareaTextOffsetDetailsFromPoint
-} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.125';
+} from './editor-blocks-inline-editing-bridge.js?v=press-system-v3.4.126';
 import {
   editableListItems,
   effectiveListItemType,
@@ -36,16 +36,16 @@ import {
   splitListItemsAtEmptyItem,
   summarizeListType,
   convertListTailItemAfterEmptyToParagraph
-} from './editor-blocks-list-model.js?v=press-system-v3.4.125';
+} from './editor-blocks-list-model.js?v=press-system-v3.4.126';
 import {
   editableTableData,
   normalizeTableAlignment,
   normalizeTableCellValue,
   tableColumnCount
-} from './editor-blocks-table-model.js?v=press-system-v3.4.125';
+} from './editor-blocks-table-model.js?v=press-system-v3.4.126';
 import {
   mergeFirstListItemIntoPreviousBlock
-} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.125';
+} from './editor-blocks-block-flow-model.js?v=press-system-v3.4.126';
 
 function registerSession(blockSessions, methodName, session) {
   if (blockSessions && typeof blockSessions[methodName] === 'function') {
