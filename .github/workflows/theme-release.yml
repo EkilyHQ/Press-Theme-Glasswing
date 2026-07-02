@@ -135,8 +135,10 @@ jobs:
         if: steps.plan.outputs.should_release == 'true'
         env:
           THEME_SLUG: ${{ steps.config.outputs.slug }}
+          PRESS_ROOT: .press
         run: |
           set -euo pipefail
+          node scripts/test-public-chrome-features.mjs
           slug="${THEME_SLUG}"
           rm -rf ".press/assets/themes/${slug}"
           mkdir -p ".press/assets/themes/${slug}"

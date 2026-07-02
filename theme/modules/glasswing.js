@@ -2,6 +2,7 @@ import {
   applySavedTheme,
   mountThemeControls
 } from '../../../js/theme.js';
+import { siteFeatureContextEnabled } from '../../../js/site-features.js';
 
 const REGION_NAMES = ['container', 'content', 'main', 'nav', 'search', 'tags', 'toc', 'footer', 'tools'];
 
@@ -11,6 +12,23 @@ function getDocument(context = {}) {
 
 function getWindow(context = {}) {
   return context.window || (typeof window !== 'undefined' ? window : null);
+}
+
+function featureEnabled(params = {}, key) {
+  const features = (params && params.features)
+    || (params && params.ctx && params.ctx.features)
+    || (params && params.context && params.context.features)
+    || (activeThemeContext && activeThemeContext.features);
+  return siteFeatureContextEnabled(features, key);
+}
+
+function setChromeHidden(element, hidden) {
+  if (!element) return;
+  try { element.hidden = !!hidden; } catch (_) {}
+  try {
+    if (hidden) element.setAttribute('aria-hidden', 'true');
+    else element.removeAttribute('aria-hidden');
+  } catch (_) {}
 }
 
 function escapeHtml(value) {
@@ -213,9 +231,10 @@ function postHref(params = {}, meta = {}) {
   return location ? withLangParam(`?id=${encodeURIComponent(location)}`) : '#';
 }
 
-function renderMeta(meta = {}) {
+function renderMeta(meta = {}, params = {}) {
+  if (!featureEnabled(params, 'postMeta')) return '';
   const date = formatDate(meta.date);
-  const tags = getTags(meta);
+  const tags = featureEnabled(params, 'tags') ? getTags(meta) : [];
   const labels = [];
   if (date) labels.push(`<span>${escapeHtml(date)}</span>`);
   tags.slice(0, 2).forEach((tag) => labels.push(`<span>${escapeHtml(tag)}</span>`));
@@ -239,7 +258,7 @@ function renderHero(entry, params = {}) {
   return `<article class="glasswing-hero">
     <a class="glasswing-hero__link" href="${attr(href)}">
       <div class="glasswing-hero__copy">
-        ${renderMeta(meta)}
+        ${renderMeta(meta, params)}
         <h1>${escapeHtml(title)}</h1>
         ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}
         <span class="glasswing-action">Read feature</span>
@@ -257,7 +276,7 @@ function renderSecondary(entry, params = {}) {
   return `<article class="glasswing-secondary-card">
     <a href="${attr(href)}">
       <div>
-        ${renderMeta(meta)}
+        ${renderMeta(meta, params)}
         <h2>${escapeHtml(title)}</h2>
         ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}
       </div>
@@ -274,7 +293,7 @@ function renderRow(entry, params = {}) {
   return `<article class="glasswing-row">
     <a href="${attr(href)}">
       <div class="glasswing-row__body">
-        ${renderMeta(meta)}
+        ${renderMeta(meta, params)}
         <h2>${escapeHtml(title)}</h2>
         ${excerpt ? `<p>${escapeHtml(excerpt)}</p>` : ''}
       </div>
@@ -354,7 +373,7 @@ function renderPost(params = {}) {
     : '';
   setHtml(main, `<article class="glasswing-article">
     <header class="glasswing-article__header">
-      ${renderMeta(meta)}
+      ${renderMeta(meta, params)}
       <h1>${escapeHtml(title)}</h1>
       ${text(meta.excerpt) ? `<p>${escapeHtml(meta.excerpt)}</p>` : ''}
       ${cover}
@@ -369,7 +388,8 @@ function renderPost(params = {}) {
         tocElement: params.containers && params.containers.tocElement,
         tocHtml: params.tocHtml,
         articleTitle: '',
-        contentRoot: main
+        contentRoot: main,
+        features: params.features
       });
     }
     if (typeof utilities.renderPostNav === 'function') {
@@ -440,6 +460,30 @@ function clearRegion(region) {
   return true;
 }
 
+function updateHomeLinks(params = {}) {
+  if (!activeShell || typeof activeShell.querySelectorAll !== 'function') return false;
+  const { withLangParam } = getI18n(params);
+  const getHomeSlug = typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null;
+  const fallback = featureEnabled(params, 'allPosts') ? 'posts' : '';
+  const homeSlug = getHomeSlug ? text(getHomeSlug()) : fallback;
+  const href = homeSlug ? withLangParam(`?tab=${encodeURIComponent(homeSlug)}`) : '#';
+  activeShell.querySelectorAll('[data-glasswing-brand], [data-glasswing-footer-brand]').forEach((link) => {
+    try { link.setAttribute('href', href); } catch (_) {}
+  });
+  return true;
+}
+
+function updateSearchChrome(params = {}) {
+  const search = activeRegions.search;
+  const enabled = featureEnabled(params, 'search');
+  setChromeHidden(search, !enabled);
+  if (enabled && search && typeof search.setPlaceholder === 'function') {
+    const { t } = getI18n(params);
+    try { search.setPlaceholder(t('sidebar.searchPlaceholder') || 'Search'); } catch (_) {}
+  }
+  return true;
+}
+
 function renderTabs(params = {}) {
   const nav = params.navElement || getRegion({ regions: params.regions || activeRegions }, 'nav');
   if (!nav) return false;
@@ -447,6 +491,7 @@ function renderTabs(params = {}) {
   const tabs = params.tabsBySlug || {};
   const active = String(params.activeSlug || '');
   const links = [];
+  updateHomeLinks(params);
   if (typeof params.postsEnabled !== 'function' || params.postsEnabled()) {
     links.push({ slug: 'posts', label: t('ui.allPosts') || 'Articles', href: withLangParam('?tab=posts') });
   }
@@ -466,16 +511,31 @@ function renderFooterLinks(config = activeSiteConfig, params = {}) {
   const linksRegion = activeShell && activeShell.querySelector('[data-glasswing-site-links]');
   if (!linksRegion) return false;
   const { t, withLangParam } = getI18n(params);
+  const showFooterNav = featureEnabled(params, 'footerNav');
+  const showProfileLinks = featureEnabled(params, 'profileLinks');
   const profileLinks = Array.isArray(config && config.profileLinks) ? config.profileLinks : [];
-  const links = [
-    { label: t('ui.allPosts') || 'All Posts', href: withLangParam('?tab=posts') },
-    ...profileLinks
+  const links = [];
+  if (showFooterNav) {
+    const getHomeSlug = typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null;
+    const fallback = featureEnabled(params, 'allPosts') ? 'posts' : '';
+    const homeSlug = getHomeSlug ? text(getHomeSlug()) : fallback;
+    const label = typeof params.getHomeLabel === 'function' ? params.getHomeLabel() : (t('ui.allPosts') || 'All Posts');
+    if (homeSlug) links.push({ label, href: withLangParam(`?tab=${encodeURIComponent(homeSlug)}`) });
+  }
+  if (showProfileLinks) {
+    links.push(...profileLinks
       .map((item) => ({
         label: text(item && item.label),
         href: text(item && item.href)
       }))
-      .filter((item) => item.label && item.href)
-  ];
+      .filter((item) => item.label && item.href));
+  }
+  if (!links.length) {
+    linksRegion.innerHTML = '';
+    setChromeHidden(linksRegion, true);
+    return true;
+  }
+  setChromeHidden(linksRegion, false);
   linksRegion.innerHTML = `<h2>Site</h2>${links.map((item) => `<a href="${attr(item.href)}">${escapeHtml(item.label)}</a>`).join('')}`;
   return true;
 }
@@ -488,6 +548,7 @@ function renderSiteIdentity(params = {}) {
   if (brand) brand.textContent = title;
   const footerBrand = activeShell && activeShell.querySelector('[data-glasswing-footer-brand]');
   if (footerBrand) footerBrand.textContent = title;
+  updateHomeLinks(params);
   renderFooterLinks(config, params);
   return !!brand || !!footerBrand;
 }
@@ -502,7 +563,7 @@ function ensureFooterStructure(footer) {
     inner = doc.createElement('div');
     inner.className = 'glasswing-footer__inner';
     inner.innerHTML = `<div class="glasswing-footer__brand">
-      <a href="?tab=posts" data-glasswing-footer-brand>Press</a>
+      <a href="#" data-glasswing-footer-brand>Press</a>
       <span data-glasswing-footer-tagline>Glasswing for Press</span>
     </div>
     <nav class="glasswing-footer__links" aria-label="Site links" data-glasswing-site-links></nav>
@@ -552,10 +613,16 @@ function setupThemeControls(params = {}) {
   const structure = ensureFooterStructure(footer);
   const tools = structure && structure.tools;
   if (!tools) return false;
+  if (!featureEnabled(params, 'visitorThemeControls')) {
+    tools.innerHTML = '';
+    setChromeHidden(tools, true);
+    return true;
+  }
+  setChromeHidden(tools, false);
   try {
     const mount = params.mountThemeControls || mountThemeControls;
     const themeContext = params.themeContext || params.context || activeThemeContext;
-    if (typeof mount === 'function') mount({ host: tools, variant: 'glasswing', themeContext });
+    if (typeof mount === 'function') mount({ host: tools, variant: 'glasswing', themeContext, features: params.features });
   } catch (_) {}
   try {
     const applyTheme = params.applySavedTheme || applySavedTheme;
@@ -579,7 +646,9 @@ function setupFooter(params = {}) {
   const year = new Date().getFullYear();
   if (structure && structure.year) structure.year.textContent = String(year);
   renderSiteIdentity({ config: activeSiteConfig, ...params });
-  if (structure && structure.tools && !structure.tools.querySelector('press-theme-controls')) {
+  if (!featureEnabled(params, 'visitorThemeControls')) {
+    setupThemeControls(params);
+  } else if (structure && structure.tools && !structure.tools.querySelector('press-theme-controls')) {
     setupThemeControls(params);
   }
   const button = structure && structure.top;
@@ -639,13 +708,13 @@ export function mount(context = {}) {
 
   const brand = ensureElement(header, '[data-glasswing-brand]', () => {
     const element = doc.createElement('a');
-    element.href = '?tab=posts';
+    element.href = '#';
     element.className = 'glasswing-brand';
     element.setAttribute('data-glasswing-brand', '');
     element.textContent = 'Press';
     return element;
   });
-  brand.href = '?tab=posts';
+  brand.href = '#';
 
   const nav = ensureElement(header, '[data-theme-region="nav"]', () => {
     const element = doc.createElement('nav');
@@ -661,6 +730,7 @@ export function mount(context = {}) {
     return element;
   });
   search.setAttribute('data-theme-region', 'search');
+  setChromeHidden(search, !featureEnabled({}, 'search'));
 
   const main = ensureElement(shell, '[data-theme-region="main"]', () => {
     const element = doc.createElement('main');
@@ -737,14 +807,25 @@ export const effects = {
   resolveViewContainers,
   renderSiteIdentity,
   renderTabs,
-  renderFooterNav: () => true,
+  renderFooterNav: (params = {}) => renderFooterLinks(activeSiteConfig, params),
   renderSiteLinks: (params = {}) => {
     activeSiteConfig = params.config || params.siteConfig || activeSiteConfig || {};
     return renderFooterLinks(activeSiteConfig, params);
   },
   setupThemeControls,
   resetThemeControls,
-  renderTagSidebar: (params = {}) => clearRegion((params.containers && params.containers.sidebarElement) || activeRegions.tags),
+  updateSearchPlaceholder: updateSearchChrome,
+  handleViewChange: (params = {}) => updateSearchChrome(params),
+  renderTagSidebar: (params = {}) => {
+    const target = (params.containers && params.containers.sidebarElement) || activeRegions.tags;
+    if (!featureEnabled(params, 'tags') || !featureEnabled(params, 'search')) {
+      clearRegion(target);
+      setChromeHidden(target, true);
+      return true;
+    }
+    setChromeHidden(target, false);
+    return clearRegion(target);
+  },
   resetTOC: (params = {}) => {
     const cleared = clearRegion((params.containers && params.containers.tocElement) || activeRegions.toc);
     setFooterTocEmpty(true);
@@ -753,6 +834,13 @@ export const effects = {
   renderPostTOC: (params = {}) => {
     const toc = params.tocElement || activeRegions.toc;
     if (!toc) return false;
+    if (!featureEnabled(params, 'toc')) {
+      clearRegion(toc);
+      setFooterTocEmpty(true);
+      setChromeHidden(toc, true);
+      return true;
+    }
+    setChromeHidden(toc, false);
     const hasToc = !!String(params.tocHtml || '').trim();
     setFooterTocEmpty(!hasToc);
     toc.setAttribute('show-top', 'false');
