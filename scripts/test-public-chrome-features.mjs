@@ -95,6 +95,7 @@ function dataKey(name) {
 function matchesSelector(element, selector) {
   const raw = String(selector || '').trim();
   if (!raw) return false;
+  if (raw.includes(',')) return raw.split(',').some((part) => matchesSelector(element, part));
   if (raw.startsWith('.')) return String(element.className || '').split(/\s+/).includes(raw.slice(1));
   if (raw.startsWith('#')) return element.id === raw.slice(1);
   const attrMatch = raw.match(/^\[([^=\]]+)(?:="([^"]*)")?\]$/);
@@ -328,6 +329,20 @@ const params = {
 
 api.effects.renderSiteIdentity(params);
 api.effects.setupFooter(params);
+
+const brand = doc.querySelector('[data-glasswing-brand]');
+const footerBrand = doc.querySelector('[data-glasswing-footer-brand]');
+assert.equal(brand.getAttribute('href'), '?tab=about', 'site brand should use the runtime home helper');
+assert.equal(footerBrand.getAttribute('href'), '?tab=about', 'footer brand should use the runtime home helper');
+
+api.effects.renderSiteIdentity({
+  config: { siteTitle: 'Product refreshed' },
+  features,
+  withLangParam: (href) => href
+});
+
+assert.equal(brand.getAttribute('href'), '?tab=about', 'identity refresh without home helpers should preserve brand home href');
+assert.equal(footerBrand.getAttribute('href'), '?tab=about', 'identity refresh without home helpers should preserve footer home href');
 
 const links = doc.querySelector('[data-glasswing-site-links]');
 assert.equal(links.hidden, true, 'late footer setup should keep footer links hidden');

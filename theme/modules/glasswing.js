@@ -464,7 +464,9 @@ function updateHomeLinks(params = {}) {
   if (!activeShell || typeof activeShell.querySelectorAll !== 'function') return false;
   const { withLangParam } = getI18n(params);
   const getHomeSlug = typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null;
-  const fallback = featureEnabled(params, 'allPosts') ? 'posts' : '';
+  const allowFallback = params.allowHomeFallback === true;
+  if (!getHomeSlug && !allowFallback) return false;
+  const fallback = allowFallback && featureEnabled(params, 'allPosts') ? 'posts' : '';
   const homeSlug = getHomeSlug ? text(getHomeSlug()) : fallback;
   const href = homeSlug ? withLangParam(`?tab=${encodeURIComponent(homeSlug)}`) : '#';
   activeShell.querySelectorAll('[data-glasswing-brand], [data-glasswing-footer-brand]').forEach((link) => {
@@ -491,7 +493,7 @@ function renderTabs(params = {}) {
   const tabs = params.tabsBySlug || {};
   const active = String(params.activeSlug || '');
   const links = [];
-  updateHomeLinks(params);
+  updateHomeLinks({ ...params, allowHomeFallback: true });
   if (typeof params.postsEnabled !== 'function' || params.postsEnabled()) {
     links.push({ slug: 'posts', label: t('ui.allPosts') || 'Articles', href: withLangParam('?tab=posts') });
   }
