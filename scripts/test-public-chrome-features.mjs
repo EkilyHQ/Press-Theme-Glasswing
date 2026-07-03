@@ -8,6 +8,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
 const source = readFileSync(resolve(root, 'theme/modules/glasswing.js'), 'utf8');
 const manifest = JSON.parse(readFileSync(resolve(root, 'theme/theme.json'), 'utf8'));
+const releaseExample = JSON.parse(readFileSync(resolve(root, 'theme-release.example.json'), 'utf8'));
 function resolvePressRoot() {
   const candidates = [];
   if (process.env.PRESS_ROOT) candidates.push(resolve(root, process.env.PRESS_ROOT));
@@ -20,6 +21,8 @@ const pressRoot = resolvePressRoot();
 
 assert.equal(manifest.contractVersion, 3);
 assert.equal(manifest.engines.press, '>=3.4.127 <4.0.0');
+assert.equal(releaseExample.contractVersion, 3);
+assert.equal(releaseExample.engines.press, '>=3.4.127 <4.0.0');
 assert.ok(manifest.components.includes('press-theme-controls'), 'manifest should declare shared theme controls usage');
 assert.doesNotMatch(source, /href\s*=\s*["']\?tab=posts["']/);
 assert.doesNotMatch(source, /element\.href\s*=\s*["']\?tab=posts["']/);

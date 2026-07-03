@@ -5,6 +5,9 @@
   "label": "Glasswing",
   "version": "0.1.13",
   "contractVersion": 3,
+  "engines": {
+    "press": ">=3.4.127 <4.0.0"
+  },
   "release": {
     "tag": "v0.1.13",
     "htmlUrl": "https://github.com/EkilyHQ/Press-Theme-Glasswing/releases/tag/v0.1.13",
