@@ -15,7 +15,8 @@ function resolvePressRoot() {
   candidates.push(resolve(root, '.press'));
   candidates.push(resolve(root, '..', 'Press'));
   const found = candidates.find((candidate) => existsSync(resolve(candidate, 'assets/js/site-features.js')));
-  return found || candidates[0];
+  if (found) return found;
+  throw new Error(`Press checkout not found for behavior probes. Set PRESS_ROOT or place Press at ../Press. Checked: ${candidates.join(', ')}`);
 }
 const pressRoot = resolvePressRoot();
 
