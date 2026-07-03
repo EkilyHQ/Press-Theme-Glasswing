@@ -7,6 +7,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
 const source = readFileSync(resolve(root, 'theme/modules/glasswing.js'), 'utf8');
+const manifest = JSON.parse(readFileSync(resolve(root, 'theme/theme.json'), 'utf8'));
+const releaseExample = JSON.parse(readFileSync(resolve(root, 'theme-release.example.json'), 'utf8'));
 function resolvePressRoot() {
   const candidates = [];
   if (process.env.PRESS_ROOT) candidates.push(resolve(root, process.env.PRESS_ROOT));
@@ -17,10 +19,18 @@ function resolvePressRoot() {
 }
 const pressRoot = resolvePressRoot();
 
+assert.equal(manifest.contractVersion, 3);
+assert.equal(manifest.engines.press, '>=3.4.127 <4.0.0');
+assert.equal(releaseExample.contractVersion, 3);
+assert.equal(releaseExample.engines.press, '>=3.4.127 <4.0.0');
+assert.ok(manifest.components.includes('press-theme-controls'), 'manifest should declare shared theme controls usage');
 assert.doesNotMatch(source, /href\s*=\s*["']\?tab=posts["']/);
 assert.doesNotMatch(source, /element\.href\s*=\s*["']\?tab=posts["']/);
 assert.doesNotMatch(source, /brand\.href\s*=\s*["']\?tab=posts["']/);
 assert.match(source, /siteFeatureContextEnabled/);
+assert.match(source, /function getRouter[\s\S]*ctx\.router/);
+assert.match(source, /function getI18n[\s\S]*getRouter\(params\)[\s\S]*router\.withLangParam/);
+assert.match(source, /function updateHomeLinks[\s\S]*routerFunction\(params, 'getHomeSlug'\)/);
 assert.match(source, /function updateHomeLinks[\s\S]*getHomeSlug[\s\S]*data-glasswing-brand/);
 assert.match(source, /function updateSearchChrome/);
 
@@ -46,6 +56,11 @@ assert.match(
   source,
   /if \(!featureEnabled\(params, 'tags'\) \|\| !featureEnabled\(params, 'search'\)\) \{/,
   'tag sidebar should hide when either tags or search is disabled'
+);
+assert.match(
+  source,
+  /function renderMeta\(meta = \{\}, params = \{\}\)[\s\S]*featureEnabled\(params, 'tags'\) && featureEnabled\(params, 'search'\) \? getTags\(meta\) : \[\]/,
+  'card metadata should hide tags when tags or search are disabled'
 );
 
 class TestClassList {
