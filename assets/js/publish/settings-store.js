@@ -1,7 +1,7 @@
 import {
   createStorageEffects,
   resolveStorageEffect
-} from '../editor-effects.js?v=press-system-v3.4.126';
+} from '../editor-effects.js?v=press-system-v3.4.127';
 
 export const GITHUB_PAT_STORAGE_KEY = 'press_fg_pat_cache';
 export const CONNECT_PUBLISH_GRANT_STORAGE_KEY = 'press_connect_publish_grant_cache';

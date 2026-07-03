@@ -1,5 +1,5 @@
-import { CONNECT_PUBLISH_MESSAGE_TYPE } from '../settings-store.js?v=press-system-v3.4.126';
-import { createEventEffects } from '../../editor-effects.js?v=press-system-v3.4.126';
+import { CONNECT_PUBLISH_MESSAGE_TYPE } from '../settings-store.js?v=press-system-v3.4.127';
+import { createEventEffects } from '../../editor-effects.js?v=press-system-v3.4.127';
 
 function resolveAmbientValue(name) {
   try {

@@ -2,10 +2,10 @@
   {
     "value": "native",
     "label": "Native",
-    "version": "3.4.1",
-    "contractVersion": 2,
+    "version": "3.4.2",
+    "contractVersion": 3,
     "engines": {
-      "press": ">=3.4.123 <4.0.0"
+      "press": ">=3.4.127 <4.0.0"
     },
     "builtIn": true,
     "removable": false,
@@ -13,7 +13,7 @@
       "type": "builtin"
     },
     "release": {
-      "tag": "v3.4.126"
+      "tag": "v3.4.127"
     },
     "files": [
       "base.css",
@@ -33,10 +33,10 @@
   {
     "value": "glasswing",
     "label": "Glasswing",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "contractVersion": 2,
     "engines": {
-      "press": ">=3.4.121 <4.0.0"
+      "press": ">=3.4.126 <4.0.0"
     },
     "builtIn": false,
     "removable": true,
@@ -46,12 +46,12 @@
       "manifestUrl": "https://raw.githubusercontent.com/EkilyHQ/Press-Theme-Glasswing/main/theme-release.json"
     },
     "release": {
-      "tag": "v0.1.11",
-      "htmlUrl": "https://github.com/EkilyHQ/Press-Theme-Glasswing/releases/tag/v0.1.11",
-      "publishedAt": "2026-06-06T15:11:13Z",
-      "assetName": "press-theme-glasswing-v0.1.11.zip",
-      "size": 14761,
-      "digest": "sha256:c6a65d6715f430b163f7a391ed7064529b57bc028110a1479b119bbccebef279"
+      "tag": "v0.1.12",
+      "htmlUrl": "https://github.com/EkilyHQ/Press-Theme-Glasswing/releases/tag/v0.1.12",
+      "publishedAt": "2026-07-02T15:38:32Z",
+      "assetName": "press-theme-glasswing-v0.1.12.zip",
+      "size": 15504,
+      "digest": "sha256:8be144574a86f9bb99f1153188a83c27f027b6a7f989bf9d6546db85edc2ae58"
     },
     "files": [
       "modules/glasswing.js",

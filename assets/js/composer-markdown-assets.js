@@ -3,7 +3,7 @@ import {
   collectManagedMarkdownReferences,
   listLocalMarkdownAssetReferences,
   resolveLocalMarkdownAssetReference
-} from './repository-deletions.js?v=press-system-v3.4.126';
+} from './repository-deletions.js?v=press-system-v3.4.127';
 
 export function createComposerMarkdownAssetManager(options = {}) {
   const translate = typeof options.t === 'function' ? options.t : ((key) => key);
