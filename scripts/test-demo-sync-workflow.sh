@@ -197,6 +197,9 @@ if (!theme.engines || theme.engines.press !== '>=3.4.130 <4.0.0') {
 if (!releaseWorkflow.includes('themeManifest.engines') || !releaseWorkflow.includes('engines,')) {
   throw new Error('theme release workflow must copy theme engines into theme-release.json');
 }
+if (!releaseWorkflow.includes('PRESS_CONTRACT_CHECK_REF: v3.4.130') || !releaseWorkflow.includes('ref: ${{ env.PRESS_CONTRACT_CHECK_REF }}')) {
+  throw new Error('theme release workflow must validate v4 themes against the Press v3.4.130 contract checks');
+}
 if (!Array.isArray(data.posts) || data.posts.length < 4) {
   throw new Error('demo site data must include at least four posts');
 }
