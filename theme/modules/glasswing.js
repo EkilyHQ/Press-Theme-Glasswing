@@ -71,14 +71,16 @@ function firstConfigText(value, fallback = '') {
 
 function getI18n(params = {}) {
   const ctx = params.ctx || {};
-  const i18n = ctx.i18n || {};
+  const context = params.context || {};
+  const i18n = params.i18n || ctx.i18n || context.i18n || {};
+  const router = getRouter(params);
   const translate = params.translate || params.t || i18n.t;
   return {
     t: typeof translate === 'function' ? translate : ((key) => String(key || '')),
     withLangParam: typeof params.withLangParam === 'function'
       ? params.withLangParam
-      : (typeof (ctx.router && ctx.router.withLangParam) === 'function'
-          ? ctx.router.withLangParam
+      : (typeof (router && router.withLangParam) === 'function'
+          ? router.withLangParam
           : (typeof i18n.withLangParam === 'function' ? i18n.withLangParam : ((url) => url)))
   };
 }

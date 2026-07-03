@@ -29,7 +29,7 @@ assert.doesNotMatch(source, /element\.href\s*=\s*["']\?tab=posts["']/);
 assert.doesNotMatch(source, /brand\.href\s*=\s*["']\?tab=posts["']/);
 assert.match(source, /siteFeatureContextEnabled/);
 assert.match(source, /function getRouter[\s\S]*ctx\.router/);
-assert.match(source, /function getI18n[\s\S]*ctx\.router\.withLangParam/);
+assert.match(source, /function getI18n[\s\S]*getRouter\(params\)[\s\S]*router\.withLangParam/);
 assert.match(source, /function updateHomeLinks[\s\S]*routerFunction\(params, 'getHomeSlug'\)/);
 assert.match(source, /function updateHomeLinks[\s\S]*getHomeSlug[\s\S]*data-glasswing-brand/);
 assert.match(source, /function updateSearchChrome/);
