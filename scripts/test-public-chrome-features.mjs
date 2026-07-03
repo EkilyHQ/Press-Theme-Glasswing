@@ -28,6 +28,7 @@ assert.doesNotMatch(source, /href\s*=\s*["']\?tab=posts["']/);
 assert.doesNotMatch(source, /element\.href\s*=\s*["']\?tab=posts["']/);
 assert.doesNotMatch(source, /brand\.href\s*=\s*["']\?tab=posts["']/);
 assert.match(source, /siteFeatureContextEnabled/);
+assert.match(source, /sanitizeUrl/);
 assert.match(source, /function getRouter[\s\S]*ctx\.router/);
 assert.match(source, /function getI18n[\s\S]*getRouter\(params\)[\s\S]*router\.withLangParam/);
 assert.match(source, /function updateHomeLinks[\s\S]*routerFunction\(params, 'getHomeSlug'\)/);
@@ -367,5 +368,37 @@ assert.doesNotMatch(links.innerHTML, /GitHub|\?tab=posts/, 'late footer setup sh
 const tools = doc.querySelector('[data-theme-region="tools"]');
 assert.equal(tools.hidden, true, 'late footer setup should keep visitor theme controls hidden');
 assert.equal(tools.innerHTML, '', 'late footer setup should not mount visitor theme controls');
+
+const enabledDoc = new TestDocument();
+const enabledFeatures = { isEnabled: () => true };
+const enabledApi = glasswing.mount({
+  document: enabledDoc,
+  window: enabledDoc.defaultView,
+  features: enabledFeatures,
+  i18n: {
+    t: (key) => key,
+    withLangParam: (href) => href
+  }
+});
+const enabledParams = {
+  config: {
+    siteTitle: 'Product',
+    profileLinks: [
+      { label: 'Unsafe', href: 'javascript:alert(1)' },
+      { label: 'Mail', href: 'mailto:hello@example.test' }
+    ]
+  },
+  features: enabledFeatures,
+  withLangParam: (href) => href,
+  getHomeSlug: () => 'about',
+  getHomeLabel: () => 'About',
+  postsEnabled: () => false
+};
+enabledApi.effects.renderSiteIdentity(enabledParams);
+enabledApi.effects.setupFooter(enabledParams);
+const enabledLinks = enabledDoc.querySelector('[data-glasswing-site-links]');
+assert.match(enabledLinks.innerHTML, /href="#"/, 'Glasswing should replace unsafe profile link URL schemes');
+assert.match(enabledLinks.innerHTML, /href="mailto:hello@example.test"/, 'Glasswing should preserve safe profile link URL schemes');
+assert.doesNotMatch(enabledLinks.innerHTML, /javascript:/i, 'Glasswing should not render javascript profile URLs');
 
 console.log('ok - Glasswing public chrome feature gates');

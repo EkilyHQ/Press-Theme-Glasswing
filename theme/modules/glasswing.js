@@ -2,6 +2,7 @@ import {
   applySavedTheme,
   mountThemeControls
 } from '../../../js/theme.js';
+import { sanitizeUrl } from '../../../js/safe-html.js';
 import { siteFeatureContextEnabled } from '../../../js/site-features.js';
 
 const REGION_NAMES = ['container', 'content', 'main', 'nav', 'search', 'tags', 'toc', 'footer', 'tools'];
@@ -546,7 +547,7 @@ function renderFooterLinks(config = activeSiteConfig, params = {}) {
     links.push(...profileLinks
       .map((item) => ({
         label: text(item && item.label),
-        href: text(item && item.href)
+        href: sanitizeUrl(text(item && item.href))
       }))
       .filter((item) => item.label && item.href));
   }
