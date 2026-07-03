@@ -1,19 +1,19 @@
-import { configureFetchCachePolicy } from './js/cache-control.js?v=press-system-v3.4.128';
-import './js/components.js?v=press-system-v3.4.128';
-import { createContentModel } from './js/content-model.js?v=press-system-v3.4.128';
+import { configureFetchCachePolicy } from './js/cache-control.js?v=press-system-v3.4.129';
+import './js/components.js?v=press-system-v3.4.129';
+import { createContentModel } from './js/content-model.js?v=press-system-v3.4.129';
 import {
   decryptMarkdownDocument,
   parseEncryptedMarkdownEnvelope,
   stripEncryptedBodyForPublicUse
-} from './js/encrypted-content.js?v=press-system-v3.4.128';
-import { setupAnchors, setupTOC } from './js/toc.js?v=press-system-v3.4.128';
-import { applySavedTheme, bindThemeToggle, bindThemePackPicker, mountThemeControls, refreshLanguageSelector, applyThemeConfig, bindPostEditor } from './js/theme.js?v=press-system-v3.4.128';
-import { createThemeI18nContext, ensureThemeLayout, getThemeApiHandler, getThemeLayoutContext, getThemeRegion } from './js/theme-layout.js?v=press-system-v3.4.128';
-import { setupSearch } from './js/search.js?v=press-system-v3.4.128';
-import { createSiteFeatureContext, isSiteFeatureEnabled } from './js/site-features.js?v=press-system-v3.4.128';
-import { extractExcerpt, computeReadTime, parseFrontMatter } from './js/content.js?v=press-system-v3.4.128';
-import { getContentRoot, setSafeHtml } from './js/safe-html.js?v=press-system-v3.4.128';
-import { getQueryVariable, setDocTitle, setBaseSiteTitle, slugifyTab, isModifiedClick } from './js/utils.js?v=press-system-v3.4.128';
+} from './js/encrypted-content.js?v=press-system-v3.4.129';
+import { setupAnchors, setupTOC } from './js/toc.js?v=press-system-v3.4.129';
+import { applySavedTheme, bindThemeToggle, bindThemePackPicker, mountThemeControls, refreshLanguageSelector, applyThemeConfig, bindPostEditor } from './js/theme.js?v=press-system-v3.4.129';
+import { createThemeI18nContext, ensureThemeLayout, getThemeApiHandler, getThemeLayoutContext, getThemeRegion } from './js/theme-layout.js?v=press-system-v3.4.129';
+import { setupSearch } from './js/search.js?v=press-system-v3.4.129';
+import { createSiteFeatureContext, isSiteFeatureEnabled } from './js/site-features.js?v=press-system-v3.4.129';
+import { extractExcerpt, computeReadTime, parseFrontMatter } from './js/content.js?v=press-system-v3.4.129';
+import { getContentRoot, setSafeHtml } from './js/safe-html.js?v=press-system-v3.4.129';
+import { getQueryVariable, setDocTitle, setBaseSiteTitle, slugifyTab, isModifiedClick } from './js/utils.js?v=press-system-v3.4.129';
 import {
   initI18n,
   t,
@@ -23,17 +23,17 @@ import {
   getCurrentLang,
   normalizeLangKey,
   POSTS_METADATA_READY_EVENT
-} from './js/i18n.js?v=press-system-v3.4.128';
-import { updateSEO, extractSEOFromMarkdown } from './js/seo.js?v=press-system-v3.4.128';
-import { initErrorReporter, setReporterContext, showErrorOverlay } from './js/errors.js?v=press-system-v3.4.128';
-import { fetchConfigWithYamlFallback } from './js/yaml.js?v=press-system-v3.4.128';
-import { applyMasonry, updateMasonryItem, calcAndSetSpan, toPx, debounce } from './js/masonry.js?v=press-system-v3.4.128';
-import { aggregateTags, renderTagSidebar, setupTagTooltips } from './js/tags.js?v=press-system-v3.4.128';
-import { renderPostNav } from './js/post-nav.js?v=press-system-v3.4.128';
-import { getArticleTitleFromMain } from './js/dom-utils.js?v=press-system-v3.4.128';
-import { applyLangHints } from './js/typography.js?v=press-system-v3.4.128';
+} from './js/i18n.js?v=press-system-v3.4.129';
+import { updateSEO, extractSEOFromMarkdown } from './js/seo.js?v=press-system-v3.4.129';
+import { initErrorReporter, setReporterContext, showErrorOverlay } from './js/errors.js?v=press-system-v3.4.129';
+import { fetchConfigWithYamlFallback } from './js/yaml.js?v=press-system-v3.4.129';
+import { applyMasonry, updateMasonryItem, calcAndSetSpan, toPx, debounce } from './js/masonry.js?v=press-system-v3.4.129';
+import { aggregateTags, renderTagSidebar, setupTagTooltips } from './js/tags.js?v=press-system-v3.4.129';
+import { renderPostNav } from './js/post-nav.js?v=press-system-v3.4.129';
+import { getArticleTitleFromMain } from './js/dom-utils.js?v=press-system-v3.4.129';
+import { applyLangHints } from './js/typography.js?v=press-system-v3.4.129';
 
-import { applyLazyLoadingIn, hydratePostImages, hydratePostVideos, hydrateCardCovers } from './js/post-render.js?v=press-system-v3.4.128';
+import { applyLazyLoadingIn, hydratePostImages, hydratePostVideos, hydrateCardCovers } from './js/post-render.js?v=press-system-v3.4.129';
 
 // Lightweight content fetch helper; cache mode is normalized by cache-control.js.
 const getFile = (filename) => fetch(String(filename || ''), { cache: 'no-store' })
@@ -80,7 +80,7 @@ function cacheDynamicImport(importer, getCached, setCached) {
 
 function loadMarkdownModule() {
   return cacheDynamicImport(
-    () => import('./js/markdown.js?v=press-system-v3.4.128'),
+    () => import('./js/markdown.js?v=press-system-v3.4.129'),
     () => markdownModulePromise,
     (promise) => { markdownModulePromise = promise; }
   );
@@ -88,7 +88,7 @@ function loadMarkdownModule() {
 
 function loadSyntaxHighlightModule() {
   return cacheDynamicImport(
-    () => import('./js/syntax-highlight.js?v=press-system-v3.4.128'),
+    () => import('./js/syntax-highlight.js?v=press-system-v3.4.129'),
     () => syntaxHighlightModulePromise,
     (promise) => { syntaxHighlightModulePromise = promise; }
   );
@@ -96,7 +96,7 @@ function loadSyntaxHighlightModule() {
 
 function loadMathRenderModule() {
   return cacheDynamicImport(
-    () => import('./js/math-render.js?v=press-system-v3.4.128'),
+    () => import('./js/math-render.js?v=press-system-v3.4.129'),
     () => mathRenderModulePromise,
     (promise) => { mathRenderModulePromise = promise; }
   );
@@ -104,7 +104,7 @@ function loadMathRenderModule() {
 
 function loadAnnotateModule() {
   return cacheDynamicImport(
-    () => import('./js/annotate.js?v=press-system-v3.4.128'),
+    () => import('./js/annotate.js?v=press-system-v3.4.129'),
     () => annotateModulePromise,
     (promise) => { annotateModulePromise = promise; }
   );
@@ -112,7 +112,7 @@ function loadAnnotateModule() {
 
 function loadLinkCardsModule() {
   return cacheDynamicImport(
-    () => import('./js/link-cards.js?v=press-system-v3.4.128'),
+    () => import('./js/link-cards.js?v=press-system-v3.4.129'),
     () => linkCardsModulePromise,
     (promise) => { linkCardsModulePromise = promise; }
   );

@@ -1,4 +1,4 @@
-import { SITE_FEATURE_KEYS, isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.128';
+import { SITE_FEATURE_KEYS, isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.129';
 
 export function createComposerSiteSettingsConfigGrids(options = {}) {
   const noop = () => {};

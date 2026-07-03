@@ -1,17 +1,17 @@
-import { installLightbox } from '../../../js/lightbox.js?v=press-system-v3.4.128';
-import { sanitizeImageUrl, setSafeHtml } from '../../../js/safe-html.js?v=press-system-v3.4.128';
-import { slugifyTab, escapeHtml, getQueryVariable, renderTags, cardImageSrc, fallbackCover, formatDisplayDate, formatBytes, renderSkeletonArticle } from '../../../js/utils.js?v=press-system-v3.4.128';
-import { attachHoverTooltip } from '../../../js/tags.js?v=press-system-v3.4.128';
-import { prefersReducedMotion, getArticleTitleFromMain } from '../../../js/dom-utils.js?v=press-system-v3.4.128';
-import { renderPostMetaCard, renderOutdatedCard } from '../../../js/templates.js?v=press-system-v3.4.128';
-import { showErrorOverlay } from '../../../js/errors.js?v=press-system-v3.4.128';
-import { renderPostNav } from '../../../js/post-nav.js?v=press-system-v3.4.128';
-import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from '../../../js/post-render.js?v=press-system-v3.4.128';
-import { applyLangHints } from '../../../js/typography.js?v=press-system-v3.4.128';
-import { renderPressPostCardHtml } from '../../../js/post-card-html.js?v=press-system-v3.4.128';
-import { mountThemeControls, applySavedTheme, bindThemeToggle, bindThemePackPicker, bindPostEditor } from '../../../js/theme.js?v=press-system-v3.4.128';
-import { isEncryptedMarkdown, stripEncryptedBodyForPublicUse } from '../../../js/encrypted-content.js?v=press-system-v3.4.128';
-import { siteFeatureContextEnabled } from '../../../js/site-features.js?v=press-system-v3.4.128';
+import { installLightbox } from '../../../js/lightbox.js?v=press-system-v3.4.129';
+import { sanitizeImageUrl, sanitizeUrl, setSafeHtml } from '../../../js/safe-html.js?v=press-system-v3.4.129';
+import { slugifyTab, escapeHtml, getQueryVariable, renderTags, cardImageSrc, fallbackCover, formatDisplayDate, formatBytes, renderSkeletonArticle } from '../../../js/utils.js?v=press-system-v3.4.129';
+import { attachHoverTooltip } from '../../../js/tags.js?v=press-system-v3.4.129';
+import { prefersReducedMotion, getArticleTitleFromMain } from '../../../js/dom-utils.js?v=press-system-v3.4.129';
+import { renderPostMetaCard, renderOutdatedCard } from '../../../js/templates.js?v=press-system-v3.4.129';
+import { showErrorOverlay } from '../../../js/errors.js?v=press-system-v3.4.129';
+import { renderPostNav } from '../../../js/post-nav.js?v=press-system-v3.4.129';
+import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from '../../../js/post-render.js?v=press-system-v3.4.129';
+import { applyLangHints } from '../../../js/typography.js?v=press-system-v3.4.129';
+import { renderPressPostCardHtml } from '../../../js/post-card-html.js?v=press-system-v3.4.129';
+import { mountThemeControls, applySavedTheme, bindThemeToggle, bindThemePackPicker, bindPostEditor } from '../../../js/theme.js?v=press-system-v3.4.129';
+import { isEncryptedMarkdown, stripEncryptedBodyForPublicUse } from '../../../js/encrypted-content.js?v=press-system-v3.4.129';
+import { siteFeatureContextEnabled } from '../../../js/site-features.js?v=press-system-v3.4.129';
 
 const defaultWindow = typeof window !== 'undefined' ? window : undefined;
 const defaultDocument = typeof document !== 'undefined' ? document : undefined;
@@ -42,9 +42,9 @@ function getRuntimeLinkCardsCache(runtimeState = null) {
 
 function loadNativeLinkCardsModule(runtimeState = null) {
   const cache = getRuntimeLinkCardsCache(runtimeState);
-  if (!cache) return import('../../../js/link-cards.js?v=press-system-v3.4.128');
+  if (!cache) return import('../../../js/link-cards.js?v=press-system-v3.4.129');
   if (!cache.modulePromise) {
-    cache.modulePromise = import('../../../js/link-cards.js?v=press-system-v3.4.128').catch((err) => {
+    cache.modulePromise = import('../../../js/link-cards.js?v=press-system-v3.4.129').catch((err) => {
       cache.modulePromise = null;
       throw err;
     });
@@ -1149,9 +1149,9 @@ function renderSiteLinksNative(params = {}, documentRef = defaultDocument) {
   if (Array.isArray(linksVal)) {
     items = linksVal
       .filter(x => x && x.href && x.label)
-      .map(x => ({ href: String(x.href), label: String(x.label) }));
+      .map(x => ({ href: sanitizeUrl(x.href), label: String(x.label) }));
   } else if (linksVal && typeof linksVal === 'object') {
-    items = Object.entries(linksVal).map(([label, href]) => ({ label: String(label), href: String(href) }));
+    items = Object.entries(linksVal).map(([label, href]) => ({ label: String(label), href: sanitizeUrl(href) }));
   }
   if (!items.length) { root.innerHTML = ''; return true; }
   const sep = '<span class="link-sep">•</span>';

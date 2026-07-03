@@ -1,4 +1,4 @@
-import chtTwTranslations from './cht-tw.js?v=press-system-v3.4.128';
+import chtTwTranslations from './cht-tw.js?v=press-system-v3.4.129';
 
 export const languageMeta = { label: '繁體中文（香港）' };
 
