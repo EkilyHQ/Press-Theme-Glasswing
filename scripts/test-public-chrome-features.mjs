@@ -26,11 +26,12 @@ assert.equal(releaseExample.engines.press, '>=3.4.130 <4.0.0');
 assert.ok(manifest.components.includes('press-theme-controls'), 'manifest should declare shared theme controls usage');
 assert.doesNotMatch(source, /[?&](?:tab|id)=/, 'v4 packaged source should use router href helpers for public routes');
 assert.doesNotMatch(source, /getRouteHref[\s\S]{0,160}\|\|\s*'#'/, 'v4 route helper null results should not become hash dead links');
+assert.doesNotMatch(source, /<a[^>]*href="#"[^>]*(?:data-glasswing-brand|data-glasswing-footer-brand)|<a[^>]*(?:data-glasswing-brand|data-glasswing-footer-brand)[^>]*href="#"|brand\.href\s*=\s*'#'/, 'brand home links should not start as hash dead links');
 assert.match(source, /siteFeatureContextEnabled/);
 assert.match(source, /sanitizeUrl/);
 assert.match(source, /function getRouter[\s\S]*ctx\.router/);
 assert.match(source, /function getRouteHref[\s\S]*routerFunction\(params, name\)/);
-assert.match(source, /function updateHomeLinks[\s\S]*getRouteHref\(params, 'getHomeHref'\)[\s\S]*data-glasswing-brand/);
+assert.match(source, /function updateHomeLinks[\s\S]*getRouteHref\(params, 'getHomeHref'\)[\s\S]*data-glasswing-brand[\s\S]*aria-disabled/);
 assert.match(source, /function updateSearchChrome/);
 
 [
@@ -376,6 +377,22 @@ api.effects.renderSiteIdentity({
 
 assert.equal(brand.getAttribute('href'), '?tab=about', 'identity refresh without home helpers should preserve brand home href');
 assert.equal(footerBrand.getAttribute('href'), '?tab=about', 'identity refresh without home helpers should preserve footer home href');
+
+api.effects.renderSiteIdentity({
+  config: { siteTitle: 'Product unreachable home' },
+  features,
+  context: {
+    router: {
+      getHomeHref: () => null
+    }
+  }
+});
+assert.equal(brand.getAttribute('href'), null, 'null home helper should remove stale brand hrefs');
+assert.equal(footerBrand.getAttribute('href'), null, 'null home helper should remove stale footer brand hrefs');
+assert.equal(brand.getAttribute('aria-disabled'), 'true', 'null home helper should disable the brand link');
+assert.equal(footerBrand.getAttribute('aria-disabled'), 'true', 'null home helper should disable the footer brand link');
+assert.equal(brand.getAttribute('tabindex'), '-1', 'null home helper should remove brand links from tab order');
+assert.equal(footerBrand.getAttribute('tabindex'), '-1', 'null home helper should remove footer brand links from tab order');
 
 const links = doc.querySelector('[data-glasswing-site-links]');
 assert.equal(links.hidden, true, 'late footer setup should keep footer links hidden');

@@ -498,11 +498,18 @@ function clearRegion(region) {
 function updateHomeLinks(params = {}) {
   if (!activeShell || typeof activeShell.querySelectorAll !== 'function') return false;
   const href = getRouteHref(params, 'getHomeHref');
-  if (!href) return false;
   activeShell.querySelectorAll('[data-glasswing-brand], [data-glasswing-footer-brand]').forEach((link) => {
+    if (!href) {
+      try { link.removeAttribute('href'); } catch (_) {}
+      try { link.setAttribute('aria-disabled', 'true'); } catch (_) {}
+      try { link.setAttribute('tabindex', '-1'); } catch (_) {}
+      return;
+    }
     try { link.setAttribute('href', href); } catch (_) {}
+    try { link.removeAttribute('aria-disabled'); } catch (_) {}
+    try { link.removeAttribute('tabindex'); } catch (_) {}
   });
-  return true;
+  return !!href;
 }
 
 function updateSearchChrome(params = {}) {
@@ -599,7 +606,7 @@ function ensureFooterStructure(footer) {
     inner = doc.createElement('div');
     inner.className = 'glasswing-footer__inner';
     inner.innerHTML = `<div class="glasswing-footer__brand">
-      <a href="#" data-glasswing-footer-brand>Press</a>
+      <a data-glasswing-footer-brand aria-disabled="true" tabindex="-1">Press</a>
       <span data-glasswing-footer-tagline>Glasswing for Press</span>
     </div>
     <nav class="glasswing-footer__links" aria-label="Site links" data-glasswing-site-links></nav>
@@ -744,13 +751,13 @@ export function mount(context = {}) {
 
   const brand = ensureElement(header, '[data-glasswing-brand]', () => {
     const element = doc.createElement('a');
-    element.href = '#';
     element.className = 'glasswing-brand';
     element.setAttribute('data-glasswing-brand', '');
+    element.setAttribute('aria-disabled', 'true');
+    element.setAttribute('tabindex', '-1');
     element.textContent = 'Press';
     return element;
   });
-  brand.href = '#';
 
   const nav = ensureElement(header, '[data-theme-region="nav"]', () => {
     const element = doc.createElement('nav');
