@@ -22,6 +22,18 @@ function featureEnabled(params = {}, key) {
   return siteFeatureContextEnabled(features, key);
 }
 
+function getRouter(params = {}) {
+  return (params && params.ctx && params.ctx.router)
+    || (params && params.context && params.context.router)
+    || (activeThemeContext && activeThemeContext.router)
+    || {};
+}
+
+function routerFunction(params = {}, name) {
+  const router = getRouter(params);
+  return router && typeof router[name] === 'function' ? router[name] : null;
+}
+
 function setChromeHidden(element, hidden) {
   if (!element) return;
   try { element.hidden = !!hidden; } catch (_) {}
@@ -65,7 +77,9 @@ function getI18n(params = {}) {
     t: typeof translate === 'function' ? translate : ((key) => String(key || '')),
     withLangParam: typeof params.withLangParam === 'function'
       ? params.withLangParam
-      : (typeof i18n.withLangParam === 'function' ? i18n.withLangParam : ((url) => url))
+      : (typeof (ctx.router && ctx.router.withLangParam) === 'function'
+          ? ctx.router.withLangParam
+          : (typeof i18n.withLangParam === 'function' ? i18n.withLangParam : ((url) => url)))
   };
 }
 
@@ -234,7 +248,7 @@ function postHref(params = {}, meta = {}) {
 function renderMeta(meta = {}, params = {}) {
   if (!featureEnabled(params, 'postMeta')) return '';
   const date = formatDate(meta.date);
-  const tags = featureEnabled(params, 'tags') ? getTags(meta) : [];
+  const tags = featureEnabled(params, 'tags') && featureEnabled(params, 'search') ? getTags(meta) : [];
   const labels = [];
   if (date) labels.push(`<span>${escapeHtml(date)}</span>`);
   tags.slice(0, 2).forEach((tag) => labels.push(`<span>${escapeHtml(tag)}</span>`));
@@ -463,7 +477,7 @@ function clearRegion(region) {
 function updateHomeLinks(params = {}) {
   if (!activeShell || typeof activeShell.querySelectorAll !== 'function') return false;
   const { withLangParam } = getI18n(params);
-  const getHomeSlug = typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null;
+  const getHomeSlug = routerFunction(params, 'getHomeSlug') || (typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null);
   const allowFallback = params.allowHomeFallback === true;
   if (!getHomeSlug && !allowFallback) return false;
   const fallback = allowFallback && featureEnabled(params, 'allPosts') ? 'posts' : '';
@@ -494,7 +508,8 @@ function renderTabs(params = {}) {
   const active = String(params.activeSlug || '');
   const links = [];
   updateHomeLinks({ ...params, allowHomeFallback: true });
-  if (typeof params.postsEnabled !== 'function' || params.postsEnabled()) {
+  const postsEnabled = routerFunction(params, 'postsEnabled') || params.postsEnabled;
+  if (typeof postsEnabled !== 'function' || postsEnabled()) {
     links.push({ slug: 'posts', label: t('ui.allPosts') || 'Articles', href: withLangParam('?tab=posts') });
   }
   Object.entries(tabs).forEach(([slug, info]) => {
@@ -518,10 +533,11 @@ function renderFooterLinks(config = activeSiteConfig, params = {}) {
   const profileLinks = Array.isArray(config && config.profileLinks) ? config.profileLinks : [];
   const links = [];
   if (showFooterNav) {
-    const getHomeSlug = typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null;
+    const getHomeSlug = routerFunction(params, 'getHomeSlug') || (typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null);
     const fallback = featureEnabled(params, 'allPosts') ? 'posts' : '';
     const homeSlug = getHomeSlug ? text(getHomeSlug()) : fallback;
-    const label = typeof params.getHomeLabel === 'function' ? params.getHomeLabel() : (t('ui.allPosts') || 'All Posts');
+    const getHomeLabel = routerFunction(params, 'getHomeLabel') || params.getHomeLabel;
+    const label = typeof getHomeLabel === 'function' ? getHomeLabel() : (t('ui.allPosts') || 'All Posts');
     if (homeSlug) links.push({ label, href: withLangParam(`?tab=${encodeURIComponent(homeSlug)}`) });
   }
   if (showProfileLinks) {
