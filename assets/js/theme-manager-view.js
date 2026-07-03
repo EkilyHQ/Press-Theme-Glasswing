@@ -1,5 +1,5 @@
-import { getProductStateThemeEntry } from './product-state.js?v=press-system-v3.4.127';
-import { REQUIRED_THEME_CONTRACT_VERSION, safeString } from './theme-package-core.js?v=press-system-v3.4.127';
+import { getProductStateThemeEntry } from './product-state.js?v=press-system-v3.4.128';
+import { REQUIRED_THEME_CONTRACT_VERSION, safeString } from './theme-package-core.js?v=press-system-v3.4.128';
 
 export function createThemeManagerElements() {
   return {

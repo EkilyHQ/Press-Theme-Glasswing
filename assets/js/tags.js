@@ -1,7 +1,7 @@
 // Tag utilities: aggregation, rendering (collapsible), and tooltips for truncated tags
-import { t, withLangParam } from './i18n.js?v=press-system-v3.4.127';
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.127';
-import { getQueryVariable, escapeHtml } from './utils.js?v=press-system-v3.4.127';
+import { t, withLangParam } from './i18n.js?v=press-system-v3.4.128';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.128';
+import { getQueryVariable, escapeHtml } from './utils.js?v=press-system-v3.4.128';
 
 function getRegionReader(options = {}) {
   return options && typeof options.getRegion === 'function' ? options.getRegion : getThemeRegion;

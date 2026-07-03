@@ -8,12 +8,12 @@
 //   (e.g., `en`, `chs`, `ja`) describing `title` and `location`. Missing languages fall back to `default`.
 // - Friendly language names come from assets/i18n/languages.json (or the language module's metadata).
 
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.127';
-import { isEncryptedMarkdown } from './encrypted-content.js?v=press-system-v3.4.127';
-import { getContentRoot } from './utils.js?v=press-system-v3.4.127';
-import { parseYAML } from './yaml.js?v=press-system-v3.4.127';
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.127';
-import enTranslations, { languageMeta as enLanguageMeta } from '../i18n/en.js?v=press-system-v3.4.127';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.128';
+import { isEncryptedMarkdown } from './encrypted-content.js?v=press-system-v3.4.128';
+import { getContentRoot } from './utils.js?v=press-system-v3.4.128';
+import { parseYAML } from './yaml.js?v=press-system-v3.4.128';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.128';
+import enTranslations, { languageMeta as enLanguageMeta } from '../i18n/en.js?v=press-system-v3.4.128';
 
 // Content fetch cache modes are normalized by cache-control.js.
 

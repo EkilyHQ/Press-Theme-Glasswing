@@ -1,4 +1,4 @@
-import { COMPOSER_SERVICE_PLAN, COMPOSER_SERVICE_SLOTS } from './composer-app-services.js?v=press-system-v3.4.127';
+import { COMPOSER_SERVICE_PLAN, COMPOSER_SERVICE_SLOTS } from './composer-app-services.js?v=press-system-v3.4.128';
 
 export const COMPOSER_SERVICE_CALLS = Object.freeze({
   applyMode: Object.freeze({

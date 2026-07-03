@@ -1,4 +1,4 @@
-import { normalizeMarkdownDraftContent } from '../composer-markdown-save.js?v=press-system-v3.4.127';
+import { normalizeMarkdownDraftContent } from '../composer-markdown-save.js?v=press-system-v3.4.128';
 
 const BASE64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
