@@ -35,6 +35,17 @@ function routerFunction(params = {}, name) {
   return router && typeof router[name] === 'function' ? router[name] : null;
 }
 
+function getRouteHref(params = {}, name, ...args) {
+  const helper = routerFunction(params, name);
+  if (!helper) return null;
+  try {
+    const href = helper(...args);
+    return href ? String(href) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
 function setChromeHidden(element, hidden) {
   if (!element) return;
   try { element.hidden = !!hidden; } catch (_) {}
@@ -243,9 +254,8 @@ function isSameMediaSource(left, right, params = {}) {
 }
 
 function postHref(params = {}, meta = {}) {
-  const { withLangParam } = getI18n(params);
   const location = text(meta.location);
-  return location ? withLangParam(`?id=${encodeURIComponent(location)}`) : '#';
+  return location ? (getRouteHref(params, 'getPostHref', location) || '') : '';
 }
 
 function renderMeta(meta = {}, params = {}) {
@@ -270,6 +280,7 @@ function renderHero(entry, params = {}) {
   if (!entry) return '';
   const [title, meta = {}] = entry;
   const href = postHref(params, meta);
+  if (!href) return '';
   const excerpt = text(meta.excerpt);
   const media = renderCover(meta, title, 'glasswing-hero__media', params);
   return `<article class="glasswing-hero">
@@ -289,6 +300,7 @@ function renderSecondary(entry, params = {}) {
   if (!entry) return '';
   const [title, meta = {}] = entry;
   const href = postHref(params, meta);
+  if (!href) return '';
   const excerpt = text(meta.excerpt);
   return `<article class="glasswing-secondary-card">
     <a href="${attr(href)}">
@@ -306,6 +318,7 @@ function renderRow(entry, params = {}) {
   if (!entry) return '';
   const [title, meta = {}] = entry;
   const href = postHref(params, meta);
+  if (!href) return '';
   const excerpt = text(meta.excerpt);
   return `<article class="glasswing-row">
     <a href="${attr(href)}">
@@ -323,19 +336,24 @@ function renderPagination(params = {}, baseTab = 'posts') {
   const page = Math.max(1, Number(params.page || 1));
   const totalPages = Math.max(1, Number(params.totalPages || 1));
   if (totalPages <= 1) return '';
-  const { withLangParam, t } = getI18n(params);
+  const { t } = getI18n(params);
   const makeHref = (target) => {
-    const query = baseTab === 'search'
-      ? `?tab=search&q=${encodeURIComponent(params.query || '')}&tag=${encodeURIComponent(params.tagFilter || '')}&page=${target}`
-      : `?tab=posts&page=${target}`;
-    return withLangParam(query);
+    const href = baseTab === 'search'
+      ? getRouteHref(params, 'getSearchHref', { q: params.query || '', tag: params.tagFilter || '', page: target })
+      : getRouteHref(params, 'getPostsHref', { page: target });
+    return href || '';
   };
+  const renderPageControl = (href, label) => href
+    ? `<a href="${attr(href)}">${escapeHtml(label)}</a>`
+    : `<span aria-disabled="true">${escapeHtml(label)}</span>`;
+  const prevLabel = t('ui.prev') || 'Previous';
+  const nextLabel = t('ui.next') || 'Next';
   const prev = page > 1
-    ? `<a href="${attr(makeHref(page - 1))}">${escapeHtml(t('ui.prev') || 'Previous')}</a>`
-    : '<span aria-disabled="true">Previous</span>';
+    ? renderPageControl(makeHref(page - 1), prevLabel)
+    : renderPageControl('', prevLabel);
   const next = page < totalPages
-    ? `<a href="${attr(makeHref(page + 1))}">${escapeHtml(t('ui.next') || 'Next')}</a>`
-    : '<span aria-disabled="true">Next</span>';
+    ? renderPageControl(makeHref(page + 1), nextLabel)
+    : renderPageControl('', nextLabel);
   return `<nav class="glasswing-pagination" aria-label="Pagination">${prev}<span>${page} / ${totalPages}</span>${next}</nav>`;
 }
 
@@ -479,13 +497,8 @@ function clearRegion(region) {
 
 function updateHomeLinks(params = {}) {
   if (!activeShell || typeof activeShell.querySelectorAll !== 'function') return false;
-  const { withLangParam } = getI18n(params);
-  const getHomeSlug = routerFunction(params, 'getHomeSlug') || (typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null);
-  const allowFallback = params.allowHomeFallback === true;
-  if (!getHomeSlug && !allowFallback) return false;
-  const fallback = allowFallback && featureEnabled(params, 'allPosts') ? 'posts' : '';
-  const homeSlug = getHomeSlug ? text(getHomeSlug()) : fallback;
-  const href = homeSlug ? withLangParam(`?tab=${encodeURIComponent(homeSlug)}`) : '#';
+  const href = getRouteHref(params, 'getHomeHref');
+  if (!href) return false;
   activeShell.querySelectorAll('[data-glasswing-brand], [data-glasswing-footer-brand]').forEach((link) => {
     try { link.setAttribute('href', href); } catch (_) {}
   });
@@ -506,21 +519,23 @@ function updateSearchChrome(params = {}) {
 function renderTabs(params = {}) {
   const nav = params.navElement || getRegion({ regions: params.regions || activeRegions }, 'nav');
   if (!nav) return false;
-  const { t, withLangParam } = getI18n(params);
+  const { t } = getI18n(params);
   const tabs = params.tabsBySlug || {};
   const active = String(params.activeSlug || '');
   const links = [];
   updateHomeLinks({ ...params, allowHomeFallback: true });
   const postsEnabled = routerFunction(params, 'postsEnabled') || params.postsEnabled;
-  if (typeof postsEnabled !== 'function' || postsEnabled()) {
-    links.push({ slug: 'posts', label: t('ui.allPosts') || 'Articles', href: withLangParam('?tab=posts') });
+  const postsHref = getRouteHref(params, 'getPostsHref');
+  if ((typeof postsEnabled !== 'function' || postsEnabled()) && postsHref) {
+    links.push({ slug: 'posts', label: t('ui.allPosts') || 'Articles', href: postsHref });
   }
   Object.entries(tabs).forEach(([slug, info]) => {
     if (!slug) return;
-    links.push({
+    const href = getRouteHref(params, 'getTabHref', slug);
+    if (href) links.push({
       slug,
       label: text(info && info.title, slug),
-      href: withLangParam(`?tab=${encodeURIComponent(slug)}`)
+      href
     });
   });
   nav.innerHTML = links.map((link) => `<a class="${link.slug === active ? 'is-active' : ''}" href="${attr(link.href)}">${escapeHtml(link.label)}</a>`).join('');
@@ -530,18 +545,18 @@ function renderTabs(params = {}) {
 function renderFooterLinks(config = activeSiteConfig, params = {}) {
   const linksRegion = activeShell && activeShell.querySelector('[data-glasswing-site-links]');
   if (!linksRegion) return false;
-  const { t, withLangParam } = getI18n(params);
+  const { t } = getI18n(params);
   const showFooterNav = featureEnabled(params, 'footerNav');
   const showProfileLinks = featureEnabled(params, 'profileLinks');
   const profileLinks = Array.isArray(config && config.profileLinks) ? config.profileLinks : [];
   const links = [];
   if (showFooterNav) {
     const getHomeSlug = routerFunction(params, 'getHomeSlug') || (typeof params.getHomeSlug === 'function' ? params.getHomeSlug : null);
-    const fallback = featureEnabled(params, 'allPosts') ? 'posts' : '';
-    const homeSlug = getHomeSlug ? text(getHomeSlug()) : fallback;
+    const homeSlug = getHomeSlug ? text(getHomeSlug()) : '';
     const getHomeLabel = routerFunction(params, 'getHomeLabel') || params.getHomeLabel;
     const label = typeof getHomeLabel === 'function' ? getHomeLabel() : (t('ui.allPosts') || 'All Posts');
-    if (homeSlug) links.push({ label, href: withLangParam(`?tab=${encodeURIComponent(homeSlug)}`) });
+    const href = getRouteHref(params, 'getHomeHref');
+    if (href) links.push({ label: label || homeSlug, href });
   }
   if (showProfileLinks) {
     links.push(...profileLinks

@@ -19,20 +19,18 @@ function resolvePressRoot() {
 }
 const pressRoot = resolvePressRoot();
 
-assert.equal(manifest.contractVersion, 3);
-assert.equal(manifest.engines.press, '>=3.4.127 <4.0.0');
-assert.equal(releaseExample.contractVersion, 3);
-assert.equal(releaseExample.engines.press, '>=3.4.127 <4.0.0');
+assert.equal(manifest.contractVersion, 4);
+assert.equal(manifest.engines.press, '>=3.4.130 <4.0.0');
+assert.equal(releaseExample.contractVersion, 4);
+assert.equal(releaseExample.engines.press, '>=3.4.130 <4.0.0');
 assert.ok(manifest.components.includes('press-theme-controls'), 'manifest should declare shared theme controls usage');
-assert.doesNotMatch(source, /href\s*=\s*["']\?tab=posts["']/);
-assert.doesNotMatch(source, /element\.href\s*=\s*["']\?tab=posts["']/);
-assert.doesNotMatch(source, /brand\.href\s*=\s*["']\?tab=posts["']/);
+assert.doesNotMatch(source, /[?&](?:tab|id)=/, 'v4 packaged source should use router href helpers for public routes');
+assert.doesNotMatch(source, /getRouteHref[\s\S]{0,160}\|\|\s*'#'/, 'v4 route helper null results should not become hash dead links');
 assert.match(source, /siteFeatureContextEnabled/);
 assert.match(source, /sanitizeUrl/);
 assert.match(source, /function getRouter[\s\S]*ctx\.router/);
-assert.match(source, /function getI18n[\s\S]*getRouter\(params\)[\s\S]*router\.withLangParam/);
-assert.match(source, /function updateHomeLinks[\s\S]*routerFunction\(params, 'getHomeSlug'\)/);
-assert.match(source, /function updateHomeLinks[\s\S]*getHomeSlug[\s\S]*data-glasswing-brand/);
+assert.match(source, /function getRouteHref[\s\S]*routerFunction\(params, name\)/);
+assert.match(source, /function updateHomeLinks[\s\S]*getRouteHref\(params, 'getHomeHref'\)[\s\S]*data-glasswing-brand/);
 assert.match(source, /function updateSearchChrome/);
 
 [
@@ -62,6 +60,16 @@ assert.match(
   source,
   /function renderMeta\(meta = \{\}, params = \{\}\)[\s\S]*featureEnabled\(params, 'tags'\) && featureEnabled\(params, 'search'\) \? getTags\(meta\) : \[\]/,
   'card metadata should hide tags when tags or search are disabled'
+);
+assert.match(
+  source,
+  /function postHref\([\s\S]*getRouteHref\(params, 'getPostHref', location\) \|\| ''/,
+  'post href helper null results should stay empty instead of becoming hash links'
+);
+assert.match(
+  source,
+  /function renderHero\([\s\S]*const href = postHref\(params, meta\);\n\s*if \(!href\) return '';/,
+  'hero cards should be omitted when post href helpers return null'
 );
 
 class TestClassList {
@@ -323,6 +331,15 @@ const api = glasswing.mount({
   document: doc,
   window: doc.defaultView,
   features,
+  router: {
+    getHomeHref: () => '?tab=about',
+    getHomeSlug: () => 'about',
+    getHomeLabel: () => 'About',
+    getTabHref: (slug) => `?tab=${slug}`,
+    getPostHref: (location) => `?id=${location}`,
+    getPostsHref: () => null,
+    postsEnabled: () => false
+  },
   i18n: {
     t: (key) => key,
     withLangParam: (href) => href
@@ -369,12 +386,74 @@ const tools = doc.querySelector('[data-theme-region="tools"]');
 assert.equal(tools.hidden, true, 'late footer setup should keep visitor theme controls hidden');
 assert.equal(tools.innerHTML, '', 'late footer setup should not mount visitor theme controls');
 
+const disabledPage = doc.createElement('main');
+api.effects.renderIndexView({
+  container: disabledPage,
+  ctx: {
+    router: {
+      getPostHref: (location) => `?id=${location}`,
+      getPostsHref: () => null
+    }
+  },
+  features,
+  pageEntries: [['Product', { location: 'product.md' }]],
+  page: 2,
+  totalPages: 3
+});
+assert.doesNotMatch(disabledPage.innerHTML, /href=""/, 'pagination should not render active empty hrefs when router helpers return null');
+assert.doesNotMatch(disabledPage.innerHTML, /href="#"/, 'pagination should not render hash hrefs when router helpers return null');
+assert.match(disabledPage.innerHTML, /aria-disabled="true"/, 'pagination should disable controls when router helpers return null');
+
+const nullPostPage = doc.createElement('main');
+api.effects.renderIndexView({
+  container: nullPostPage,
+  ctx: {
+    router: {
+      getPostHref: () => null,
+      getPostsHref: () => null
+    }
+  },
+  features,
+  pageEntries: [['Product', { location: 'product.md' }]],
+  page: 1,
+  totalPages: 2
+});
+assert.doesNotMatch(nullPostPage.innerHTML, /href="(?:#|)"/, 'null post href helpers should not render empty or hash links');
+assert.match(nullPostPage.innerHTML, /aria-disabled="true"/, 'null pagination helpers should still render disabled text controls');
+
+const nullSearchPage = doc.createElement('main');
+api.effects.renderSearchResults({
+  container: nullSearchPage,
+  ctx: {
+    router: {
+      getPostHref: () => null,
+      getSearchHref: () => null
+    }
+  },
+  features,
+  entries: [['Product', { location: 'product.md' }]],
+  query: 'Product',
+  page: 2,
+  totalPages: 3
+});
+assert.doesNotMatch(nullSearchPage.innerHTML, /href="(?:#|)"/, 'null search route helpers should not render empty or hash links');
+assert.match(nullSearchPage.innerHTML, /aria-disabled="true"/, 'null search pagination helpers should render disabled text controls');
+
 const enabledDoc = new TestDocument();
 const enabledFeatures = { isEnabled: () => true };
 const enabledApi = glasswing.mount({
   document: enabledDoc,
   window: enabledDoc.defaultView,
   features: enabledFeatures,
+  router: {
+    getHomeHref: () => '?tab=about',
+    getHomeSlug: () => 'about',
+    getHomeLabel: () => 'About',
+    getTabHref: (slug) => `?tab=${slug}`,
+    getPostHref: (location) => `?id=${location}`,
+    getPostsHref: () => null,
+    postsEnabled: () => false
+  },
   i18n: {
     t: (key) => key,
     withLangParam: (href) => href
