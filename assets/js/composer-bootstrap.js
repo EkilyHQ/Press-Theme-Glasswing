@@ -1,10 +1,10 @@
-import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.130';
-import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.130';
-import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.130';
+import { createEditorAppKernel } from './editor-app-kernel.js?v=press-system-v3.4.131';
+import { createDomEffects } from './editor-effects.js?v=press-system-v3.4.131';
+import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.131';
 import {
   CONTENT_MODEL_MIGRATION_STATE_KEY,
   getLegacyContentModelMigrationFiles
-} from './content-model-migration.js?v=press-system-v3.4.130';
+} from './content-model-migration.js?v=press-system-v3.4.131';
 
 function noop() {}
 

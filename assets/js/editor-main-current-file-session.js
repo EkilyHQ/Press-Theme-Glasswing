@@ -1,4 +1,4 @@
-import { createEditorMainCurrentFileView, normalizeCurrentFileBreadcrumb } from './editor-main-current-file-view.js?v=press-system-v3.4.130';
+import { createEditorMainCurrentFileView, normalizeCurrentFileBreadcrumb } from './editor-main-current-file-view.js?v=press-system-v3.4.131';
 
 const fallbackInferSource = (path) => {
   const normalized = String(path || '').replace(/[\\]/g, '/').replace(/^\/+/, '').toLowerCase();

@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.130';
+import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.131';
 
 function fallbackEscapeHtml(value) {
   return String(value == null ? '' : value)

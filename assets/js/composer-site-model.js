@@ -2,7 +2,7 @@ import {
   SITE_FEATURE_KEYS,
   normalizeSiteFeatureSettings,
   siteFeatureSettingsForOutput
-} from './site-features.js?v=press-system-v3.4.130';
+} from './site-features.js?v=press-system-v3.4.131';
 
 function deepClone(value) {
   try {

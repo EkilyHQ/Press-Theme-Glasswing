@@ -1,4 +1,4 @@
-import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.130';
+import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.131';
 import {
   PRESS_THEME_CONTRACT,
   getDefaultThemeStyles,
@@ -10,13 +10,13 @@ import {
   getThemeArchiveAllowedExtensions,
   getThemeTextExtensions,
   isPressThemeContractVersionSupported
-} from './theme-contract-surface.mjs?v=press-system-v3.4.130';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.131';
 import {
   canParseV4RouteGuardSource,
   collectV4RouteGuardFacts,
   containsForbiddenV4RouteConstructionAst
-} from './theme-route-guard.js?v=press-system-v3.4.130';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.130';
+} from './theme-route-guard.js?v=press-system-v3.4.131';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.131';
 
 export const REQUIRED_THEME_CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 

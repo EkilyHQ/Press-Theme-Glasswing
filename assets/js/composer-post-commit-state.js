@@ -1,4 +1,4 @@
-import { parseEncryptedMarkdownEnvelope } from './encrypted-content.js?v=press-system-v3.4.130';
+import { parseEncryptedMarkdownEnvelope } from './encrypted-content.js?v=press-system-v3.4.131';
 
 export function createPostCommitStateApplier({
   stagingRegistry,
