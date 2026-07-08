@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.129';
+} from './theme.js?v=press-system-v3.4.130';
 import {
   t,
   withLangParam,
@@ -13,26 +13,27 @@ import {
   ensureLanguageBundle,
   getAvailableLangs,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.129';
+} from './i18n.js?v=press-system-v3.4.130';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.129';
+} from './theme-regions.js?v=press-system-v3.4.130';
 import {
   PRESS_THEME_CONTRACT,
   isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.129';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.130';
 
 function createThemeLayoutState(options = {}) {
   return {
     activePack: null,
     layoutPromise: null,
     layoutMountGeneration: 0,
+    latestLayoutOptions: null,
     regionController: options.regionController || getDefaultThemeRegionController()
   };
 }
@@ -43,8 +44,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.129';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.129';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.130';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.130';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',
@@ -103,6 +104,20 @@ function firstDefined(...values) {
     if (value !== undefined && value !== null) return value;
   }
   return undefined;
+}
+
+function refreshThemeLayoutRuntimeContext(context, options = {}, regionController = null) {
+  if (!context || typeof context !== 'object') return context;
+  if (options && Object.prototype.hasOwnProperty.call(options, 'features')) {
+    context.features = options.features || null;
+  }
+  if (options && Object.prototype.hasOwnProperty.call(options, 'router')) {
+    context.router = options.router || null;
+  }
+  if (regionController && typeof regionController.setThemeLayoutContext === 'function') {
+    regionController.setThemeLayoutContext(context);
+  }
+  return context;
 }
 
 export function createThemeI18nContext() {
@@ -501,11 +516,13 @@ async function mountPack(pack, allowFallback = true, options = {}) {
     if (result.loaded) loadedModules.push(result.loaded);
   }
 
+  const runtimeOptions = themeLayoutState.latestLayoutOptions || options;
   const context = {
     document: document,
     i18n: createThemeI18nContext(),
     regions: createThemeRegionRegistry(),
-    features: options.features || null,
+    features: runtimeOptions.features || null,
+    router: runtimeOptions.router || null,
     pack,
     manifest,
     theme: createThemeApi(pack, manifest),
@@ -558,23 +575,27 @@ async function ensureThemeLayoutWithState(themeLayoutState, options = {}) {
     clearMountedThemeArtifacts({ themeLayoutState });
     themeLayoutState.activePack = null;
     themeLayoutState.layoutPromise = null;
+    themeLayoutState.latestLayoutOptions = null;
   }
   const cachedContext = themeLayoutState.regionController.getThemeLayoutContext();
   if (cachedContext && document.body.dataset.themeLayout === pack) {
-    if (options && Object.prototype.hasOwnProperty.call(options, 'features')) {
-      cachedContext.features = options.features || null;
-    }
-    return cachedContext;
+    return refreshThemeLayoutRuntimeContext(cachedContext, options, themeLayoutState.regionController);
   }
   if (themeLayoutState.layoutPromise && themeLayoutState.activePack === pack) {
-    return themeLayoutState.layoutPromise;
+    const reuseGeneration = mountGeneration;
+    themeLayoutState.latestLayoutOptions = options;
+    return themeLayoutState.layoutPromise.then((context) => {
+      if (!isCurrentMountGeneration(reuseGeneration, { themeLayoutState })) return context;
+      return refreshThemeLayoutRuntimeContext(context, themeLayoutState.latestLayoutOptions || options, themeLayoutState.regionController);
+    });
   }
   themeLayoutState.activePack = pack;
+  themeLayoutState.latestLayoutOptions = options;
   themeLayoutState.layoutPromise = mountPack(pack, true, { ...options, mountGeneration, themeLayoutState }).then((context) => {
     if (!isCurrentMountGeneration(mountGeneration, { themeLayoutState })) return context;
     const resolvedPack = (context && context.pack) || document.body.dataset.themeLayout || DEFAULT_PACK;
     themeLayoutState.activePack = resolvedPack;
-    return context;
+    return refreshThemeLayoutRuntimeContext(context, themeLayoutState.latestLayoutOptions || options, themeLayoutState.regionController);
   });
   return themeLayoutState.layoutPromise;
 }

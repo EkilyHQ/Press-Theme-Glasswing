@@ -1,19 +1,20 @@
-import { configureFetchCachePolicy } from './js/cache-control.js?v=press-system-v3.4.129';
-import './js/components.js?v=press-system-v3.4.129';
-import { createContentModel } from './js/content-model.js?v=press-system-v3.4.129';
+import { configureFetchCachePolicy } from './js/cache-control.js?v=press-system-v3.4.130';
+import './js/components.js?v=press-system-v3.4.130';
+import { createContentModel } from './js/content-model.js?v=press-system-v3.4.130';
 import {
   decryptMarkdownDocument,
   parseEncryptedMarkdownEnvelope,
   stripEncryptedBodyForPublicUse
-} from './js/encrypted-content.js?v=press-system-v3.4.129';
-import { setupAnchors, setupTOC } from './js/toc.js?v=press-system-v3.4.129';
-import { applySavedTheme, bindThemeToggle, bindThemePackPicker, mountThemeControls, refreshLanguageSelector, applyThemeConfig, bindPostEditor } from './js/theme.js?v=press-system-v3.4.129';
-import { createThemeI18nContext, ensureThemeLayout, getThemeApiHandler, getThemeLayoutContext, getThemeRegion } from './js/theme-layout.js?v=press-system-v3.4.129';
-import { setupSearch } from './js/search.js?v=press-system-v3.4.129';
-import { createSiteFeatureContext, isSiteFeatureEnabled } from './js/site-features.js?v=press-system-v3.4.129';
-import { extractExcerpt, computeReadTime, parseFrontMatter } from './js/content.js?v=press-system-v3.4.129';
-import { getContentRoot, setSafeHtml } from './js/safe-html.js?v=press-system-v3.4.129';
-import { getQueryVariable, setDocTitle, setBaseSiteTitle, slugifyTab, isModifiedClick } from './js/utils.js?v=press-system-v3.4.129';
+} from './js/encrypted-content.js?v=press-system-v3.4.130';
+import { setupAnchors, setupTOC } from './js/toc.js?v=press-system-v3.4.130';
+import { applySavedTheme, bindThemeToggle, bindThemePackPicker, mountThemeControls, refreshLanguageSelector, applyThemeConfig, bindPostEditor } from './js/theme.js?v=press-system-v3.4.130';
+import { createThemeI18nContext, ensureThemeLayout, getThemeApiHandler, getThemeLayoutContext, getThemeRegion } from './js/theme-layout.js?v=press-system-v3.4.130';
+import { setupSearch } from './js/search.js?v=press-system-v3.4.130';
+import { createSiteFeatureContext, isSiteFeatureEnabled } from './js/site-features.js?v=press-system-v3.4.130';
+import { createThemeRouterHrefHelpers } from './js/theme-router-helpers.js?v=press-system-v3.4.130';
+import { extractExcerpt, computeReadTime, parseFrontMatter } from './js/content.js?v=press-system-v3.4.130';
+import { getContentRoot, setSafeHtml } from './js/safe-html.js?v=press-system-v3.4.130';
+import { getQueryVariable, setDocTitle, setBaseSiteTitle, slugifyTab, isModifiedClick } from './js/utils.js?v=press-system-v3.4.130';
 import {
   initI18n,
   t,
@@ -23,17 +24,17 @@ import {
   getCurrentLang,
   normalizeLangKey,
   POSTS_METADATA_READY_EVENT
-} from './js/i18n.js?v=press-system-v3.4.129';
-import { updateSEO, extractSEOFromMarkdown } from './js/seo.js?v=press-system-v3.4.129';
-import { initErrorReporter, setReporterContext, showErrorOverlay } from './js/errors.js?v=press-system-v3.4.129';
-import { fetchConfigWithYamlFallback } from './js/yaml.js?v=press-system-v3.4.129';
-import { applyMasonry, updateMasonryItem, calcAndSetSpan, toPx, debounce } from './js/masonry.js?v=press-system-v3.4.129';
-import { aggregateTags, renderTagSidebar, setupTagTooltips } from './js/tags.js?v=press-system-v3.4.129';
-import { renderPostNav } from './js/post-nav.js?v=press-system-v3.4.129';
-import { getArticleTitleFromMain } from './js/dom-utils.js?v=press-system-v3.4.129';
-import { applyLangHints } from './js/typography.js?v=press-system-v3.4.129';
+} from './js/i18n.js?v=press-system-v3.4.130';
+import { updateSEO, extractSEOFromMarkdown } from './js/seo.js?v=press-system-v3.4.130';
+import { initErrorReporter, setReporterContext, showErrorOverlay } from './js/errors.js?v=press-system-v3.4.130';
+import { fetchConfigWithYamlFallback } from './js/yaml.js?v=press-system-v3.4.130';
+import { applyMasonry, updateMasonryItem, calcAndSetSpan, toPx, debounce } from './js/masonry.js?v=press-system-v3.4.130';
+import { aggregateTags, renderTagSidebar, setupTagTooltips } from './js/tags.js?v=press-system-v3.4.130';
+import { renderPostNav } from './js/post-nav.js?v=press-system-v3.4.130';
+import { getArticleTitleFromMain } from './js/dom-utils.js?v=press-system-v3.4.130';
+import { applyLangHints } from './js/typography.js?v=press-system-v3.4.130';
 
-import { applyLazyLoadingIn, hydratePostImages, hydratePostVideos, hydrateCardCovers } from './js/post-render.js?v=press-system-v3.4.129';
+import { applyLazyLoadingIn, hydratePostImages, hydratePostVideos, hydrateCardCovers } from './js/post-render.js?v=press-system-v3.4.130';
 
 // Lightweight content fetch helper; cache mode is normalized by cache-control.js.
 const getFile = (filename) => fetch(String(filename || ''), { cache: 'no-store' })
@@ -80,7 +81,7 @@ function cacheDynamicImport(importer, getCached, setCached) {
 
 function loadMarkdownModule() {
   return cacheDynamicImport(
-    () => import('./js/markdown.js?v=press-system-v3.4.129'),
+    () => import('./js/markdown.js?v=press-system-v3.4.130'),
     () => markdownModulePromise,
     (promise) => { markdownModulePromise = promise; }
   );
@@ -88,7 +89,7 @@ function loadMarkdownModule() {
 
 function loadSyntaxHighlightModule() {
   return cacheDynamicImport(
-    () => import('./js/syntax-highlight.js?v=press-system-v3.4.129'),
+    () => import('./js/syntax-highlight.js?v=press-system-v3.4.130'),
     () => syntaxHighlightModulePromise,
     (promise) => { syntaxHighlightModulePromise = promise; }
   );
@@ -96,7 +97,7 @@ function loadSyntaxHighlightModule() {
 
 function loadMathRenderModule() {
   return cacheDynamicImport(
-    () => import('./js/math-render.js?v=press-system-v3.4.129'),
+    () => import('./js/math-render.js?v=press-system-v3.4.130'),
     () => mathRenderModulePromise,
     (promise) => { mathRenderModulePromise = promise; }
   );
@@ -104,7 +105,7 @@ function loadMathRenderModule() {
 
 function loadAnnotateModule() {
   return cacheDynamicImport(
-    () => import('./js/annotate.js?v=press-system-v3.4.129'),
+    () => import('./js/annotate.js?v=press-system-v3.4.130'),
     () => annotateModulePromise,
     (promise) => { annotateModulePromise = promise; }
   );
@@ -112,7 +113,7 @@ function loadAnnotateModule() {
 
 function loadLinkCardsModule() {
   return cacheDynamicImport(
-    () => import('./js/link-cards.js?v=press-system-v3.4.129'),
+    () => import('./js/link-cards.js?v=press-system-v3.4.130'),
     () => linkCardsModulePromise,
     (promise) => { linkCardsModulePromise = promise; }
   );
@@ -734,6 +735,13 @@ function getHomeLabel() {
 }
 
 function createThemeRouterContext() {
+  const hrefHelpers = createThemeRouterHrefHelpers({
+    withLangParam,
+    getHomeSlug: () => getHomeSlug(),
+    postsEnabled: () => postsEnabled(),
+    searchEnabled: () => searchEnabled(),
+    tagsEnabled: () => siteFeatureEnabled('tags')
+  });
   return {
     getRouteKey: getCurrentRouteKey,
     withLangParam,
@@ -742,6 +750,11 @@ function createThemeRouterContext() {
     getHomeLabel: () => getHomeLabel(),
     postsEnabled: () => postsEnabled(),
     searchEnabled: () => searchEnabled(),
+    getHomeHref: hrefHelpers.getHomeHref,
+    getTabHref: hrefHelpers.getTabHref,
+    getPostHref: hrefHelpers.getPostHref,
+    getPostsHref: hrefHelpers.getPostsHref,
+    getSearchHref: hrefHelpers.getSearchHref,
     navigate(href) {
       try {
         history.pushState({}, '', String(href || ''));
@@ -752,6 +765,21 @@ function createThemeRouterContext() {
       }
     }
   };
+}
+
+function renderPostNavForSite(container, postsIndex, postname, options = {}) {
+  return renderPostNav(container, postsIndex, postname, {
+    router: createThemeRouterContext(),
+    ...options
+  });
+}
+
+function renderTagSidebarForSite(indexMap, options = {}) {
+  if (!tagNavigationEnabled()) return false;
+  return renderTagSidebar(indexMap, {
+    router: createThemeRouterContext(),
+    ...options
+  });
 }
 
 // Expose a minimal API that other modules can consult if needed
@@ -888,7 +916,7 @@ function refreshTagSidebar({
     features: getSiteFeatureContext(),
     utilities: {
       aggregateTags,
-      renderTagSidebar,
+      renderTagSidebar: renderTagSidebarForSite,
       setupTagTooltips
     },
     document,
@@ -959,7 +987,7 @@ function enhanceIndexLayout(params = {}) {
     debounce,
     renderTagSidebar: (...args) => {
       if (!tagNavigationEnabled()) return false;
-      return renderTagSidebar(...args);
+      return renderTagSidebarForSite(...args);
     },
     setupSearch: setupSearchForSite,
     features: getSiteFeatureContext(),
@@ -1035,7 +1063,7 @@ function createThemeRuntimeContext({
     containers,
     utilities: {
       getRegion: getThemeRegion,
-      renderPostNav,
+      renderPostNav: renderPostNavForSite,
       hydratePostImages,
       hydratePostVideos,
       hydrateInternalLinkCards,
@@ -1044,7 +1072,7 @@ function createThemeRuntimeContext({
       renderPostTOC: (opts) => renderPostTOCBlock(opts),
       renderTagSidebar: (...args) => {
         if (!tagNavigationEnabled()) return false;
-        return renderTagSidebar(...args);
+        return renderTagSidebarForSite(...args);
       },
       setupAnchors,
       setupTOC,
@@ -1274,12 +1302,12 @@ function displayPost(postname, options = {}) {
         );
         const publicMetadata = publicInfo.metadata || {};
         const invalidTitle = t('errors.protectedPostInvalidTitle');
-        const backHref = withLangParam(`?tab=${encodeURIComponent(getHomeSlug())}`);
+        const backHref = createThemeRouterContext().getHomeHref();
         const backText = postsEnabled() ? t('ui.backToAllPosts') : (t('ui.backToHome') || t('ui.backToAllPosts'));
         renderErrorState(containers.mainElement || getViewContainer('post', 'main'), {
           title: invalidTitle,
           message: t('errors.protectedPostInvalidBody'),
-          actions: [{ href: backHref, label: backText }],
+          actions: backHref ? [{ href: backHref, label: backText }] : [],
           view: 'post',
           containers
         });
@@ -1408,7 +1436,7 @@ function displayPost(postname, options = {}) {
       document,
       window,
       utilities: {
-        renderPostNav,
+        renderPostNav: renderPostNavForSite,
         hydratePostImages,
         hydratePostVideos,
         hydrateInternalLinkCards,
@@ -1417,7 +1445,7 @@ function displayPost(postname, options = {}) {
         renderPostTOC: (opts) => renderPostTOCBlock(opts),
         renderTagSidebar: (...args) => {
           if (!tagNavigationEnabled()) return false;
-          return renderTagSidebar(...args);
+          return renderTagSidebarForSite(...args);
         },
         getArticleTitleFromMain,
         setupAnchors,
@@ -1428,7 +1456,7 @@ function displayPost(postname, options = {}) {
         setSafeHtml,
         withLangParam,
         fetchMarkdown: (loc) => getFile(`${getContentRoot()}/${loc}`),
-        makeLangHref: (loc) => withLangParam(`?id=${encodeURIComponent(loc)}`)
+        makeLangHref: (loc) => createThemeRouterContext().getPostHref(loc)
       }
     }) || {};
 
@@ -1536,12 +1564,12 @@ function displayPost(postname, options = {}) {
     } catch (_) {}
 
     resetTOCView('post', containers, { reason: 'postError' });
-    const backHref = withLangParam(`?tab=${encodeURIComponent(getHomeSlug())}`);
+    const backHref = createThemeRouterContext().getHomeHref();
     const backText = postsEnabled() ? t('ui.backToAllPosts') : (t('ui.backToHome') || t('ui.backToAllPosts'));
     renderErrorState(containers.mainElement || getViewContainer('post', 'main'), {
       title: t('errors.postNotFoundTitle'),
       message: t('errors.postNotFoundBody'),
-      actions: [{ href: backHref, label: backText }],
+      actions: backHref ? [{ href: backHref, label: backText }] : [],
       view: 'post',
       containers
     });
@@ -1690,6 +1718,7 @@ function displayIndex(parsed) {
   setDocTitle(t('titles.allPosts'));
 
   callThemeEffect('afterIndexRender', {
+    ctx: createThemeRuntimeContext({ view: 'posts' }),
     entries: pageEntries,
     translate: t,
     getFile,
@@ -1846,6 +1875,7 @@ function displaySearch(query) {
   setDocTitle(tagFilter ? t('ui.tagSearch', tagFilter) : t('titles.search', q));
 
   callThemeEffect('afterSearchRender', {
+    ctx: createThemeRuntimeContext({ view: 'search' }),
     entries: pageEntries,
     translate: t,
     getFile,
@@ -1943,7 +1973,7 @@ function displayStaticTab(slug) {
           renderPostTOC: (opts) => renderPostTOCBlock(opts),
           renderTagSidebar: (...args) => {
             if (!tagNavigationEnabled()) return false;
-            return renderTagSidebar(...args);
+            return renderTagSidebarForSite(...args);
           },
           getArticleTitleFromMain,
           setupAnchors,
@@ -1954,7 +1984,7 @@ function displayStaticTab(slug) {
           setSafeHtml,
           withLangParam,
           fetchMarkdown: (loc) => getFile(`${getContentRoot()}/${loc}`),
-          makeLangHref: (loc) => withLangParam(`?id=${encodeURIComponent(loc)}`)
+          makeLangHref: (loc) => createThemeRouterContext().getPostHref(loc)
         }
       }) || {};
 
@@ -2258,7 +2288,7 @@ try {
 } catch (_) {}
 
 // Build layout according to the active theme pack before binding UI logic
-await ensureThemeLayout({ features: getSiteFeatureContext() });
+await ensureThemeLayout({ features: getSiteFeatureContext(), router: createThemeRouterContext() });
 setBootProgress(0.6);
 
 // Ensure theme controls are present, then apply and bind
@@ -2640,6 +2670,7 @@ try {
 // Footer: set dynamic year once
 try {
   callThemeEffect('setupFooter', {
+    ctx: createThemeRuntimeContext({ view: 'footer' }),
     translate: t,
     document,
     window,
@@ -2652,6 +2683,7 @@ try {
     withLangParam,
     getHomeSlug: () => getHomeSlug(),
     getHomeLabel: () => getHomeLabel(),
-    postsEnabled: () => postsEnabled()
+    postsEnabled: () => postsEnabled(),
+    searchEnabled: () => searchEnabled()
   });
 } catch (_) {}

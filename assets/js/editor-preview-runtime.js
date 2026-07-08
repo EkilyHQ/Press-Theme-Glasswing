@@ -1,27 +1,28 @@
-import './components.js?v=press-system-v3.4.129';
-import { mdParse } from './markdown.js?v=press-system-v3.4.129';
-import { createContentModel } from './content-model.js?v=press-system-v3.4.129';
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.129';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.129';
-import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from './post-render.js?v=press-system-v3.4.129';
-import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.129';
-import { applyLangHints } from './typography.js?v=press-system-v3.4.129';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.129';
-import { initSyntaxHighlighting } from './syntax-highlight.js?v=press-system-v3.4.129';
-import { setupAnchors, setupTOC } from './toc.js?v=press-system-v3.4.129';
-import { initI18n, t, withLangParam } from './i18n.js?v=press-system-v3.4.129';
-import { renderPostNav } from './post-nav.js?v=press-system-v3.4.129';
-import { renderTagSidebar } from './tags.js?v=press-system-v3.4.129';
-import { getArticleTitleFromMain } from './dom-utils.js?v=press-system-v3.4.129';
-import { createThemeLayoutController, createThemeI18nContext } from './theme-layout.js?v=press-system-v3.4.129';
-import { createEditorPreviewAppRuntime } from './editor-preview-app-runtime.js?v=press-system-v3.4.129';
-import { createSiteFeatureContext } from './site-features.js?v=press-system-v3.4.129';
+import './components.js?v=press-system-v3.4.130';
+import { mdParse } from './markdown.js?v=press-system-v3.4.130';
+import { createContentModel } from './content-model.js?v=press-system-v3.4.130';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.130';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.130';
+import { hydratePostImages, hydratePostVideos, applyLazyLoadingIn } from './post-render.js?v=press-system-v3.4.130';
+import { hydrateInternalLinkCards } from './link-cards.js?v=press-system-v3.4.130';
+import { applyLangHints } from './typography.js?v=press-system-v3.4.130';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.130';
+import { initSyntaxHighlighting } from './syntax-highlight.js?v=press-system-v3.4.130';
+import { setupAnchors, setupTOC } from './toc.js?v=press-system-v3.4.130';
+import { initI18n, t, withLangParam } from './i18n.js?v=press-system-v3.4.130';
+import { renderPostNav } from './post-nav.js?v=press-system-v3.4.130';
+import { renderTagSidebar } from './tags.js?v=press-system-v3.4.130';
+import { getArticleTitleFromMain } from './dom-utils.js?v=press-system-v3.4.130';
+import { createThemeLayoutController, createThemeI18nContext } from './theme-layout.js?v=press-system-v3.4.130';
+import { createEditorPreviewAppRuntime } from './editor-preview-app-runtime.js?v=press-system-v3.4.130';
+import { createSiteFeatureContext } from './site-features.js?v=press-system-v3.4.130';
+import { createThemeRouterHrefHelpers } from './theme-router-helpers.js?v=press-system-v3.4.130';
 
 const RENDER_MESSAGE = 'press-editor-preview-render';
 const READY_MESSAGE = 'press-editor-preview-ready';
 const RENDERED_MESSAGE = 'press-editor-preview-rendered';
 const ERROR_MESSAGE = 'press-editor-preview-error';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.129';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.130';
 
 export function createEditorPreviewRuntimeController(
   previewRuntime = createEditorPreviewAppRuntime(),
@@ -154,8 +155,18 @@ function setupPreviewTOC() {
   return setupTOC({ getRegion: getPreviewThemeRegion });
 }
 
-function renderPreviewTagSidebar(indexMap) {
-  return renderTagSidebar(indexMap, { getRegion: getPreviewThemeRegion });
+function renderPreviewPostNav(router, container, postsIndex, postname, options = {}) {
+  return renderPostNav(container, postsIndex, postname, {
+    router,
+    ...options
+  });
+}
+
+function renderPreviewTagSidebar(indexMap, options = {}) {
+  return renderTagSidebar(indexMap, {
+    getRegion: getPreviewThemeRegion,
+    ...options
+  });
 }
 
 function normalizeAssetKey(value) {
@@ -292,22 +303,39 @@ function getPreviewHomeLabel(payload, features) {
   return (tabsBySlug[slug] && tabsBySlug[slug].title) || slug;
 }
 
+function createPreviewRouterContext(payload, features) {
+  const hrefHelpers = createThemeRouterHrefHelpers({
+    withLangParam,
+    getHomeSlug: () => getPreviewHomeSlug(payload, features),
+    postsEnabled: () => previewPostsEnabled(features),
+    searchEnabled: () => previewSearchEnabled(features),
+    tagsEnabled: () => previewFeatureEnabled(features, 'tags')
+  });
+  return {
+    getRouteKey: () => (payload.currentPath ? `post:${payload.currentPath}` : 'editor-preview'),
+    withLangParam,
+    getHomeSlug: () => getPreviewHomeSlug(payload, features),
+    getHomeLabel: () => getPreviewHomeLabel(payload, features),
+    postsEnabled: () => previewPostsEnabled(features),
+    searchEnabled: () => previewSearchEnabled(features),
+    getHomeHref: hrefHelpers.getHomeHref,
+    getTabHref: hrefHelpers.getTabHref,
+    getPostHref: hrefHelpers.getPostHref,
+    getPostsHref: hrefHelpers.getPostsHref,
+    getSearchHref: hrefHelpers.getSearchHref,
+    navigate() { return false; }
+  };
+}
+
 function createRuntimeContext({ payload, containers, content, features }) {
   const layout = themeLayout.getThemeLayoutContext();
+  const router = createPreviewRouterContext(payload, features);
   return {
     document: previewRuntime.documentRef,
     window: previewRuntime.windowRef,
     view: 'post',
     route: { key: payload.currentPath ? `post:${payload.currentPath}` : 'editor-preview', id: payload.currentPath || '' },
-    router: {
-      getRouteKey: () => (payload.currentPath ? `post:${payload.currentPath}` : 'editor-preview'),
-      withLangParam,
-      getHomeSlug: () => getPreviewHomeSlug(payload, features),
-      getHomeLabel: () => getPreviewHomeLabel(payload, features),
-      postsEnabled: () => previewPostsEnabled(features),
-      searchEnabled: () => previewSearchEnabled(features),
-      navigate() { return false; }
-    },
+    router,
     i18n: createThemeI18nContext(),
     features,
     content,
@@ -315,7 +343,7 @@ function createRuntimeContext({ payload, containers, content, features }) {
     containers,
     utilities: {
       getRegion: getPreviewThemeRegion,
-      renderPostNav,
+      renderPostNav: (...args) => renderPreviewPostNav(router, args[0], args[1], args[2], args[3] || {}),
       hydratePostImages,
       hydratePostVideos,
       hydrateInternalLinkCards,
@@ -324,7 +352,7 @@ function createRuntimeContext({ payload, containers, content, features }) {
       renderPostTOC: () => {},
       renderTagSidebar: (...args) => {
         if (!previewFeatureEnabled(features, 'tags') || !previewSearchEnabled(features)) return false;
-        return renderPreviewTagSidebar(...args);
+        return renderPreviewTagSidebar(args[0], { router, ...(args[1] || {}) });
       },
       setupAnchors: setupPreviewAnchors,
       setupTOC: setupPreviewTOC,
@@ -354,11 +382,13 @@ async function renderPreview(payload = {}) {
   try {
     const reset = previewRuntime.shouldResetThemePack(requestedPack);
     const features = createSiteFeatureContext(payload.siteConfig || {});
+    const previewRouter = createPreviewRouterContext(payload, features);
     const layout = await themeLayout.ensureThemeLayout({
       pack: requestedPack,
       persist: false,
       reset,
-      features
+      features,
+      router: previewRouter
     });
     if (!isCurrentPreviewRender(requestId)) return;
     const activePack = previewRuntime.setActiveThemePack((layout && layout.pack) || previewRuntime.getThemeLayoutPackFallback() || requestedPack);
@@ -414,7 +444,7 @@ async function renderPreview(payload = {}) {
       document: previewRuntime.documentRef,
       window: previewRuntime.windowRef,
       utilities: {
-        renderPostNav,
+        renderPostNav: (...args) => renderPreviewPostNav(ctx.router, args[0], args[1], args[2], args[3] || {}),
         hydratePostImages,
         hydratePostVideos,
         hydrateInternalLinkCards,
@@ -423,7 +453,7 @@ async function renderPreview(payload = {}) {
         renderPostTOC: () => {},
         renderTagSidebar: (...args) => {
           if (!previewFeatureEnabled(features, 'tags') || !previewSearchEnabled(features)) return false;
-          return renderPreviewTagSidebar(...args);
+          return renderPreviewTagSidebar(args[0], { router: ctx.router, ...(args[1] || {}) });
         },
         getArticleTitleFromMain,
         setupAnchors: setupPreviewAnchors,
@@ -441,7 +471,7 @@ async function renderPreview(payload = {}) {
         setSafeHtml: setPreviewSafeHtml,
         withLangParam,
         fetchMarkdown: (loc) => previewRuntime.fetchText(`${getContentRoot()}/${loc}`),
-        makeLangHref: (loc) => withLangParam(`?id=${encodeURIComponent(loc)}`)
+        makeLangHref: (loc) => (ctx.router && ctx.router.getPostHref(loc))
       }
     }));
     if (!isCurrentPreviewRender(requestId)) return;
