@@ -46,6 +46,11 @@ if ! grep -F 'scripts/write-press-system-lock.js' "${workflow}" >/dev/null || ! 
   exit 1
 fi
 
+if ! grep -F 'scripts/write-theme-demo-release-lock.js' "${workflow}" >/dev/null || ! grep -F 'demo/demo-release-lock.json' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must write a deterministic theme demo release lockfile into the demo branch" >&2
+  exit 1
+fi
+
 if ! grep -F 'DISPATCH_RELEASE_INTENT_SOURCE' "${workflow}" >/dev/null; then
   echo "demo sync workflow must prefer release_intent.source from dispatch payloads" >&2
   exit 1
@@ -68,6 +73,21 @@ fi
 
 if ! grep -F 'PRESS_RELEASE_TARGET_RECONCILER="theme-demo-runtime-sync"' "${workflow}" >/dev/null; then
   echo "demo sync workflow must validate the theme demo release intent target kind" >&2
+  exit 1
+fi
+
+if ! grep -F 'Resolve theme release' "${workflow}" >/dev/null || ! grep -F 'Download theme package' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must resolve and download the published theme release artifact" >&2
+  exit 1
+fi
+
+if ! grep -F -- '--theme-archive dist/theme.zip' "${workflow}" >/dev/null || ! grep -F -- '--theme-release-manifest source/theme-release.json' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must install the demo theme from the published release archive" >&2
+  exit 1
+fi
+
+if grep -F -- '--theme-root' "${workflow}" >/dev/null; then
+  echo "demo sync workflow must not install the public demo theme directly from source/theme" >&2
   exit 1
 fi
 
@@ -138,6 +158,16 @@ if grep -E 'actions/(checkout@v4|configure-pages@v5|deploy-pages@v4|upload-artif
   exit 1
 fi
 
+if ! grep -F 'actions: write' "${theme_release_workflow}" >/dev/null; then
+  echo "theme release workflow must be allowed to trigger demo sync after publishing" >&2
+  exit 1
+fi
+
+if ! grep -F 'gh workflow run .github/workflows/sync-demo-from-press-release.yml' "${theme_release_workflow}" >/dev/null; then
+  echo "theme release workflow must trigger demo sync after publishing a theme release" >&2
+  exit 1
+fi
+
 if ! grep -F 'git ls-files -z -- .nojekyll index.html index_editor.html index_editor_preview.html site.yaml assets wwwroot' "${pages_workflow}" >/dev/null; then
   echo "demo Pages workflow must upload the generated demo site surface" >&2
   exit 1
@@ -155,6 +185,11 @@ fi
 
 if ! grep -F 'assets/themes/packs.json' "${script}" >/dev/null; then
   echo "demo sync script must regenerate packs.json for the installed theme" >&2
+  exit 1
+fi
+
+if ! grep -F 'theme release archive SHA-256 mismatch' "${script}" >/dev/null || ! grep -F 'theme release archive contains symlink' "${script}" >/dev/null; then
+  echo "demo sync script must validate published theme release archive integrity and symlink safety" >&2
   exit 1
 fi
 
@@ -188,17 +223,22 @@ const fs = require('fs');
 const data = JSON.parse(fs.readFileSync('scripts/demo-site-data.json', 'utf8'));
 const theme = JSON.parse(fs.readFileSync('theme/theme.json', 'utf8'));
 const releaseWorkflow = fs.readFileSync('.github/workflows/theme-release.yml', 'utf8');
+const checkRefMatch = releaseWorkflow.match(/PRESS_CONTRACT_CHECK_REF:\s+(v\d+\.\d+\.\d+)/);
 if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(data.slug || '')) {
   throw new Error('demo site data must define a safe slug');
 }
-if (!theme.engines || theme.engines.press !== '>=3.4.130 <4.0.0') {
-  throw new Error('theme/theme.json must declare engines.press for Press v3.4.130 compatibility');
+if (!checkRefMatch) {
+  throw new Error('theme release workflow must declare PRESS_CONTRACT_CHECK_REF');
+}
+const checkVersion = checkRefMatch[1].slice(1);
+if (!theme.engines || !String(theme.engines.press || '').includes(`>=${checkVersion}`)) {
+  throw new Error(`theme/theme.json must declare engines.press for Press ${checkVersion} compatibility`);
 }
 if (!releaseWorkflow.includes('themeManifest.engines') || !releaseWorkflow.includes('engines,')) {
   throw new Error('theme release workflow must copy theme engines into theme-release.json');
 }
-if (!releaseWorkflow.includes('PRESS_CONTRACT_CHECK_REF: v3.4.130') || !releaseWorkflow.includes('ref: ${{ env.PRESS_CONTRACT_CHECK_REF }}')) {
-  throw new Error('theme release workflow must validate v4 themes against the Press v3.4.130 contract checks');
+if (!releaseWorkflow.includes('ref: ${{ env.PRESS_CONTRACT_CHECK_REF }}')) {
+  throw new Error('theme release workflow must validate themes against the configured Press contract checks');
 }
 if (!Array.isArray(data.posts) || data.posts.length < 4) {
   throw new Error('demo site data must include at least four posts');
@@ -212,6 +252,7 @@ NODE
 
 node scripts/test-release-intent-resolution.js
 node scripts/test-press-system-lock.js
+node scripts/test-theme-demo-release-lock.js
 
 tmp_dir="$(mktemp -d)"
 cleanup() {
@@ -250,12 +291,53 @@ create_release_payload() {
 create_release_payload press-system-v0.0.0
 (cd "${tmp_dir}" && zip -qr press-system.zip press-system-v0.0.0)
 
+create_theme_payload() {
+  local archive="$1"
+  local manifest="$2"
+  local slug
+  local version
+  slug="$(node -p "require('./scripts/demo-site-data.json').slug")"
+  version="$(node -p "require('./theme-release.json').version")"
+  local root="press-theme-${slug}"
+  rm -rf "${tmp_dir}/${root}"
+  mkdir -p "${tmp_dir}/${root}"
+  rsync -a theme/ "${tmp_dir}/${root}/"
+  THEME_JSON="${tmp_dir}/${root}/theme.json" THEME_VERSION="${version}" node <<'NODE'
+const fs = require('fs');
+const file = process.env.THEME_JSON;
+const manifest = JSON.parse(fs.readFileSync(file, 'utf8'));
+manifest.version = process.env.THEME_VERSION;
+fs.writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
+NODE
+  (cd "${tmp_dir}" && zip -qr "$(basename "${archive}")" "${root}")
+  local size
+  local digest
+  size="$(wc -c < "${archive}" | tr -d ' ')"
+  digest="$(shasum -a 256 "${archive}" | awk '{print $1}')"
+  THEME_RELEASE_OUT="${manifest}" THEME_RELEASE_SIZE="${size}" THEME_RELEASE_DIGEST="${digest}" node <<'NODE'
+const fs = require('fs');
+const out = process.env.THEME_RELEASE_OUT;
+const manifest = JSON.parse(fs.readFileSync('theme-release.json', 'utf8'));
+manifest.asset = {
+  ...manifest.asset,
+  size: Number(process.env.THEME_RELEASE_SIZE),
+  digest: `sha256:${process.env.THEME_RELEASE_DIGEST}`
+};
+fs.writeFileSync(out, `${JSON.stringify(manifest, null, 2)}\n`);
+NODE
+}
+
+theme_archive="${tmp_dir}/theme.zip"
+theme_release_manifest="${tmp_dir}/theme-release.json"
+create_theme_payload "${theme_archive}" "${theme_release_manifest}"
+
 mkdir -p "${tmp_dir}/demo/wwwroot/post/stale"
 printf 'stale\n' > "${tmp_dir}/demo/wwwroot/post/stale/en.md"
 
 bash "${script}" \
   --demo-root "${tmp_dir}/demo" \
-  --theme-root theme \
+  --theme-archive "${theme_archive}" \
+  --theme-release-manifest "${theme_release_manifest}" \
   --archive "${tmp_dir}/press-system.zip" \
   --tag v0.0.0
 
@@ -274,7 +356,8 @@ create_release_payload press-system-v0.0.1 without-runtime-manifest
 
 bash "${script}" \
   --demo-root "${tmp_dir}/demo" \
-  --theme-root theme \
+  --theme-archive "${theme_archive}" \
+  --theme-release-manifest "${theme_release_manifest}" \
   --archive "${tmp_dir}/legacy-press-system.zip" \
   --tag v0.0.1
 
@@ -288,7 +371,8 @@ create_release_payload press-system-v0.0.2 symlink
 
 if bash "${script}" \
   --demo-root "${tmp_dir}/symlink-demo" \
-  --theme-root theme \
+  --theme-archive "${theme_archive}" \
+  --theme-release-manifest "${theme_release_manifest}" \
   --archive "${tmp_dir}/symlink-system.zip" \
   --tag v0.0.2 >"${tmp_dir}/symlink.out" 2>"${tmp_dir}/symlink.err"; then
   echo "demo sync script must reject symlink payload files" >&2
@@ -297,6 +381,29 @@ fi
 
 if ! grep -F 'system release archive contains symlink: index.html' "${tmp_dir}/symlink.err" >/dev/null; then
   echo "demo sync script must explain rejected symlink payload files" >&2
+  exit 1
+fi
+
+bad_theme_manifest="${tmp_dir}/bad-theme-release.json"
+THEME_RELEASE_IN="${theme_release_manifest}" THEME_RELEASE_OUT="${bad_theme_manifest}" node <<'NODE'
+const fs = require('fs');
+const manifest = JSON.parse(fs.readFileSync(process.env.THEME_RELEASE_IN, 'utf8'));
+manifest.asset.digest = `sha256:${'b'.repeat(64)}`;
+fs.writeFileSync(process.env.THEME_RELEASE_OUT, `${JSON.stringify(manifest, null, 2)}\n`);
+NODE
+
+if bash "${script}" \
+  --demo-root "${tmp_dir}/bad-theme-demo" \
+  --theme-archive "${theme_archive}" \
+  --theme-release-manifest "${bad_theme_manifest}" \
+  --archive "${tmp_dir}/press-system.zip" \
+  --tag v0.0.0 >"${tmp_dir}/bad-theme.out" 2>"${tmp_dir}/bad-theme.err"; then
+  echo "demo sync script must reject theme release archive digest mismatches" >&2
+  exit 1
+fi
+
+if ! grep -F 'theme release archive SHA-256 mismatch' "${tmp_dir}/bad-theme.err" >/dev/null; then
+  echo "demo sync script must explain rejected theme release archive digest mismatches" >&2
   exit 1
 fi
 

@@ -3,13 +3,14 @@ set -euo pipefail
 
 archive_path=""
 demo_root=""
-theme_root=""
+theme_archive_path=""
+theme_release_manifest_path=""
 expected_sha256="${PRESS_RELEASE_SHA256:-}"
 expected_size="${PRESS_RELEASE_SIZE:-}"
 release_tag="${PRESS_RELEASE_TAG:-}"
 
 usage() {
-  echo "usage: $0 --demo-root path --theme-root path --archive path [--tag vX.Y.Z] [--sha256 sha256] [--size bytes]" >&2
+  echo "usage: $0 --demo-root path --theme-archive path --archive path [--theme-release-manifest path] [--tag vX.Y.Z] [--sha256 sha256] [--size bytes]" >&2
   exit 2
 }
 
@@ -25,9 +26,14 @@ while [[ $# -gt 0 ]]; do
       demo_root="$2"
       shift 2
       ;;
-    --theme-root)
+    --theme-archive)
       [[ $# -ge 2 ]] || usage
-      theme_root="$2"
+      theme_archive_path="$2"
+      shift 2
+      ;;
+    --theme-release-manifest)
+      [[ $# -ge 2 ]] || usage
+      theme_release_manifest_path="$2"
       shift 2
       ;;
     --tag)
@@ -54,21 +60,25 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "${archive_path}" || -z "${demo_root}" || -z "${theme_root}" ]]; then
+if [[ -z "${archive_path}" || -z "${demo_root}" || -z "${theme_archive_path}" ]]; then
   usage
 fi
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd "${script_dir}/.." && pwd)"
 data_path="${repo_root}/scripts/demo-site-data.json"
-release_manifest_path="${repo_root}/theme-release.json"
+release_manifest_path="${theme_release_manifest_path:-${repo_root}/theme-release.json}"
 
 if [[ ! -f "${archive_path}" ]]; then
   echo "release archive not found: ${archive_path}" >&2
   exit 1
 fi
-if [[ ! -d "${theme_root}" ]]; then
-  echo "theme root not found: ${theme_root}" >&2
+if [[ ! -f "${theme_archive_path}" ]]; then
+  echo "theme release archive not found: ${theme_archive_path}" >&2
+  exit 1
+fi
+if [[ ! -f "${release_manifest_path}" ]]; then
+  echo "theme release manifest not found: ${release_manifest_path}" >&2
   exit 1
 fi
 if [[ ! -f "${data_path}" ]]; then
@@ -221,6 +231,121 @@ sync_payload_dir "assets/i18n"
 sync_payload_dir "assets/schema"
 sync_payload_dir "assets/themes/native"
 rm -f "${demo_root}/assets/themes/catalog.json"
+
+theme_release_env="${tmp_dir}/theme-release-env.txt"
+PRESS_THEME_RELEASE_MANIFEST="${release_manifest_path}" node >"${theme_release_env}" <<'NODE'
+const fs = require('fs');
+const manifestPath = process.env.PRESS_THEME_RELEASE_MANIFEST;
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+const slug = String(manifest.value || '').trim();
+const version = String(manifest.version || '').trim();
+const tag = String(manifest.release && manifest.release.tag || '').trim();
+const asset = manifest.asset && typeof manifest.asset === 'object' ? manifest.asset : {};
+const size = Number(asset.size || 0);
+const digest = String(asset.digest || '').trim().replace(/^sha256:/i, '').toLowerCase();
+if (manifest.schemaVersion !== 1 || manifest.type !== 'press-theme') {
+  throw new Error('theme release manifest must be schemaVersion 1 and type press-theme');
+}
+if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(slug)) {
+  throw new Error('theme release manifest value must be a safe theme slug');
+}
+if (!version || tag !== `v${version}`) {
+  throw new Error('theme release manifest must declare matching version and release.tag');
+}
+if (!asset.name || !asset.url || !(size > 0) || !digest) {
+  throw new Error('theme release manifest asset must declare name, url, size, and digest');
+}
+console.log(`slug=${slug}`);
+console.log(`version=${version}`);
+console.log(`tag=${tag}`);
+console.log(`asset_name=${asset.name}`);
+console.log(`asset_size=${size}`);
+console.log(`asset_digest=${digest}`);
+NODE
+
+theme_slug=""
+theme_version=""
+theme_tag=""
+theme_asset_name=""
+theme_expected_size=""
+theme_expected_sha256=""
+while IFS='=' read -r key value; do
+  case "${key}" in
+    slug) theme_slug="${value}" ;;
+    version) theme_version="${value}" ;;
+    tag) theme_tag="${value}" ;;
+    asset_name) theme_asset_name="${value}" ;;
+    asset_size) theme_expected_size="${value}" ;;
+    asset_digest) theme_expected_sha256="${value}" ;;
+  esac
+done < "${theme_release_env}"
+
+theme_actual_size="$(wc -c < "${theme_archive_path}" | tr -d ' ')"
+if [[ "${theme_actual_size}" != "${theme_expected_size}" ]]; then
+  echo "theme release archive size mismatch: expected ${theme_expected_size}, got ${theme_actual_size}" >&2
+  exit 1
+fi
+
+theme_actual_sha256="$(shasum -a 256 "${theme_archive_path}" | awk '{print $1}')"
+if [[ "${theme_actual_sha256}" != "${theme_expected_sha256}" ]]; then
+  echo "theme release archive SHA-256 mismatch: expected ${theme_expected_sha256}, got ${theme_actual_sha256}" >&2
+  exit 1
+fi
+
+theme_entries_file="${tmp_dir}/theme-entries.txt"
+unzip -Z1 "${theme_archive_path}" > "${theme_entries_file}"
+
+theme_payload_root=""
+while IFS= read -r entry; do
+  [[ -n "${entry}" ]] || continue
+  if [[ "${entry}" == /* || "${entry}" == *\\* ]]; then
+    echo "unsafe theme archive path: ${entry}" >&2
+    exit 1
+  fi
+
+  IFS='/' read -r -a parts <<< "${entry}"
+  for part in "${parts[@]}"; do
+    if [[ "${part}" == ".." ]]; then
+      echo "unsafe theme archive path: ${entry}" >&2
+      exit 1
+    fi
+  done
+
+  top="${parts[0]}"
+  [[ -n "${top}" ]] || continue
+  if [[ -z "${theme_payload_root}" ]]; then
+    theme_payload_root="${top}"
+  elif [[ "${theme_payload_root}" != "${top}" ]]; then
+    echo "theme release archive must contain a single top-level payload directory" >&2
+    exit 1
+  fi
+done < "${theme_entries_file}"
+
+if [[ -z "${theme_payload_root}" ]]; then
+  echo "theme release archive is empty" >&2
+  exit 1
+fi
+
+if [[ "${theme_payload_root}" != "press-theme-${theme_slug}" ]]; then
+  echo "theme release archive root ${theme_payload_root} does not match ${theme_slug}" >&2
+  exit 1
+fi
+
+theme_extract_dir="${tmp_dir}/theme-extract"
+mkdir -p "${theme_extract_dir}"
+unzip -q "${theme_archive_path}" -d "${theme_extract_dir}"
+theme_root="${theme_extract_dir}/${theme_payload_root}"
+
+theme_symlink_path="$(find "${theme_root}" -type l -print -quit)"
+if [[ -n "${theme_symlink_path}" ]]; then
+  echo "theme release archive contains symlink: ${theme_symlink_path#${theme_root}/}" >&2
+  exit 1
+fi
+
+if [[ ! -f "${theme_root}/theme.json" || -L "${theme_root}/theme.json" ]]; then
+  echo "theme release archive is missing theme.json" >&2
+  exit 1
+fi
 
 export PRESS_DEMO_ROOT="${demo_root}"
 export PRESS_THEME_ROOT="${theme_root}"
@@ -382,7 +507,7 @@ writeFile('README.md', [
   '',
   `This branch hosts the ${data.label} demo site for GitHub Pages.`,
   '',
-  'The site is regenerated from the latest Press system release and the theme source on `main` by `sync-demo-from-press-release.yml`.',
+  'The site is regenerated from the latest Press system release and the published theme release artifact by `sync-demo-from-press-release.yml`.',
   ''
 ].join('\n'));
 
