@@ -334,7 +334,10 @@ const api = glasswing.mount({
   window: doc.defaultView,
   features,
   router: {
-    getHomeHref: () => '?tab=about',
+    homeHref: '?tab=about',
+    getHomeHref() {
+      return this.homeHref;
+    },
     getHomeSlug: () => 'about',
     getHomeLabel: () => 'About',
     getTabHref: (slug) => `?tab=${slug}`,
