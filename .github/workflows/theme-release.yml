@@ -30,6 +30,7 @@ jobs:
       REQUESTED_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || '' }}
       PRESS_CONTRACT_CHECK_REF: v3.4.130
       PRESS_REPOSITORY: ${{ vars.PRESS_REPOSITORY || 'EkilyHQ/Press' }}
+      PRESS_RELEASE_TOKEN: ${{ secrets.PRESS_RELEASE_TOKEN || github.token }}
     steps:
       - name: Checkout theme
         uses: actions/checkout@v6
@@ -324,7 +325,7 @@ jobs:
         if: steps.plan.outputs.should_release == 'true'
         run: |
           set -euo pipefail
-          press_tag="$(gh api "repos/${PRESS_REPOSITORY}/releases/latest" --jq '.tag_name')"
+          press_tag="$(GH_TOKEN="${PRESS_RELEASE_TOKEN}" gh api "repos/${PRESS_REPOSITORY}/releases/latest" --jq '.tag_name')"
           if [[ -z "${press_tag}" ]]; then
             echo "Unable to resolve latest Press release tag." >&2
             exit 1
