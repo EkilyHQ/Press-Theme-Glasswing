@@ -31,6 +31,7 @@ jobs:
       DISPATCH_ASSET_SHA256: ${{ github.event.client_payload.asset_sha256 }}
       DISPATCH_RELEASE_INTENT_SOURCE: ${{ github.event.client_payload.release_intent.source }}
       PRESS_RELEASE_TOKEN: ${{ secrets.PRESS_RELEASE_TOKEN || github.token }}
+      THEME_RELEASE_TOKEN: ${{ secrets.THEME_RELEASE_TOKEN || github.token }}
       DEMO_BRANCH: demo
     steps:
       - name: Checkout theme source
@@ -95,6 +96,44 @@ jobs:
             echo "${key}=${value}" >> "${GITHUB_OUTPUT}"
           done < ../dist/press-release-env.txt
 
+      - name: Resolve theme release
+        id: theme
+        working-directory: source
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('fs');
+          const manifest = JSON.parse(fs.readFileSync('theme-release.json', 'utf8'));
+          const asset = manifest.asset && typeof manifest.asset === 'object' ? manifest.asset : {};
+          const release = manifest.release && typeof manifest.release === 'object' ? manifest.release : {};
+          const slug = String(manifest.value || '').trim();
+          const version = String(manifest.version || '').trim();
+          const tag = String(release.tag || '').trim();
+          const digest = String(asset.digest || '').trim().replace(/^sha256:/i, '').toLowerCase();
+          if (manifest.schemaVersion !== 1 || manifest.type !== 'press-theme') {
+            throw new Error('theme-release.json must be schemaVersion 1 and type press-theme');
+          }
+          if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(slug)) {
+            throw new Error('theme-release.json value must be a safe theme slug');
+          }
+          if (!version || tag !== `v${version}`) {
+            throw new Error('theme-release.json must declare matching version and release.tag');
+          }
+          if (!asset.url || !asset.name || !(Number(asset.size) > 0) || !digest) {
+            throw new Error('theme-release.json asset must declare url, name, size, and digest');
+          }
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, [
+            `slug=${slug}`,
+            `version=${version}`,
+            `tag=${tag}`,
+            `asset_url=${asset.url}`,
+            `asset_name=${asset.name}`,
+            `asset_size=${Number(asset.size)}`,
+            `asset_sha256=${digest}`,
+            ''
+          ].join('\n'));
+          NODE
+
       - name: Download Press system package
         run: |
           set -euo pipefail
@@ -102,6 +141,14 @@ jobs:
             --header "Authorization: Bearer ${PRESS_RELEASE_TOKEN}" \
             --output dist/press-system.zip \
             "${{ steps.release.outputs.asset_url }}"
+
+      - name: Download theme package
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --location --silent --show-error \
+            --header "Authorization: Bearer ${THEME_RELEASE_TOKEN}" \
+            --output dist/theme.zip \
+            "${{ steps.theme.outputs.asset_url }}"
 
       - name: Prepare demo worktree
         working-directory: source
@@ -129,7 +176,8 @@ jobs:
           set -euo pipefail
           bash source/scripts/sync-demo-from-press-release.sh \
             --demo-root demo \
-            --theme-root source/theme \
+            --theme-archive dist/theme.zip \
+            --theme-release-manifest source/theme-release.json \
             --archive dist/press-system.zip \
             --tag "${{ steps.release.outputs.tag }}" \
             --sha256 "${{ steps.release.outputs.asset_sha256 }}" \
@@ -149,6 +197,19 @@ jobs:
             --observed-type press-system-manifest \
             --reconciler theme-demo-runtime-sync
 
+      - name: Write theme demo release lock
+        run: |
+          set -euo pipefail
+          node source/scripts/write-theme-demo-release-lock.js \
+            --press-lock demo/press-system-lock.json \
+            --theme-release source/theme-release.json \
+            --theme-manifest "demo/assets/themes/${{ steps.theme.outputs.slug }}/theme.json" \
+            --packs demo/assets/themes/packs.json \
+            --out demo/demo-release-lock.json \
+            --repository "${GITHUB_REPOSITORY}" \
+            --slug "${{ steps.theme.outputs.slug }}" \
+            --ref demo
+
       - name: Validate demo sync workflow
         working-directory: source
         run: |
@@ -158,10 +219,11 @@ jobs:
         working-directory: demo
         env:
           SYNC_TAG: ${{ steps.release.outputs.tag }}
+          THEME_TAG: ${{ steps.theme.outputs.tag }}
         run: |
           set -euo pipefail
           if [[ -z "$(git status --porcelain)" ]]; then
-            echo "Demo branch is already current with ${SYNC_TAG}."
+            echo "Demo branch is already current with ${SYNC_TAG} and ${THEME_TAG}."
             exit 0
           fi
 
@@ -169,6 +231,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add .
-          git commit -m "Sync demo site ${SYNC_TAG}"
+          git commit -m "Sync demo site ${SYNC_TAG} ${THEME_TAG}"
           git pull --rebase origin "${DEMO_BRANCH}" || true
           git push origin "HEAD:${DEMO_BRANCH}"
