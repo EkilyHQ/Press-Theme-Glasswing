@@ -1,10 +1,10 @@
 // seo.js - Dynamic SEO meta tag management for client-side routing
 // This maintains SEO benefits while keeping the "no compilation needed" philosophy
 
-import { getCurrentLang, DEFAULT_LANG } from './i18n.js?v=press-system-v3.4.131';
-import { getAvailableLangs } from './i18n.js?v=press-system-v3.4.131';
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.131';
-import { isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.131';
+import { getCurrentLang, DEFAULT_LANG } from './i18n.js?v=press-system-v3.4.132';
+import { getAvailableLangs } from './i18n.js?v=press-system-v3.4.132';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.132';
+import { isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.132';
 
 function ensureTrailingSlash(value) {
   const str = String(value == null ? '' : value).trim();

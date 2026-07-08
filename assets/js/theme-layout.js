@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.131';
+} from './theme.js?v=press-system-v3.4.132';
 import {
   t,
   withLangParam,
@@ -13,20 +13,24 @@ import {
   ensureLanguageBundle,
   getAvailableLangs,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.131';
+} from './i18n.js?v=press-system-v3.4.132';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.131';
+} from './theme-regions.js?v=press-system-v3.4.132';
 import {
   PRESS_THEME_CONTRACT,
   isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.131';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.132';
+import {
+  applyThemeSettingsCssVariables,
+  resolveThemeSettings
+} from './theme-settings.js?v=press-system-v3.4.132';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -44,8 +48,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.131';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.131';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.132';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.132';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',
@@ -106,13 +110,54 @@ function firstDefined(...values) {
   return undefined;
 }
 
+function reflectThemeRuntimeConfig(context, options = {}, themeSettings = null) {
+  if (!context.theme || !context.theme.effects) return false;
+  const effect = context.theme.effects.reflectThemeConfig;
+  if (typeof effect !== 'function') return false;
+  const siteConfig = options && options.siteConfig && typeof options.siteConfig === 'object'
+    ? options.siteConfig
+    : {};
+  const documentRef = context.document || (typeof document !== 'undefined' ? document : null);
+  const windowRef = (documentRef && documentRef.defaultView) || (typeof window !== 'undefined' ? window : null);
+  try {
+    effect({
+      config: siteConfig,
+      siteConfig,
+      ctx: context,
+      themeSettings: themeSettings || context.themeSettings || null,
+      features: context.features || null,
+      document: documentRef,
+      window: windowRef
+    });
+    return true;
+  } catch (err) {
+    themeDevWarn(`Theme "${context.pack || ''}" reflectThemeConfig failed`, err);
+  }
+  return false;
+}
+
 function refreshThemeLayoutRuntimeContext(context, options = {}, regionController = null) {
   if (!context || typeof context !== 'object') return context;
+  const shouldReflectThemeConfig = !options || options.reflectThemeConfig !== false;
   if (options && Object.prototype.hasOwnProperty.call(options, 'features')) {
     context.features = options.features || null;
   }
   if (options && Object.prototype.hasOwnProperty.call(options, 'router')) {
     context.router = options.router || null;
+  }
+  if (context.manifest && context.theme && typeof context.theme === 'object') {
+    const resolvedSettings = resolveThemeSettings({
+      pack: context.pack,
+      manifest: context.manifest,
+      siteConfig: options.siteConfig || {}
+    });
+    context.theme.settings = resolvedSettings.settings;
+    context.theme.settingFields = resolvedSettings.fields;
+    context.theme.settingWarnings = resolvedSettings.warnings;
+    context.themeSettings = resolvedSettings;
+    const documentRef = context.document || (typeof document !== 'undefined' ? document : null);
+    applyThemeSettingsCssVariables(documentRef, resolvedSettings);
+    if (shouldReflectThemeConfig) reflectThemeRuntimeConfig(context, options, resolvedSettings);
   }
   if (regionController && typeof regionController.setThemeLayoutContext === 'function') {
     regionController.setThemeLayoutContext(context);
@@ -295,6 +340,9 @@ function createThemeApi(pack, manifest) {
     version: String((manifest && manifest.version) || ''),
     contractVersion: firstDefined(manifest && manifest.contractVersion, CONTRACT_VERSION),
     manifest,
+    settings: {},
+    settingFields: [],
+    settingWarnings: [],
     mount: null,
     unmount: null,
     regions: asObject(manifest && manifest.regions) || {},
@@ -517,6 +565,16 @@ async function mountPack(pack, allowFallback = true, options = {}) {
   }
 
   const runtimeOptions = themeLayoutState.latestLayoutOptions || options;
+  const themeSettings = resolveThemeSettings({
+    pack,
+    manifest,
+    siteConfig: runtimeOptions.siteConfig || {}
+  });
+  const themeApi = createThemeApi(pack, manifest);
+  themeApi.settings = themeSettings.settings;
+  themeApi.settingFields = themeSettings.fields;
+  themeApi.settingWarnings = themeSettings.warnings;
+
   const context = {
     document: document,
     i18n: createThemeI18nContext(),
@@ -525,7 +583,8 @@ async function mountPack(pack, allowFallback = true, options = {}) {
     router: runtimeOptions.router || null,
     pack,
     manifest,
-    theme: createThemeApi(pack, manifest),
+    theme: themeApi,
+    themeSettings,
     utilities: {
       getRegion: (names) => regionController.getThemeRegion(names),
       warn: themeDevWarn
@@ -535,6 +594,7 @@ async function mountPack(pack, allowFallback = true, options = {}) {
   if (!isCurrentMountGeneration(mountGeneration, options)) return null;
   regionController.setThemeLayoutContext(context);
   applyManifestStyles(pack, manifest);
+  applyThemeSettingsCssVariables(document, themeSettings);
 
   for (const { entry, mod } of loadedModules) {
     try {
