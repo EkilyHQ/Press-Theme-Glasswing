@@ -1,6 +1,6 @@
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.132';
-import { escapeHtml } from './utils.js?v=press-system-v3.4.132';
-export { renderPressPostCardHtml } from './post-card-html.js?v=press-system-v3.4.132';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.133';
+import { escapeHtml } from './utils.js?v=press-system-v3.4.133';
+export { renderPressPostCardHtml } from './post-card-html.js?v=press-system-v3.4.133';
 
 const safe = (value) => escapeHtml(String(value ?? '')) || '';
 const asBool = (value) => value === true || value === 'true' || value === '';
@@ -538,9 +538,13 @@ export class PressThemeControls extends HTMLElement {
       const option = (this.ownerDocument || document).createElement('option');
       option.value = current;
       option.textContent = current;
-      select.appendChild(option);
+      option.disabled = true;
+      option.hidden = true;
+      select.insertBefore(option, select.firstChild);
+      select.value = current;
+    } else if (current) {
+      select.value = current;
     }
-    if (current) select.value = current;
   }
 }
 

@@ -1,5 +1,5 @@
-import { createSystemUpdatesController } from './system-updates.js?v=press-system-v3.4.132';
-import { createThemeManagerController } from './theme-manager.js?v=press-system-v3.4.132';
+import { createSystemUpdatesController } from './system-updates.js?v=press-system-v3.4.133';
+import { createThemeManagerController } from './theme-manager.js?v=press-system-v3.4.133';
 
 export function createComposerSystemThemeBridge(options = {}) {
   const consoleRef = options.consoleRef || null;

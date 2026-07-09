@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.132';
+import { EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.133';
 
 const noop = () => {};
 

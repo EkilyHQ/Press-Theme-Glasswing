@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.132';
+} from './theme.js?v=press-system-v3.4.133';
 import {
   t,
   withLangParam,
@@ -12,25 +12,27 @@ import {
   switchLanguage,
   ensureLanguageBundle,
   getAvailableLangs,
+  getPublicLangs,
+  getPublicLanguageOptions,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.132';
+} from './i18n.js?v=press-system-v3.4.133';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.132';
+} from './theme-regions.js?v=press-system-v3.4.133';
 import {
   PRESS_THEME_CONTRACT,
   isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.132';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.133';
 import {
   applyThemeSettingsCssVariables,
   resolveThemeSettings
-} from './theme-settings.js?v=press-system-v3.4.132';
+} from './theme-settings.js?v=press-system-v3.4.133';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -48,8 +50,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.132';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.132';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.133';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.133';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',
@@ -145,6 +147,9 @@ function refreshThemeLayoutRuntimeContext(context, options = {}, regionControlle
   if (options && Object.prototype.hasOwnProperty.call(options, 'router')) {
     context.router = options.router || null;
   }
+  if (options && Object.prototype.hasOwnProperty.call(options, 'siteConfig')) {
+    context.siteConfig = options.siteConfig || {};
+  }
   if (context.manifest && context.theme && typeof context.theme === 'object') {
     const resolvedSettings = resolveThemeSettings({
       pack: context.pack,
@@ -173,6 +178,8 @@ export function createThemeI18nContext() {
     switchLanguage,
     ensureLanguageBundle,
     getAvailableLangs,
+    getPublicLangs,
+    getPublicLanguageOptions,
     getLanguageLabel,
     lang: typeof getCurrentLang === 'function' ? getCurrentLang() : ''
   };
@@ -581,6 +588,7 @@ async function mountPack(pack, allowFallback = true, options = {}) {
     regions: createThemeRegionRegistry(),
     features: runtimeOptions.features || null,
     router: runtimeOptions.router || null,
+    siteConfig: runtimeOptions.siteConfig || {},
     pack,
     manifest,
     theme: themeApi,

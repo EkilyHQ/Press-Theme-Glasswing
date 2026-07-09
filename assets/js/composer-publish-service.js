@@ -1,9 +1,9 @@
-import { createComposerSyncCommitController } from './composer-sync-commit-controller.js?v=press-system-v3.4.132';
-import { createSyncOverlayController } from './composer-sync-overlay.js?v=press-system-v3.4.132';
-import { createPublishTransportSettingsUi } from './composer-publish-settings-ui.js?v=press-system-v3.4.132';
-import { createPublishSummaryRenderer } from './composer-publish-summary.js?v=press-system-v3.4.132';
-import { createComposerPublishFlow } from './composer-publish-flow.js?v=press-system-v3.4.132';
-import { createPublishSettingsStore } from './publish/settings-store.js?v=press-system-v3.4.132';
+import { createComposerSyncCommitController } from './composer-sync-commit-controller.js?v=press-system-v3.4.133';
+import { createSyncOverlayController } from './composer-sync-overlay.js?v=press-system-v3.4.133';
+import { createPublishTransportSettingsUi } from './composer-publish-settings-ui.js?v=press-system-v3.4.133';
+import { createPublishSummaryRenderer } from './composer-publish-summary.js?v=press-system-v3.4.133';
+import { createComposerPublishFlow } from './composer-publish-flow.js?v=press-system-v3.4.133';
+import { createPublishSettingsStore } from './publish/settings-store.js?v=press-system-v3.4.133';
 
 function noop() {}
 
