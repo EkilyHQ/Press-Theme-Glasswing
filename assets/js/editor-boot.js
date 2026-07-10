@@ -1,6 +1,6 @@
-import './cache-control.js?v=press-system-v3.4.134';
-import { initI18n, t, getAvailableLangs, getLanguageLabel, getCurrentLang, switchLanguage, ensureLanguageBundle } from './i18n.js?v=press-system-v3.4.134';
-import { createEditorBootRuntime } from './editor-boot-runtime.js?v=press-system-v3.4.134';
+import './cache-control.js?v=press-system-v3.4.135';
+import { initI18n, t, getAvailableLangs, getLanguageLabel, getCurrentLang, switchLanguage, ensureLanguageBundle } from './i18n.js?v=press-system-v3.4.135';
+import { createEditorBootRuntime } from './editor-boot-runtime.js?v=press-system-v3.4.135';
 
 function applyAttributeTranslation(el, target, value) {
   if (value == null) return;

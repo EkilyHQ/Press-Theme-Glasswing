@@ -1,7 +1,7 @@
-import { createComposerDragList } from './composer-drag-list.js?v=press-system-v3.4.134';
-import { createComposerIndexTabsLanguageMenu } from './composer-index-tabs-language-menu.js?v=press-system-v3.4.134';
-import { createComposerIndexVersionList } from './composer-index-version-list.js?v=press-system-v3.4.134';
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.134';
+import { createComposerDragList } from './composer-drag-list.js?v=press-system-v3.4.135';
+import { createComposerIndexTabsLanguageMenu } from './composer-index-tabs-language-menu.js?v=press-system-v3.4.135';
+import { createComposerIndexVersionList } from './composer-index-version-list.js?v=press-system-v3.4.135';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.135';
 
 export function createComposerIndexTabsUi(options = {}) {
   const documentRef = options.documentRef || null;

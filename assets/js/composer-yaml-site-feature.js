@@ -1,14 +1,14 @@
-import { createComposerYamlSerialization } from './composer-yaml-serialization.js?v=press-system-v3.4.134';
-import { createComposerDiffUi } from './composer-diff-ui.js?v=press-system-v3.4.134';
-import { createComposerOrderDiffUi } from './composer-order-diff-ui.js?v=press-system-v3.4.134';
-import { createComposerIndexTabsUi } from './composer-index-tabs-ui.js?v=press-system-v3.4.134';
-import { createComposerSiteSettingsUi } from './composer-site-settings-ui.js?v=press-system-v3.4.134';
-import { createComposerYamlPanelsController } from './composer-yaml-panels-controller.js?v=press-system-v3.4.134';
-import { createComposerYamlActions } from './composer-yaml-actions.js?v=press-system-v3.4.134';
-import { createComposerYamlDraftController } from './composer-yaml-drafts.js?v=press-system-v3.4.134';
+import { createComposerYamlSerialization } from './composer-yaml-serialization.js?v=press-system-v3.4.135';
+import { createComposerDiffUi } from './composer-diff-ui.js?v=press-system-v3.4.135';
+import { createComposerOrderDiffUi } from './composer-order-diff-ui.js?v=press-system-v3.4.135';
+import { createComposerIndexTabsUi } from './composer-index-tabs-ui.js?v=press-system-v3.4.135';
+import { createComposerSiteSettingsUi } from './composer-site-settings-ui.js?v=press-system-v3.4.135';
+import { createComposerYamlPanelsController } from './composer-yaml-panels-controller.js?v=press-system-v3.4.135';
+import { createComposerYamlActions } from './composer-yaml-actions.js?v=press-system-v3.4.135';
+import { createComposerYamlDraftController } from './composer-yaml-drafts.js?v=press-system-v3.4.135';
 import {
   CONNECT_PUBLISH_PRESETS
-} from './publish/settings-store.js?v=press-system-v3.4.134';
+} from './publish/settings-store.js?v=press-system-v3.4.135';
 
 const ANNOTATE_DISCUSSION_CATEGORY_PRESETS = [
   { value: 'General', label: 'General' }

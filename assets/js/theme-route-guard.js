@@ -1,5 +1,5 @@
-import { parse } from './vendor/acorn.mjs?v=press-system-v3.4.134';
-import { fullAncestor } from './vendor/acorn-walk.mjs?v=press-system-v3.4.134';
+import { parse } from './vendor/acorn.mjs?v=press-system-v3.4.135';
+import { fullAncestor } from './vendor/acorn-walk.mjs?v=press-system-v3.4.135';
 
 const ROUTE_KEYS = new Set(['tab', 'id']);
 const URL_MUTATORS = new Set(['set', 'append', 'delete']);
