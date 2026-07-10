@@ -158,6 +158,27 @@ if grep -E 'actions/(checkout@v4|configure-pages@v5|deploy-pages@v4|upload-artif
   exit 1
 fi
 
+for node_workflow in "${workflow}" "${theme_release_workflow}"; do
+  if ! grep -F 'actions/setup-node@v6' "${node_workflow}" >/dev/null || ! grep -F "node-version: '22.18.0'" "${node_workflow}" >/dev/null; then
+    echo "${node_workflow} must pin actions/setup-node@v6 with Node 22.18.0" >&2
+    exit 1
+  fi
+done
+
+legacy_module_flag='--experimental-default-type'
+legacy_module_flag+='=module'
+if grep -F -- "${legacy_module_flag}" "${theme_release_workflow}" >/dev/null; then
+  echo "theme release workflow must not depend on experimental Node module flags" >&2
+  exit 1
+fi
+
+for needle in 'scripts/test-theme-contracts.mjs' 'scripts/test-theme-contracts.js' 'PRESS_CONTRACT_LEGACY_JS_REF' 'node "${contract_test}"'; do
+  if ! grep -F "${needle}" "${theme_release_workflow}" >/dev/null; then
+    echo "theme release workflow must include bounded Press contract test selection: ${needle}" >&2
+    exit 1
+  fi
+done
+
 if ! grep -F 'actions: write' "${theme_release_workflow}" >/dev/null; then
   echo "theme release workflow must be allowed to trigger demo sync after publishing" >&2
   exit 1
@@ -224,11 +245,15 @@ const data = JSON.parse(fs.readFileSync('scripts/demo-site-data.json', 'utf8'));
 const theme = JSON.parse(fs.readFileSync('theme/theme.json', 'utf8'));
 const releaseWorkflow = fs.readFileSync('.github/workflows/theme-release.yml', 'utf8');
 const checkRefMatch = releaseWorkflow.match(/PRESS_CONTRACT_CHECK_REF:\s+(v\d+\.\d+\.\d+)/);
+const legacyRefMatch = releaseWorkflow.match(/PRESS_CONTRACT_LEGACY_JS_REF:\s+(v\d+\.\d+\.\d+)/);
 if (!/^[a-z0-9][a-z0-9_-]{0,63}$/.test(data.slug || '')) {
   throw new Error('demo site data must define a safe slug');
 }
 if (!checkRefMatch) {
   throw new Error('theme release workflow must declare PRESS_CONTRACT_CHECK_REF');
+}
+if (!legacyRefMatch || legacyRefMatch[1] !== checkRefMatch[1]) {
+  throw new Error('legacy .js fallback must be bounded to the current Press contract check ref');
 }
 const checkVersion = checkRefMatch[1].slice(1);
 if (!theme.engines || !String(theme.engines.press || '').includes(`>=${checkVersion}`)) {
