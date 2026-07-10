@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "scope": "Glasswing first-party theme source and repository tooling",
+  "eslint": {
+    "profile": "@eslint/js recommended",
+    "measuredRules": [
+      {
+        "rule": "no-empty",
+        "decision": "accepted-no-action",
+        "observedDiagnostics": 15,
+        "observedAffectedFiles": 1,
+        "evidence": "Intentional best-effort browser cleanup and compatibility fallbacks keep the primary rendering operation available when optional DOM operations fail."
+      },
+      {
+        "rule": "no-unused-vars",
+        "decision": "accepted-no-action",
+        "observedDiagnostics": 22,
+        "observedAffectedFiles": 1,
+        "evidence": "The theme contract retains callback and renderer signatures supplied by Press even when Glasswing does not consume every argument locally."
+      },
+      {
+        "rule": "no-useless-assignment",
+        "decision": "enforced-zero-baseline",
+        "observedDiagnostics": 0,
+        "observedAffectedFiles": 0,
+        "evidence": "The current source has no useless assignments, so the recommended rule remains enabled while the evidence probe guards the measured zero."
+      }
+    ],
+    "noGrowth": {
+      "mechanism": "zero-baseline",
+      "command": "eslint . --max-warnings 0",
+      "policy": "Repository tooling keeps every recommended rule enabled. Theme source excludes only the two measured legacy rules; all other recommended diagnostics fail CI."
+    },
+    "removalCondition": "Remove an exclusion after an intentional theme cleanup makes its exact diagnostic count reach zero without changing the Press theme contract."
+  },
+  "prettier": {
+    "baseline": {
+      "file": "scripts/prettier-baseline.json",
+      "initialFiles": 10
+    },
+    "excludedGeneratedFiles": ["theme-release.example.json", "theme-release.json", "theme/theme.json"],
+    "noGrowth": {
+      "mechanism": "merge-base-shrinking-file-baseline",
+      "baseRefEnvironmentVariable": "CODE_QUALITY_BASE_REF",
+      "headShaEnvironmentVariable": "CODE_QUALITY_HEAD_SHA",
+      "policy": "New candidate files must pass Prettier. A changed legacy file must be formatted and removed from the baseline; only exact-content renames may transfer baseline ownership."
+    }
+  },
+  "htmlSinks": {
+    "decision": "reviewed-exact-fingerprint-baseline-with-zero-growth",
+    "policyFile": "scripts/html-sink-policy.json",
+    "scope": "theme/**/*.js and theme/**/*.mjs",
+    "policy": "Every known HTML write or parser sink is classified by path, kind, source fingerprint, disposition, and rationale. The first policy bootstraps from a merge base without a policy; after that, approved keys may only shrink and established wrapper names cannot be removed or renamed. Direct wrapper calls are fingerprinted, while wrapper or native sink alias, bind, call, apply, export, and callback references create fail-closed indirect-reference occurrences. Reflect.set, Object.assign, and Object.defineProperty HTML-property writes are explicit sinks. Direct parseFromString remains an HTML sink only for text/html; an indirect reference fails closed because its MIME argument can no longer be proven at the member boundary."
+  }
+}

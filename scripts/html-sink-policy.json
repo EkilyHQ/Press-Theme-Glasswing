@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "decision": "reviewed-exact-fingerprint-baseline-with-zero-growth",
+  "scope": ["theme/**/*.js", "theme/**/*.mjs"],
+  "rationale": "Glasswing intentionally renders Press-sanitized content and its own escaped or static templates. Exact source fingerprints keep each direct HTML write and each reviewed wrapper call visible without changing release-bearing theme source.",
+  "wrappers": [
+    {
+      "name": "setHtml",
+      "rationale": "setHtml is Glasswing's local live-DOM rendering wrapper; every call is fingerprinted so template or caller growth requires review."
+    }
+  ],
+  "expectedKinds": {
+    "html-wrapper-call:setHtml": 6,
+    "innerHTML-write": 10
+  },
+  "approved": [
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "html-wrapper-call:setHtml",
+      "fingerprint": "sha256:03179f62984c069b88ba6a65778a810d798f076bacba5b5b26541611ef1b3b7d",
+      "occurrence": 1,
+      "disposition": "trusted-wrapper-call",
+      "rationale": "The loading-state caller supplies a source-static Glasswing notice template with no interpolated input."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "html-wrapper-call:setHtml",
+      "fingerprint": "sha256:33f7f099f7f27ef422ca4d7a4e3e3b4c095e78c4bc82c9cfef7f46b1448d63cf",
+      "occurrence": 1,
+      "disposition": "trusted-wrapper-call",
+      "rationale": "The home caller delegates to Glasswing's owned card renderer, which escapes text and attributes and accepts Press-rendered excerpts through the theme contract."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "html-wrapper-call:setHtml",
+      "fingerprint": "sha256:63c8b659a0bcb762943d72e4e0bb5e51a2a20fe8b8773ede915c1b32be587a84",
+      "occurrence": 1,
+      "disposition": "trusted-wrapper-call",
+      "rationale": "The error-state template escapes the title, message, action label, and action href before inserting the owned notice markup."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "html-wrapper-call:setHtml",
+      "fingerprint": "sha256:6b1e7e698edb4321c501d6caa4abb4c88e87f3bc0aa8a923960f0b51a4eea644",
+      "occurrence": 1,
+      "disposition": "trusted-wrapper-call",
+      "rationale": "The list-view caller delegates to the owned list renderer, whose variable text and route attributes are escaped before insertion."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "html-wrapper-call:setHtml",
+      "fingerprint": "sha256:7078a7a201c5891c6de8ad46e241bdf150b698aa286aa9b3bcebe1b033ce8689",
+      "occurrence": 1,
+      "disposition": "trusted-wrapper-call",
+      "rationale": "The post caller escapes theme-owned metadata and renders markdownHtml supplied by Press's reviewed rendering boundary."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "html-wrapper-call:setHtml",
+      "fingerprint": "sha256:8e0c0c4176dfcb0856b35af2dd359d49a64634f7088279442e1a58fd0eee729a",
+      "occurrence": 1,
+      "disposition": "trusted-wrapper-call",
+      "rationale": "The tab caller escapes the heading and renders markdownHtml supplied by Press's reviewed rendering boundary."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:1656dc899e4838e80eb820e423ff848d30fbc5e1f65c36bf28e0530da16b1558",
+      "occurrence": 1,
+      "disposition": "empty-clear",
+      "rationale": "The constant empty-string assignment removes hidden footer links and does not parse attacker-controlled markup."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:472d47ef9f9d1ee79bf44f9b20edb028c970ff0ca29dccab9d368dc9a1734cdd",
+      "occurrence": 1,
+      "disposition": "empty-clear",
+      "rationale": "The shared region reset assigns only a constant empty string and does not parse attacker-controlled markup."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:838a5c79c4bc30a839e9e73d3e99d77e359e0bcf4cb57f2bd8b680c7ca23e327",
+      "occurrence": 1,
+      "disposition": "press-renderer-output",
+      "rationale": "This is the single local live-DOM wrapper; every call is separately fingerprinted and classified, including Press-rendered content inputs."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:87862d186f65deb65ce75bf8f88662cd06c23fa3e913270089fbc1f9935748b5",
+      "occurrence": 1,
+      "disposition": "static-theme-template",
+      "rationale": "The footer skeleton is a source-static Glasswing template; later identity and link values use textContent or escaped templates."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:c642828ac307a52d5eec83370a8a3795d5f7927f03bb5aebf40a8dccfa20d5d6",
+      "occurrence": 1,
+      "disposition": "escaped-theme-template",
+      "rationale": "Footer link labels are escaped, profile URLs pass sanitizeUrl, and every rendered href is escaped as an attribute."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:d0a55bd400d1046c605dd145f7cc9c108765be881a401871634f114f5a8b67a0",
+      "occurrence": 1,
+      "disposition": "controlled-detached-parser",
+      "rationale": "A detached template parses Press-rendered markdown only to read the first image source; it is never attached to the live document."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:f2daec74e32a798ebed4d19d01e28826a8051c033f7db9b7d2d9bd1b1c942b6f",
+      "occurrence": 1,
+      "disposition": "empty-clear",
+      "rationale": "The disabled theme-controls branch assigns only a constant empty string before hiding the host region."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:f2f5e7d273db9e06a1c019174ef4e1ea9c17cadd7a0efe9ff271821f14844b06",
+      "occurrence": 1,
+      "disposition": "escaped-theme-template",
+      "rationale": "Navigation labels and helper-produced route hrefs are escaped before insertion into Glasswing's owned anchor template."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:fc2fc027f83f368f25c4941bbeb50b1bfa779fe9d5d228c98a85bbfc585db0a0",
+      "occurrence": 1,
+      "disposition": "press-renderer-output",
+      "rationale": "The fallback writes tocHtml produced by Press when the press-toc component does not expose its owned renderToc method."
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "kind": "innerHTML-write",
+      "fingerprint": "sha256:fc5e53a0d9827a18ff4379ede6dfb904b51de4dd28f48d6ae1d76ae60a0817b9",
+      "occurrence": 1,
+      "disposition": "empty-clear",
+      "rationale": "The theme-controls reset assigns only a constant empty string before remounting the trusted Press control component."
+    }
+  ]
+}
