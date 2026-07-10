@@ -1,4 +1,4 @@
-import { parseYAML } from './yaml.js?v=press-system-v3.4.135';
+import { parseYAML } from './yaml.js?v=press-system-v3.4.136';
 
 export const CONTENT_MODEL_MIGRATION_STATE_KEY = '__contentModelMigration';
 export const CONTENT_MODEL_MIGRATION_KIND = 'content-model-migration';

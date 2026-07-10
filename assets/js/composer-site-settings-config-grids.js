@@ -1,15 +1,15 @@
-import { SITE_FEATURE_KEYS, isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.135';
+import { SITE_FEATURE_KEYS, isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.136';
 import {
   buildLanguageAvailability,
   normalizeLanguageCode,
   normalizePublicLanguageSettings
-} from './language-availability.js?v=press-system-v3.4.135';
+} from './language-availability.js?v=press-system-v3.4.136';
 import {
   resolveThemeSettings,
   sanitizeThemeSlug,
   setThemeSettingOverride,
   themeSettingValueSignature
-} from './theme-settings.js?v=press-system-v3.4.135';
+} from './theme-settings.js?v=press-system-v3.4.136';
 
 export function createComposerSiteSettingsConfigGrids(options = {}) {
   const noop = () => {};

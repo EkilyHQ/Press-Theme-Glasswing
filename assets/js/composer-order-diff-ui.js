@@ -1,7 +1,7 @@
-import { createComposerDiffReviewViews } from './composer-diff-review-views.js?v=press-system-v3.4.135';
-import { createComposerOrderPreview } from './composer-order-preview.js?v=press-system-v3.4.135';
-import { createComposerOrderReviewView } from './composer-order-review-view.js?v=press-system-v3.4.135';
-import { createComposerOrderVisual } from './composer-order-visual.js?v=press-system-v3.4.135';
+import { createComposerDiffReviewViews } from './composer-diff-review-views.js?v=press-system-v3.4.136';
+import { createComposerOrderPreview } from './composer-order-preview.js?v=press-system-v3.4.136';
+import { createComposerOrderReviewView } from './composer-order-review-view.js?v=press-system-v3.4.136';
+import { createComposerOrderVisual } from './composer-order-visual.js?v=press-system-v3.4.136';
 
 function noop() {}
 
