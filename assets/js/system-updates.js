@@ -1,13 +1,14 @@
-import { mdParse } from './markdown.js?v=press-system-v3.4.133';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.133';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.133';
-import { t } from './i18n.js?v=press-system-v3.4.133';
-import { bindEventEffect } from './editor-effects.js?v=press-system-v3.4.133';
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.133';
-import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.133';
-import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.133';
-import { parseYAML } from './yaml.js?v=press-system-v3.4.133';
+import { mdParse } from './markdown.js?v=press-system-v3.4.134';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.134';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.134';
+import { t } from './i18n.js?v=press-system-v3.4.134';
+import { bindEventEffect } from './editor-effects.js?v=press-system-v3.4.134';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.134';
+import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.134';
+import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.134';
+import { parseYAML } from './yaml.js?v=press-system-v3.4.134';
 import {
+  compareSemver,
   isUpgradeAllowed,
   loadPressSystemManifest,
   normalizeContentModelUpgrade,
@@ -15,15 +16,16 @@ import {
   normalizePressSystemManifest,
   normalizeSemver,
   normalizeUpgradeFrom,
+  SECURITY_UPDATE_REQUIRED_VERSION,
   semverToTag
-} from './press-version.js?v=press-system-v3.4.133';
-import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.133';
+} from './press-version.js?v=press-system-v3.4.134';
+import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.134';
 import {
   getLegacyContentModelMigrationFiles,
   loadLegacyContentModelMigration
-} from './content-model-migration.js?v=press-system-v3.4.133';
-import { normalizeThemeRegistry, sanitizeThemeSlug } from './theme-package-core.js?v=press-system-v3.4.133';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.133';
+} from './content-model-migration.js?v=press-system-v3.4.134';
+import { normalizeThemeRegistry, sanitizeThemeSlug } from './theme-package-core.js?v=press-system-v3.4.134';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.134';
 
 const TEXT_EXTENSIONS = new Set([
   '.js', '.mjs', '.cjs', '.ts', '.json', '.yaml', '.yml', '.md', '.txt', '.html', '.css', '.svg', '.xml',
@@ -379,6 +381,10 @@ function requireManifestString(manifest, key) {
   return value;
 }
 
+export function isSecurityUpdateReleaseName(value) {
+  return /^(?:press\s+)?security update\b/i.test(String(value || '').trim());
+}
+
 function normalizeReleaseCache(data) {
   const asset = selectSystemUpdateAsset(data);
   const version = normalizeSemver(data.version || data.tag_name || '');
@@ -388,6 +394,7 @@ function normalizeReleaseCache(data) {
     version,
     publishedAt: data.published_at || data.created_at || '',
     notes: data.body || '',
+    securityUpdate: data.securityUpdate === true || isSecurityUpdateReleaseName(data.name),
     upgradeFrom: normalizeUpgradeFrom(data.upgradeFrom),
     themeContractUpgrade: normalizeThemeContractUpgrade(data.themeContractUpgrade),
     contentModelUpgrade: normalizeContentModelUpgrade(data.contentModelUpgrade),
@@ -409,6 +416,12 @@ export function normalizeSystemReleaseManifest(manifest) {
   const publishedAt = requireManifestString(manifest, 'publishedAt');
   const notes = requireManifestString(manifest, 'notes');
   const htmlUrl = requireManifestString(manifest, 'htmlUrl');
+  if ((compareSemver(version, SECURITY_UPDATE_REQUIRED_VERSION) >= 0
+      && typeof manifest.securityUpdate !== 'boolean')
+    || (Object.prototype.hasOwnProperty.call(manifest, 'securityUpdate')
+      && typeof manifest.securityUpdate !== 'boolean')) {
+    throw new Error('Invalid system release manifest: securityUpdate must be boolean');
+  }
   if (!isObject(manifest.asset)) {
     throw new Error('Invalid system release manifest: missing asset');
   }
@@ -430,6 +443,7 @@ export function normalizeSystemReleaseManifest(manifest) {
     version,
     publishedAt,
     notes,
+    securityUpdate: manifest.securityUpdate === true,
     upgradeFrom: normalizeUpgradeFrom(manifest.upgradeFrom),
     themeContractUpgrade: normalizeThemeContractUpgrade(manifest.themeContractUpgrade),
     contentModelUpgrade: normalizeContentModelUpgrade(manifest.contentModelUpgrade),
@@ -802,7 +816,21 @@ async function assertContentModelCompatibility(runtime, release, archiveSystem) 
     contentRoot,
     fetchImpl: runtime.getFetch()
   });
-  const legacyFiles = getLegacyContentModelMigrationFiles(migration);
+  // Historical cleanup-gated releases must still refuse to proceed while any
+  // legacy sidecar exists. Recovery preserves those source files intentionally,
+  // so this compatibility check must inspect discovery state rather than the
+  // narrower list of files selected for deletion/staging.
+  const discoveredLegacyFiles = Array.isArray(migration && migration.legacyFiles)
+    ? migration.legacyFiles
+      .filter(file => file && file.path)
+      .map(file => ({
+        ...file,
+        path: String(file.path).replace(/[\\]/g, '/').replace(/^\/+/, '')
+      }))
+    : [];
+  const legacyFiles = discoveredLegacyFiles.length
+    ? discoveredLegacyFiles
+    : getLegacyContentModelMigrationFiles(migration);
   if (legacyFiles.length) {
     createContentModelUpgradeError(targetVersion, requirement, legacyFiles, 'legacy');
   }
@@ -968,6 +996,8 @@ async function assertInstalledThemeContractCompatibility(runtime, release, archi
 }
 
 function renderRelease(runtime) {
+  const { root } = runtime.state.elements;
+  if (root) root.dataset.securityUpdate = runtime.state.releaseCache && runtime.state.releaseCache.securityUpdate ? 'true' : 'false';
   renderReleaseMeta(runtime);
   renderNotes(runtime, getDisplayReleaseNotes(runtime.state.releaseCache));
   updateDownloadLink(runtime);

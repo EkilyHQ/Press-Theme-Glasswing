@@ -1,4 +1,4 @@
-import { simpleHighlight } from './syntax-highlight.js?v=press-system-v3.4.133';
+import { simpleHighlight } from './syntax-highlight.js?v=press-system-v3.4.134';
 
 function escapeHtmlInline(text) {
   if (!text) return '';
@@ -818,7 +818,6 @@ function makeEditor(targetTextarea, language, readOnly, options = {}) {
     // Collapse first to force reflow, then grow to scrollHeight
     ta.style.height = '0px';
     // Force reflow to ensure scrollHeight is recalculated
-    // eslint-disable-next-line no-unused-expressions
     ta.offsetHeight;
     const minH = 0; // grow exactly with content height
     let h = Math.max(minH, ta.scrollHeight);

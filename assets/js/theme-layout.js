@@ -4,7 +4,7 @@ import {
   getRequestedThemePack,
   setThemePackStylesheet,
   suppressThemePack
-} from './theme.js?v=press-system-v3.4.133';
+} from './theme.js?v=press-system-v3.4.134';
 import {
   t,
   withLangParam,
@@ -15,24 +15,24 @@ import {
   getPublicLangs,
   getPublicLanguageOptions,
   getLanguageLabel
-} from './i18n.js?v=press-system-v3.4.133';
+} from './i18n.js?v=press-system-v3.4.134';
 import {
   createThemeRegionController,
   createThemeRegionRegistry,
   ensureThemeRegionRegistry,
   getDefaultThemeRegionController,
   mergeThemeRegions,
-} from './theme-regions.js?v=press-system-v3.4.133';
+} from './theme-regions.js?v=press-system-v3.4.134';
 import {
   PRESS_THEME_CONTRACT,
   isPressThemeContractVersionSupported,
   getDefaultThemeStyles,
   getRequiredThemeContentShapes
-} from './theme-contract-surface.mjs?v=press-system-v3.4.133';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.134';
 import {
   applyThemeSettingsCssVariables,
   resolveThemeSettings
-} from './theme-settings.js?v=press-system-v3.4.133';
+} from './theme-settings.js?v=press-system-v3.4.134';
 
 function createThemeLayoutState(options = {}) {
   return {
@@ -50,8 +50,8 @@ const DEFAULT_PACK = 'native';
 const CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 const DEFAULT_THEME_STYLES = getDefaultThemeStyles();
 const REQUIRED_CONTENT_SHAPES = getRequiredThemeContentShapes();
-const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.133';
-const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.133';
+const NATIVE_MODULE_CACHE_KEY = 'press-system-v3.4.134';
+const NATIVE_STYLE_CACHE_KEY = 'press-system-v3.4.134';
 
 const EFFECT_VIEW_NAMES = {
   renderPostView: 'post',
@@ -420,6 +420,9 @@ async function loadManifest(pack) {
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
   const data = await resp.json();
   if (!data || typeof data !== 'object') throw new Error('Invalid manifest');
+  if (pack !== DEFAULT_PACK && !isPressThemeContractVersionSupported(data.contractVersion)) {
+    throw new Error(`Unsupported theme contract version: ${data.contractVersion || 'unknown'}`);
+  }
   const list = Array.isArray(data.modules) ? data.modules : [];
   if (!list.length) throw new Error('Empty module list');
   const manifest = { ...data, modules: list.map(x => String(x)) };
@@ -452,13 +455,9 @@ function resolveModuleEntry(pack, entry, manifest) {
 async function loadThemeModule(pack, entry, manifest) {
   const path = resolveModuleEntry(pack, entry, manifest);
   if (!path) return null;
-  try {
-    if (typeof window !== 'undefined' && typeof window.__pressThemeModuleLoader === 'function') {
-      const mod = await window.__pressThemeModuleLoader(path, { pack, entry, manifest });
-      return { entry, mod };
-    }
-  } catch (err) {
-    throw err;
+  if (typeof window !== 'undefined' && typeof window.__pressThemeModuleLoader === 'function') {
+    const mod = await window.__pressThemeModuleLoader(path, { pack, entry, manifest });
+    return { entry, mod };
   }
   const mod = await import(path);
   return { entry, mod };

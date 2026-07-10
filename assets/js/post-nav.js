@@ -1,5 +1,5 @@
-import { withLangParam, t } from './i18n.js?v=press-system-v3.4.133';
-import { escapeHtml } from './utils.js?v=press-system-v3.4.133';
+import { withLangParam, t } from './i18n.js?v=press-system-v3.4.134';
+import { escapeHtml } from './utils.js?v=press-system-v3.4.134';
 
 function getPostHrefResolver(options = {}) {
   const direct = typeof options.getPostHref === 'function' ? options.getPostHref : null;

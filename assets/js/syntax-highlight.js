@@ -1,4 +1,4 @@
-import hljs from './vendor/highlightjs/highlight.min.js?v=press-system-v3.4.133';
+import hljs from './vendor/highlightjs/highlight.min.js?v=press-system-v3.4.134';
 
 const HIGHLIGHT_LANGUAGES = [
   'bash', 'c', 'cpp', 'csharp', 'css', 'diff', 'go', 'graphql', 'ini', 'java',
