@@ -1,4 +1,4 @@
-import { PRESS_GITHUB_SITE_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.136';
+import { PRESS_GITHUB_SITE_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.137';
 
 function noop() {}
 

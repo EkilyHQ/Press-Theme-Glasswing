@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.136';
+import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.137';
 
 export function createComposerUnsyncedSummaryController(options = {}) {
   const documentRef = options.documentRef || null;

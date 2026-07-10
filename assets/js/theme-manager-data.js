@@ -1,9 +1,9 @@
-import { loadProductState } from './product-state.js?v=press-system-v3.4.136';
-import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.136';
+import { loadProductState } from './product-state.js?v=press-system-v3.4.137';
+import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.137';
 import {
   normalizeThemeCatalog,
   normalizeThemeRegistry
-} from './theme-package-core.js?v=press-system-v3.4.136';
+} from './theme-package-core.js?v=press-system-v3.4.137';
 
 export const OFFICIAL_THEME_CATALOG_URL = PRESS_GITHUB_PROVIDER.themeCatalogUrl;
 

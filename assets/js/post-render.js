@@ -1,4 +1,4 @@
-import { sanitizeImageUrl, sanitizeUrl } from './safe-html.js?v=press-system-v3.4.136';
+import { sanitizeImageUrl, sanitizeUrl } from './safe-html.js?v=press-system-v3.4.137';
 
 // Ensure images defer offscreen loading for performance
 export function applyLazyLoadingIn(container) {

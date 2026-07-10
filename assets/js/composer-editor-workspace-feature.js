@@ -1,10 +1,10 @@
-import { findEditorContentTreeNode, flattenEditorContentTree } from './editor-content-tree.js?v=press-system-v3.4.136';
-import { createComposerEditorTreeState } from './composer-editor-tree-state.js?v=press-system-v3.4.136';
-import { createComposerEditorShell } from './composer-editor-shell.js?v=press-system-v3.4.136';
-import { createComposerEditorDetailPanelController } from './composer-editor-detail-panel-controller.js?v=press-system-v3.4.136';
-import { createEditorContentTreeController } from './editor-content-tree-controller.js?v=press-system-v3.4.136';
-import { createEditorFileTreeUi } from './editor-file-tree-ui.js?v=press-system-v3.4.136';
-import { createEditorStructurePanelUi } from './editor-structure-panel-ui.js?v=press-system-v3.4.136';
+import { findEditorContentTreeNode, flattenEditorContentTree } from './editor-content-tree.js?v=press-system-v3.4.137';
+import { createComposerEditorTreeState } from './composer-editor-tree-state.js?v=press-system-v3.4.137';
+import { createComposerEditorShell } from './composer-editor-shell.js?v=press-system-v3.4.137';
+import { createComposerEditorDetailPanelController } from './composer-editor-detail-panel-controller.js?v=press-system-v3.4.137';
+import { createEditorContentTreeController } from './editor-content-tree-controller.js?v=press-system-v3.4.137';
+import { createEditorFileTreeUi } from './editor-file-tree-ui.js?v=press-system-v3.4.137';
+import { createEditorStructurePanelUi } from './editor-structure-panel-ui.js?v=press-system-v3.4.137';
 
 const noop = () => {};
 

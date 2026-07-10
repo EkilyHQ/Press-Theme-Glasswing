@@ -8,13 +8,13 @@
 //   (e.g., `en`, `chs`, `ja`) describing `title` and `location`. Missing languages fall back to `default`.
 // - Friendly language names come from assets/i18n/languages.json (or the language module's metadata).
 
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.136';
-import { isEncryptedMarkdown } from './encrypted-content.js?v=press-system-v3.4.136';
-import { getContentRoot } from './utils.js?v=press-system-v3.4.136';
-import { parseYAML } from './yaml.js?v=press-system-v3.4.136';
-import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.136';
-import { buildLanguageAvailability } from './language-availability.js?v=press-system-v3.4.136';
-import enTranslations, { languageMeta as enLanguageMeta } from '../i18n/en.js?v=press-system-v3.4.136';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.137';
+import { isEncryptedMarkdown } from './encrypted-content.js?v=press-system-v3.4.137';
+import { getContentRoot } from './utils.js?v=press-system-v3.4.137';
+import { parseYAML } from './yaml.js?v=press-system-v3.4.137';
+import { getThemeRegion } from './theme-regions.js?v=press-system-v3.4.137';
+import { buildLanguageAvailability } from './language-availability.js?v=press-system-v3.4.137';
+import enTranslations, { languageMeta as enLanguageMeta } from '../i18n/en.js?v=press-system-v3.4.137';
 
 // Content fetch cache modes are normalized by cache-control.js.
 
@@ -77,7 +77,7 @@ async function fetchConfigWithYamlFallbackForRuntime(runtime, names) {
 }
 
 // Recovery releases keep legacy per-language sidecars readable for sites that
-// update directly from the declared v3.4.64 support floor. This fallback may be
+// update directly from the declared v3.4.63 support floor. This fallback may be
 // removed only after the support floor advances beyond sidecar-era sites.
 async function loadRecoveryContentSidecarWithRuntime(runtime, basePath, baseName, languageCandidates = null) {
   const state = runtime.state;
