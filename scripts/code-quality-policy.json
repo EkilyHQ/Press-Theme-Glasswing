@@ -31,6 +31,12 @@
       "command": "eslint . --max-warnings 0",
       "policy": "Repository tooling keeps every recommended rule enabled. Theme source excludes only the two measured legacy rules; all other recommended diagnostics fail CI."
     },
+    "inlineConfiguration": {
+      "decision": "forbidden",
+      "mechanism": "linterOptions.noInlineConfig",
+      "proofCommand": "node scripts/test-eslint-policy.mjs",
+      "policy": "Source comments cannot disable or reconfigure ESLint rules. The executable proof loads the real project configuration and confirms a used no-undef directive neither suppresses nor downgrades the severity-2 diagnostic."
+    },
     "removalCondition": "Remove an exclusion after an intentional theme cleanup makes its exact diagnostic count reach zero without changing the Press theme contract."
   },
   "prettier": {

@@ -41,6 +41,7 @@ for (const version of Object.values(packageJson.devDependencies)) {
 }
 assert.equal(packageJson.scripts?.lint, 'eslint . --max-warnings 0');
 assert.equal(packageJson.scripts?.['lint:debt-probe'], 'node scripts/probe-eslint-debt.mjs');
+assert.equal(packageJson.scripts?.['lint:policy'], 'node scripts/test-eslint-policy.mjs');
 assert.equal(packageJson.scripts?.['format:check'], 'node scripts/check-format.mjs');
 assert.equal(
   packageJson.scripts?.['security:html-sinks'],
@@ -48,7 +49,7 @@ assert.equal(
 );
 assert.equal(
   packageJson.scripts?.quality,
-  'node scripts/test-code-quality-config.mjs && npm run lint && npm run lint:debt-probe && npm run format:check && npm run security:html-sinks'
+  'node scripts/test-code-quality-config.mjs && npm run lint:policy && npm run lint && npm run lint:debt-probe && npm run format:check && npm run security:html-sinks'
 );
 
 const packageLock = readJson('package-lock.json');
@@ -73,6 +74,7 @@ assert.deepEqual(readJson('.prettierrc.json'), {
 
 const eslintConfig = read('eslint.config.mjs');
 assert.match(eslintConfig, /js\.configs\.recommended\.rules/u, 'ESLint recommended rules must remain enabled');
+assert.match(eslintConfig, /noInlineConfig:\s*true/u, 'source comments must not alter the project lint policy');
 assert.match(eslintConfig, /reportUnusedDisableDirectives:\s*'error'/u);
 assert.match(eslintConfig, /sourceType:\s*'commonjs'/u, 'existing .js tooling must remain CommonJS');
 assert.match(eslintConfig, /sourceType:\s*'module'/u, 'theme and .mjs tooling must parse as modules');
@@ -124,6 +126,23 @@ for (const record of policy.eslint.measuredRules) {
   assert.ok(record.evidence.length >= 32, `${record.rule} must retain reviewable evidence`);
 }
 assert.equal(policy.eslint?.noGrowth?.mechanism, 'zero-baseline');
+assert.deepEqual(policy.eslint?.inlineConfiguration, {
+  decision: 'forbidden',
+  mechanism: 'linterOptions.noInlineConfig',
+  proofCommand: 'node scripts/test-eslint-policy.mjs',
+  policy:
+    'Source comments cannot disable or reconfigure ESLint rules. The executable proof loads the real project configuration and confirms a used no-undef directive neither suppresses nor downgrades the severity-2 diagnostic.'
+});
+const eslintPolicyTest = read('scripts/test-eslint-policy.mjs');
+for (const token of [
+  'calculateConfigForFile',
+  'noInlineConfig',
+  'suppressedMessages',
+  "ruleId === 'no-undef'",
+  'severity'
+]) {
+  assert.ok(eslintPolicyTest.includes(token), `ESLint policy proof must retain ${token}`);
+}
 assert.equal(policy.prettier?.baseline?.file, 'scripts/prettier-baseline.json');
 assert.equal(policy.prettier?.baseline?.initialFiles, 10);
 assert.deepEqual(policy.prettier?.excludedGeneratedFiles, EXPECTED_FORMAT_EXCLUSIONS);
