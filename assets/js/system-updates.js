@@ -1,12 +1,12 @@
-import { mdParse } from './markdown.js?v=press-system-v3.4.137';
-import { renderPressMath } from './math-render.js?v=press-system-v3.4.137';
-import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.137';
-import { t } from './i18n.js?v=press-system-v3.4.137';
-import { bindEventEffect } from './editor-effects.js?v=press-system-v3.4.137';
-import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.137';
-import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.137';
-import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.137';
-import { parseYAML } from './yaml.js?v=press-system-v3.4.137';
+import { mdParse } from './markdown.js?v=press-system-v3.4.138';
+import { renderPressMath } from './math-render.js?v=press-system-v3.4.138';
+import { setSafeHtml } from './safe-html.js?v=press-system-v3.4.138';
+import { t } from './i18n.js?v=press-system-v3.4.138';
+import { bindEventEffect } from './editor-effects.js?v=press-system-v3.4.138';
+import { EDITOR_SHELL_IDS } from './editor-shell-contract.js?v=press-system-v3.4.138';
+import { buildConnectStatusUrl, CONNECT_SYSTEM_RELEASE_PATH } from './connect-status.js?v=press-system-v3.4.138';
+import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.138';
+import { parseYAML } from './yaml.js?v=press-system-v3.4.138';
 import {
   compareSemver,
   isUpgradeAllowed,
@@ -18,14 +18,14 @@ import {
   normalizeUpgradeFrom,
   SECURITY_UPDATE_REQUIRED_VERSION,
   semverToTag
-} from './press-version.js?v=press-system-v3.4.137';
-import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.137';
+} from './press-version.js?v=press-system-v3.4.138';
+import { isPressSystemUpdatePath } from './press-system-surface.mjs?v=press-system-v3.4.138';
 import {
   getLegacyContentModelMigrationFiles,
   loadLegacyContentModelMigration
-} from './content-model-migration.js?v=press-system-v3.4.137';
-import { normalizeThemeRegistry, sanitizeThemeSlug } from './theme-package-core.js?v=press-system-v3.4.137';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.137';
+} from './content-model-migration.js?v=press-system-v3.4.138';
+import { normalizeThemeRegistry, sanitizeThemeSlug } from './theme-package-core.js?v=press-system-v3.4.138';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.138';
 
 const TEXT_EXTENSIONS = new Set([
   '.js', '.mjs', '.cjs', '.ts', '.json', '.yaml', '.yml', '.md', '.txt', '.html', '.css', '.svg', '.xml',

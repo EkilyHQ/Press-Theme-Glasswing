@@ -1,10 +1,10 @@
 // seo.js - Dynamic SEO meta tag management for client-side routing
 // This maintains SEO benefits while keeping the "no compilation needed" philosophy
 
-import { getCurrentLang, DEFAULT_LANG, getAvailableLangs } from './i18n.js?v=press-system-v3.4.137';
-import { parseFrontMatter } from './content.js?v=press-system-v3.4.137';
-import { isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.137';
-import { buildLanguageAvailability, collectContentLanguages, normalizeLanguageCode } from './language-availability.js?v=press-system-v3.4.137';
+import { getCurrentLang, DEFAULT_LANG, getAvailableLangs } from './i18n.js?v=press-system-v3.4.138';
+import { parseFrontMatter } from './content.js?v=press-system-v3.4.138';
+import { isSiteFeatureEnabled } from './site-features.js?v=press-system-v3.4.138';
+import { buildLanguageAvailability, collectContentLanguages, normalizeLanguageCode } from './language-availability.js?v=press-system-v3.4.138';
 
 const SITEMAP_METADATA_KEYS = new Set([
   '__order',

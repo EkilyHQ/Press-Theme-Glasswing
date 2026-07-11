@@ -1,4 +1,4 @@
-import { createEditorMainSidebarFileTree } from './editor-main-sidebar-file-tree.js?v=press-system-v3.4.137';
+import { createEditorMainSidebarFileTree } from './editor-main-sidebar-file-tree.js?v=press-system-v3.4.138';
 
 function fallbackNormalizeLangKey(value) {
   return String(value || '').trim().toLowerCase();

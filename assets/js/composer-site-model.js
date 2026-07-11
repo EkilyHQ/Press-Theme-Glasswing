@@ -2,15 +2,15 @@ import {
   SITE_FEATURE_KEYS,
   normalizeSiteFeatureSettings,
   siteFeatureSettingsForOutput
-} from './site-features.js?v=press-system-v3.4.137';
+} from './site-features.js?v=press-system-v3.4.138';
 import {
   normalizeThemeSettingsMap,
   themeSettingsForOutput
-} from './theme-settings.js?v=press-system-v3.4.137';
+} from './theme-settings.js?v=press-system-v3.4.138';
 import {
   normalizePublicLanguageSettings,
   publicLanguageSettingsForOutput
-} from './language-availability.js?v=press-system-v3.4.137';
+} from './language-availability.js?v=press-system-v3.4.138';
 
 function deepClone(value) {
   try {

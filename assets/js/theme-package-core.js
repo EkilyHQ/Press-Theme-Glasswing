@@ -1,4 +1,4 @@
-import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.137';
+import { loadPressSystemManifest, satisfiesSemverRange } from './press-version.js?v=press-system-v3.4.138';
 import {
   PRESS_THEME_CONTRACT,
   getDefaultThemeStyles,
@@ -10,16 +10,16 @@ import {
   getThemeArchiveAllowedExtensions,
   getThemeTextExtensions,
   isPressThemeContractVersionSupported
-} from './theme-contract-surface.mjs?v=press-system-v3.4.137';
-import { validateThemeConfigSchema } from './theme-settings.js?v=press-system-v3.4.137';
+} from './theme-contract-surface.mjs?v=press-system-v3.4.138';
+import { validateThemeConfigSchema } from './theme-settings.js?v=press-system-v3.4.138';
 import {
   canParseV4RouteGuardSource,
   collectV4RouteGuardFacts,
   containsForbiddenV4RouteConstructionAst
-} from './theme-route-guard.js?v=press-system-v3.4.137';
-import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.137';
+} from './theme-route-guard.js?v=press-system-v3.4.138';
+import { unzipSync, strFromU8 } from './vendor/fflate.browser.js?v=press-system-v3.4.138';
 
-export { validateThemeConfigSchema } from './theme-settings.js?v=press-system-v3.4.137';
+export { validateThemeConfigSchema } from './theme-settings.js?v=press-system-v3.4.138';
 
 export const REQUIRED_THEME_CONTRACT_VERSION = PRESS_THEME_CONTRACT.contractVersion;
 

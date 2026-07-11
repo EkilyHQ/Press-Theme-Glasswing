@@ -1,12 +1,12 @@
-import { ensurePublishGrant, publishCommit as publishStagedCommit } from './publish/commit-service.js?v=press-system-v3.4.137';
-import { waitForRemotePropagation as waitForPublishedFiles } from './publish/propagation-watcher.js?v=press-system-v3.4.137';
-import { waitForConnectPublishPropagation } from './publish/transports/connect-transport.js?v=press-system-v3.4.137';
+import { ensurePublishGrant, publishCommit as publishStagedCommit } from './publish/commit-service.js?v=press-system-v3.4.138';
+import { waitForRemotePropagation as waitForPublishedFiles } from './publish/propagation-watcher.js?v=press-system-v3.4.138';
+import { waitForConnectPublishPropagation } from './publish/transports/connect-transport.js?v=press-system-v3.4.138';
 import {
   createPublishReceipt,
   createPublishReceiptStore,
   PUBLISH_STATES,
   transitionPublishReceipt
-} from './publish/publish-receipt.js?v=press-system-v3.4.137';
+} from './publish/publish-receipt.js?v=press-system-v3.4.138';
 
 function resolveAmbientFunction(name) {
   try {
