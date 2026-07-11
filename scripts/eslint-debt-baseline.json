@@ -63,9 +63,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:setupFooter/callback:button.addEventListener('click')#2",
+      "owner": "function:setupFooter/callback:button.addEventListener(literal:\"click\")#2",
       "ownerPath": "body[55]/body/body[9]/consequent/body[1]/expression/arguments[1]/body/body[0]/handler/body/body[0]/handler/body",
-      "fingerprint": "sha256:fe4cc89980472923bca3af1c5bca876ff5a9daec39ea7f208a22b48719c231a2",
+      "fingerprint": "sha256:7b77863ff5feb3ad9d164b95c4dfc0742412652cd6cb50210dd65deab65b550c",
       "occurrence": 1
     },
     {
@@ -93,9 +93,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[0]/handler/body",
-      "fingerprint": "sha256:c1a02ae704ffee26153ce8006ee2295ed98b7e5da9fbb22ca03725f99bc3c46d",
+      "fingerprint": "sha256:15ea44de473d9c0ef6c030b5dc644bd8aac93dc55136bf6ebdf5493041f9c70f",
       "occurrence": 1
     },
     {
@@ -103,9 +103,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[1]/handler/body",
-      "fingerprint": "sha256:dcb54072c9133f1118abd296f9b86f1b8ff74c8df9965c6ebee026bc1d336d15",
+      "fingerprint": "sha256:769d2258b11a2cdbdf189802386a2c2333c5017fcfb7537a1604625be1f9546d",
       "occurrence": 1
     },
     {
@@ -113,9 +113,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[2]/handler/body",
-      "fingerprint": "sha256:6cc7409e3fdadce70cc7cd692cf37ebf001ac0713f0246b393a1b7f8d4d5983f",
+      "fingerprint": "sha256:b1a89dfe1348b924d374c788bce311fff455a8d160309ea9a1156a97056d2044",
       "occurrence": 1
     },
     {
@@ -123,9 +123,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[1]/handler/body",
-      "fingerprint": "sha256:b7af55d11562c639270b6c96144fa430fcc773526ae80db3cd61f6f486672d02",
+      "fingerprint": "sha256:805e8ca61d105fbce68cb9e0262d61a61359d3f164b0a75f3295a4c7aa789fdf",
       "occurrence": 1
     },
     {
@@ -133,9 +133,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[2]/handler/body",
-      "fingerprint": "sha256:d0d0ba44ae41c13a7f7b8af6d6229a1f790c30263575ca40c88f774a937f6731",
+      "fingerprint": "sha256:04c8f4417edfcee898bbaf2b5d78ae080a3e6fc0dca67fd5c00287a40d5e830f",
       "occurrence": 1
     },
     {
@@ -143,9 +143,9 @@
       "rule": "no-empty",
       "messageId": "unexpected",
       "message": "Empty block statement.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[3]/handler/body",
-      "fingerprint": "sha256:cec645442abd4aa9fc306734890cc793d5047984efca8b9a82150f46d715ae09",
+      "fingerprint": "sha256:95dd8ed1b8b505c566150bda3307000c075a221ff1ee28eae5f8d0b2c2480460",
       "occurrence": 1
     },
     {
@@ -263,9 +263,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:setupFooter/callback:button.addEventListener('click')#2",
+      "owner": "function:setupFooter/callback:button.addEventListener(literal:\"click\")#2",
       "ownerPath": "body[55]/body/body[9]/consequent/body[1]/expression/arguments[1]/body/body[0]/handler/param",
-      "fingerprint": "sha256:9564e7279f34a7fe8427bdb9a7a12383ddd629b96a77dc154f9642c15d97e1d9",
+      "fingerprint": "sha256:5b12b6579f95efd0e4df0fe53caab2dcdc522e29dfa3461a56b106421d3ccca1",
       "occurrence": 1
     },
     {
@@ -293,9 +293,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[0]/handler/param",
-      "fingerprint": "sha256:90b77c39147e3f6f0021fa11bbbef039f604bf309e9bcd641babad9c575fd294",
+      "fingerprint": "sha256:ff3bba96506fa0494b9c0ab1eb143c06cb0ec6c5b0cd009e35bfaba78b792cee",
       "occurrence": 1
     },
     {
@@ -303,9 +303,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[1]/handler/param",
-      "fingerprint": "sha256:a9b859511dee4401946a6ecd220c96c0dbc844d83a7b594b0325de25dc645326",
+      "fingerprint": "sha256:d75a50c1948e03b10d2bde8f03267e976bc7058df3412c4b171d7b4a21ab1e2b",
       "occurrence": 1
     },
     {
@@ -313,9 +313,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[2]/handler/param",
-      "fingerprint": "sha256:ac11954d9da5850957a9aae06c72afeab8902914ac5aa473c705dad59d755910",
+      "fingerprint": "sha256:edf766c868d8acc801c4603b0abdd1be1e9a21a305588fa63b32e509abeed807",
       "occurrence": 1
     },
     {
@@ -323,9 +323,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[1]/handler/param",
-      "fingerprint": "sha256:4ed3c1d369c61b48021b981193a48402519872c8f2a5658be3c9e0b660f505c4",
+      "fingerprint": "sha256:a4429f8c7f29d3566fad429fa78ccaee0505785d82e8c717ecf510f0ac03bf41",
       "occurrence": 1
     },
     {
@@ -333,9 +333,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[2]/handler/param",
-      "fingerprint": "sha256:045e859c8665761e2e05152ba468a16e7c096060e2a7957a336f247db730d1a5",
+      "fingerprint": "sha256:0b75e0f0d1d20a547f9adc274ae5f4bf603927ebf8a750d961ef20b1e66983ae",
       "occurrence": 1
     },
     {
@@ -343,9 +343,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'_' is defined but never used.",
-      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll(literal:\"[data-glasswing-brand], [data-glasswing-footer-brand]\").forEach()#1",
       "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[3]/handler/param",
-      "fingerprint": "sha256:d4e2d88b58f77b3699b1ff16ceef54b1729d744147e66b1a100b8ac9baaea9c3",
+      "fingerprint": "sha256:4987f0083face4a1a9e191768cfad41e7a0237003f7ae70636b368e977b16952",
       "occurrence": 1
     },
     {
@@ -363,9 +363,9 @@
       "rule": "no-unused-vars",
       "messageId": "unusedVar",
       "message": "'__' is defined but never used.",
-      "owner": "function:setupFooter/callback:button.addEventListener('click')#2",
+      "owner": "function:setupFooter/callback:button.addEventListener(literal:\"click\")#2",
       "ownerPath": "body[55]/body/body[9]/consequent/body[1]/expression/arguments[1]/body/body[0]/handler/body/body[0]/handler/param",
-      "fingerprint": "sha256:973a3b468f70e4a23da1bae5a72441c9d050e3b9f5d29c0278ed6e54c03bcb46",
+      "fingerprint": "sha256:af6054bf8a50727382e3b0d78c4dd2bc040ff8c83a455877df3e346fa63a21aa",
       "occurrence": 1
     },
     {

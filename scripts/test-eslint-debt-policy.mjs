@@ -214,6 +214,67 @@ assert.ok(
   'same-count debt moved between identical callback call sites must fail the exact baseline'
 );
 
+const firstComputedCallbackDebt = scanJavaScriptSource({
+  filePath: 'theme/modules/computed-callback.js',
+  source: `export function run(items, first, second) { items[first](() => { const dormant = 1; }); }`
+});
+const secondComputedCallbackDebt = scanJavaScriptSource({
+  filePath: 'theme/modules/computed-callback.js',
+  source: `export function run(items, first, second) { items[second](() => { const dormant = 1; }); }`
+});
+assert.notEqual(
+  firstComputedCallbackDebt[0].owner,
+  secondComputedCallbackDebt[0].owner,
+  'computed callback callees must retain the semantic property expression in their owner identity'
+);
+assert.ok(
+  verifyBaselineTransition(createBaseline(firstComputedCallbackDebt), createBaseline(secondComputedCallbackDebt)).some(
+    (error) => /ESLint debt baseline growth is forbidden/u.test(error)
+  ),
+  'same-position debt moved between computed callback callees must fail the exact baseline'
+);
+
+const firstNestedCallbackDebt = scanJavaScriptSource({
+  filePath: 'theme/modules/nested-callback.js',
+  source: `export function run(alpha, beta) { return alpha(() => () => { const dormant = 1; }); }`
+});
+const secondNestedCallbackDebt = scanJavaScriptSource({
+  filePath: 'theme/modules/nested-callback.js',
+  source: `export function run(alpha, beta) { return beta(() => () => { const dormant = 1; }); }`
+});
+assert.notEqual(
+  firstNestedCallbackDebt[0].owner,
+  secondNestedCallbackDebt[0].owner,
+  'nested anonymous functions must retain every enclosing semantic callback call-site anchor'
+);
+assert.ok(
+  verifyBaselineTransition(createBaseline(firstNestedCallbackDebt), createBaseline(secondNestedCallbackDebt)).some(
+    (error) => /ESLint debt baseline growth is forbidden/u.test(error)
+  ),
+  'same-position debt moved between outer nested callback callees must fail the exact baseline'
+);
+
+const callbackQuoteSource = `export function run(alpha) { alpha("click", () => { const dormant = 1; }); }`;
+const formattedCallbackQuoteSource = await prettier.format(callbackQuoteSource, {
+  parser: 'babel',
+  printWidth: 120,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'none'
+});
+assert.deepEqual(
+  createBaseline(
+    scanJavaScriptSource({ filePath: 'theme/modules/callback-quote-stability.js', source: callbackQuoteSource })
+  ),
+  createBaseline(
+    scanJavaScriptSource({
+      filePath: 'theme/modules/callback-quote-stability.js',
+      source: formattedCallbackQuoteSource
+    })
+  ),
+  'callback identities must normalize preceding literal arguments across Prettier quote changes'
+);
+
 const unformattedDebtSource = `export function render( ){try{run()}catch(_){}const dormant=1;return true}`;
 const formattedDebtSource = await prettier.format(unformattedDebtSource, {
   parser: 'babel',

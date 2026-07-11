@@ -174,6 +174,19 @@ const indirectDocumentWrites = scanJavaScriptSource({
   source: `
     const boundWrite = document.write.bind(document);
     const { writeln: detachedWriteln } = frame.contentDocument;
+    let assignedWrite;
+    ({ write: assignedWrite } = document);
+    let assignedWriteln;
+    ({ writeln: assignedWriteln } = frame.ownerDocument);
+    let assignedOwnerDocument;
+    ({ ownerDocument: assignedOwnerDocument } = frame);
+    let assignedContentDocument;
+    ({ contentDocument: assignedContentDocument } = frame);
+    let assignedDefaultDocument;
+    ({ document: assignedDefaultDocument = frame.ownerDocument } = frame);
+    let directlyAssignedDocument;
+    directlyAssignedDocument = frame.ownerDocument;
+    let initializedDocument = frame.contentDocument;
     export function render(frame, node, { ownerDocument: parameterDocument }, markup) {
       const { ownerDocument: contextDocument } = node;
       const { contentDocument } = frame;
@@ -183,6 +196,13 @@ const indirectDocumentWrites = scanJavaScriptSource({
       contextDocument.write(markup);
       contentDocument.writeln(markup);
       parameterDocument.write(markup);
+      assignedWrite(markup);
+      assignedWriteln(markup);
+      assignedOwnerDocument.write(markup);
+      assignedContentDocument.writeln(markup);
+      assignedDefaultDocument.write(markup);
+      directlyAssignedDocument.write(markup);
+      initializedDocument.writeln(markup);
       const reflectedWrite = Reflect.get(frame.ownerDocument, 'write');
       return [boundWrite, detachedWriteln, reflectedWrite];
     }
@@ -196,12 +216,44 @@ assert.deepEqual(
     'document-write-call',
     'document-write-call',
     'document-write-call',
+    'document-write-call',
+    'document-write-call',
+    'document-write-call',
+    'document-write-call',
+    'document-write-call',
     'html-native-sink-indirect-reference:document.write',
     'html-native-sink-indirect-reference:document.write',
+    'html-native-sink-indirect-reference:document.write',
+    'html-native-sink-indirect-reference:document.writeln',
     'html-native-sink-indirect-reference:document.writeln',
     'html-native-sink-indirect-reference:document.writeln'
   ].sort(),
   'document write aliases, call indirection, reflective lookup, contentDocument, and ownerDocument must fail closed'
+);
+
+const documentExpressionAliases = scanJavaScriptSource({
+  filePath: 'theme/modules/document-expression-aliases.js',
+  source: `
+    export function render(frame, flag, textTarget, markup) {
+      const logicalDocument = frame.contentDocument || document;
+      const conditionalDocument = flag ? frame.ownerDocument : document;
+      const sequenceDocument = (prepare(), frame.contentDocument);
+      const safeSequence = (document, textTarget);
+      const [arrayDocument] = [frame.ownerDocument];
+      const [defaultDocument = document] = [];
+      logicalDocument.write(markup);
+      conditionalDocument.writeln(markup);
+      sequenceDocument.write(markup);
+      safeSequence.write(markup);
+      arrayDocument.writeln(markup);
+      defaultDocument.write(markup);
+    }
+  `
+});
+assert.deepEqual(
+  documentExpressionAliases.map(({ kind }) => kind),
+  ['document-write-call', 'document-write-call', 'document-write-call', 'document-write-call', 'document-write-call'],
+  'logical, conditional, result-sequence, matched array, and defaulted array document aliases must classify while a safe final sequence value stays clean'
 );
 
 const dynamicParserMimes = scanJavaScriptSource({
@@ -312,6 +364,44 @@ assert.deepEqual(
     'html-reflection-helper-indirect-reference:Reflect.set'
   ].sort(),
   'const and destructured Reflect/Object helper aliases, aliased payloads, spreads, and defineProperties must be classified'
+);
+
+const reflectGetHelpers = scanJavaScriptSource({
+  filePath: 'theme/modules/reflect-get-helpers.js',
+  source: `
+    const assign = Reflect.get(Object, 'assign');
+    const setter = Reflect.get(Reflect, 'set');
+    export function reflect(target, markup) {
+      Reflect.get(Object, 'assign')(target, { innerHTML: markup });
+      assign(target, { outerHTML: markup });
+      Reflect.get(Reflect, 'set')(target, 'srcdoc', markup);
+      setter.call(Reflect, target, 'innerHTML', markup);
+      Reflect.get(Object, 'defineProperty').apply(Object, [target, 'outerHTML', { value: markup }]);
+      Reflect.get(Object, 'keys')({ innerHTML: markup });
+    }
+  `
+});
+for (const expectedKind of [
+  'Object.assign-innerHTML',
+  'Object.assign-outerHTML',
+  'Object.defineProperty-outerHTML',
+  'Reflect.set-innerHTML',
+  'Reflect.set-srcdoc',
+  'html-reflection-helper-apply:Object.defineProperty',
+  'html-reflection-helper-call:Reflect.set',
+  'html-reflection-helper-indirect-reference:Object.assign',
+  'html-reflection-helper-indirect-reference:Object.defineProperty',
+  'html-reflection-helper-indirect-reference:Reflect.set'
+]) {
+  assert.ok(
+    reflectGetHelpers.some(({ kind }) => kind === expectedKind),
+    `Reflect.get helper retrieval must retain ${expectedKind}`
+  );
+}
+assert.equal(
+  reflectGetHelpers.some(({ kind }) => kind.includes('Object.keys')),
+  false,
+  'Reflect.get(Object, keys) must remain a safe negative control'
 );
 
 const repeatedAliasedPayload = scanJavaScriptSource({
@@ -632,6 +722,60 @@ assert.notEqual(
   'identical callback owners must retain distinct full-file call-site AST paths'
 );
 
+const alphaCallbackSink = scanJavaScriptSource({
+  filePath: 'theme/modules/callback-owner.js',
+  source: `export function run(alpha, beta, node, markup) { alpha(() => { node.innerHTML = markup; }); }`
+});
+const betaCallbackSink = scanJavaScriptSource({
+  filePath: 'theme/modules/callback-owner.js',
+  source: `export function run(alpha, beta, node, markup) { beta(() => { node.innerHTML = markup; }); }`
+});
+assert.notEqual(
+  alphaCallbackSink[0].owner,
+  betaCallbackSink[0].owner,
+  'anonymous callbacks nested inside named functions must retain their semantic call-site owner anchor'
+);
+assert.notEqual(
+  alphaCallbackSink[0].fingerprint,
+  betaCallbackSink[0].fingerprint,
+  'same-position sinks moved between callback callees must change exact identity'
+);
+
+const alphaNestedCallbackSink = scanJavaScriptSource({
+  filePath: 'theme/modules/nested-callback-owner.js',
+  source: `export function run(alpha, beta, node, markup) { return alpha(() => () => { node.innerHTML = markup; }); }`
+});
+const betaNestedCallbackSink = scanJavaScriptSource({
+  filePath: 'theme/modules/nested-callback-owner.js',
+  source: `export function run(alpha, beta, node, markup) { return beta(() => () => { node.innerHTML = markup; }); }`
+});
+assert.notEqual(
+  alphaNestedCallbackSink[0].owner,
+  betaNestedCallbackSink[0].owner,
+  'nested anonymous functions must retain every enclosing callback call-site anchor'
+);
+
+const callbackQuoteSource = `obj["listen"](() => { target.innerHTML = markup; });`;
+const formattedCallbackQuoteSource = await prettier.format(callbackQuoteSource, {
+  parser: 'babel',
+  printWidth: 120,
+  semi: true,
+  singleQuote: true,
+  trailingComma: 'none'
+});
+assert.deepEqual(
+  withoutLocations(
+    scanJavaScriptSource({ filePath: 'theme/modules/callback-quote-stability.js', source: callbackQuoteSource })
+  ),
+  withoutLocations(
+    scanJavaScriptSource({
+      filePath: 'theme/modules/callback-quote-stability.js',
+      source: formattedCallbackQuoteSource
+    })
+  ),
+  'callback callee identities must normalize computed literal quoting across Prettier formatting'
+);
+
 const headerStableSource = `export function render(node, markup) { node.innerHTML = markup; }`;
 assert.deepEqual(
   withoutLocations(scanJavaScriptSource({ filePath: 'theme/modules/header-stability.js', source: headerStableSource })),
@@ -646,31 +790,33 @@ assert.deepEqual(
 
 const policy = JSON.parse(await readFile(path.join(SCRIPT_DIR, 'html-sink-policy.json'), 'utf8'));
 const inventory = await scanRepository({ wrappers: policy.wrappers });
-const glasswingSource = await readFile(path.join(SCRIPT_DIR, '..', 'theme/modules/glasswing.js'), 'utf8');
-const formattedGlasswingSource = await prettier.format(glasswingSource, {
-  parser: 'babel',
-  printWidth: 120,
-  semi: true,
-  singleQuote: true,
-  trailingComma: 'none'
-});
-assert.deepEqual(
-  withoutLocations(
-    scanJavaScriptSource({
-      filePath: 'theme/modules/glasswing.js',
-      source: glasswingSource,
-      wrapperNames: policy.wrappers.map(({ name }) => name)
-    })
-  ),
-  withoutLocations(
-    scanJavaScriptSource({
-      filePath: 'theme/modules/glasswing.js',
-      source: formattedGlasswingSource,
-      wrapperNames: policy.wrappers.map(({ name }) => name)
-    })
-  ),
-  'the exact Glasswing sink inventory must remain stable when the touched-legacy Prettier rule formats its theme file'
-);
+for (const filePath of ['theme/modules/glasswing.js']) {
+  const glasswingSource = await readFile(path.join(SCRIPT_DIR, '..', filePath), 'utf8');
+  const formattedGlasswingSource = await prettier.format(glasswingSource, {
+    parser: 'babel',
+    printWidth: 120,
+    semi: true,
+    singleQuote: true,
+    trailingComma: 'none'
+  });
+  assert.deepEqual(
+    withoutLocations(
+      scanJavaScriptSource({
+        filePath,
+        source: glasswingSource,
+        wrapperNames: policy.wrappers.map(({ name }) => name)
+      })
+    ),
+    withoutLocations(
+      scanJavaScriptSource({
+        filePath,
+        source: formattedGlasswingSource,
+        wrapperNames: policy.wrappers.map(({ name }) => name)
+      })
+    ),
+    `the exact Glasswing sink inventory must remain stable when Prettier formats ${filePath}`
+  );
+}
 assert.deepEqual(verifyInventory(inventory, policy), [], 'the checked-in exact sink inventory must match theme source');
 
 const changedInventory = structuredClone(inventory);

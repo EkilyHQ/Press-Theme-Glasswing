@@ -45,17 +45,41 @@ function expressionLabel(node, sourceCode) {
     return `literal:${JSON.stringify(current.quasis.map((quasi) => quasi.value.cooked ?? quasi.value.raw).join(''))}`;
   }
   if (current?.type === 'MemberExpression') {
-    return `${expressionLabel(current.object, sourceCode)}.${memberPropertyName(current) || '(computed)'}`;
+    if (current.computed) {
+      return `${expressionLabel(current.object, sourceCode)}[${expressionLabel(current.property, sourceCode)}]`;
+    }
+    return `${expressionLabel(current.object, sourceCode)}.${memberPropertyName(current) || '(missing)'}`;
   }
-  if (current?.type === 'CallExpression') return `${expressionLabel(current.callee, sourceCode)}()`;
-  return normalizeText(sourceCode, current);
+  if (current?.type === 'CallExpression') {
+    return `${expressionLabel(current.callee, sourceCode)}(${current.arguments
+      .map((argument) => expressionLabel(argument, sourceCode))
+      .join(',')})`;
+  }
+  const normalize = (value) => {
+    if (value === null || typeof value !== 'object') {
+      return typeof value === 'bigint' ? `bigint:${value}` : value;
+    }
+    if (Array.isArray(value)) return value.map(normalize);
+    if (value instanceof RegExp) return { flags: value.flags, source: value.source };
+    const normalized = {};
+    for (const key of Object.keys(value).sort()) {
+      if (['comments', 'end', 'loc', 'parent', 'range', 'raw', 'start', 'tokens'].includes(key)) continue;
+      if (typeof value[key] === 'function' || value[key] === undefined) continue;
+      normalized[key] = normalize(value[key]);
+    }
+    return normalized;
+  };
+  const digest = createHash('sha256')
+    .update(JSON.stringify(normalize(current)))
+    .digest('hex');
+  return `expression:${current?.type || 'unknown'}:${digest}`;
 }
 
 function propertyName(property, sourceCode) {
   if (!property || (property.type !== 'Property' && property.type !== 'MethodDefinition')) return '';
   if (!property.computed && property.key?.type === 'Identifier') return property.key.name;
   if (property.key?.type === 'Literal' && typeof property.key.value === 'string') return property.key.value;
-  return normalizeText(sourceCode, property.key);
+  return expressionLabel(property.key, sourceCode);
 }
 
 function ownerFor(sourceCode, node) {
@@ -73,26 +97,28 @@ function ownerFor(sourceCode, node) {
       } else if (current.type === 'FunctionDeclaration') {
         labels.push(`function:${current.id?.name || '<anonymous>'}`);
       } else if (current.type === 'VariableDeclarator') {
-        labels.push(`variable:${normalizeText(sourceCode, current.id)}`);
+        labels.push(`variable:${expressionLabel(current.id, sourceCode)}`);
       } else if (current.type === 'AssignmentExpression') {
-        labels.push(`assignment:${normalizeText(sourceCode, current.left)}`);
+        labels.push(`assignment:${expressionLabel(current.left, sourceCode)}`);
       } else if (current.type === 'Property') {
         labels.push(`property:${propertyName(current, sourceCode) || '(computed)'}`);
       } else if (current.type === 'MethodDefinition') {
         labels.push(`method:${propertyName(current, sourceCode) || '(computed)'}`);
       }
-    }
-    const parent = ancestors[index - 1];
-    if (parent?.type === 'CallExpression') {
-      const argumentIndex = parent.arguments.indexOf(candidate);
-      if (argumentIndex >= 0) {
-        const precedingArguments = parent.arguments
-          .slice(0, argumentIndex)
-          .map((argument) => normalizeText(sourceCode, argument))
-          .join(', ');
-        labels.push(
-          `callback:${expressionLabel(parent.callee, sourceCode)}(${precedingArguments})#${argumentIndex + 1}`
-        );
+      if (['ArrowFunctionExpression', 'FunctionExpression'].includes(current.type)) {
+        const parent = ancestors[ownerIndex - 1];
+        if (parent?.type === 'CallExpression') {
+          const argumentIndex = parent.arguments.indexOf(current);
+          if (argumentIndex >= 0) {
+            const precedingArguments = parent.arguments
+              .slice(0, argumentIndex)
+              .map((argument) => expressionLabel(argument, sourceCode))
+              .join(',');
+            labels.push(
+              `callback:${expressionLabel(parent.callee, sourceCode)}(${precedingArguments})#${argumentIndex + 1}`
+            );
+          }
+        }
       }
     }
     if (candidate.type !== 'FunctionDeclaration' && labels.length === 0) {
