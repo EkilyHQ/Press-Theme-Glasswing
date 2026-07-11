@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "scope": "Glasswing first-party theme source and repository tooling",
+  "eslint": {
+    "profile": "@eslint/js recommended",
+    "measuredRules": [
+      {
+        "rule": "no-empty",
+        "decision": "accepted-no-action",
+        "observedDiagnostics": 15,
+        "observedAffectedFiles": 1,
+        "evidence": "Intentional best-effort browser cleanup and compatibility fallbacks keep the primary rendering operation available when optional DOM operations fail."
+      },
+      {
+        "rule": "no-unused-vars",
+        "decision": "accepted-no-action",
+        "observedDiagnostics": 22,
+        "observedAffectedFiles": 1,
+        "evidence": "The theme contract retains callback and renderer signatures supplied by Press even when Glasswing does not consume every argument locally."
+      },
+      {
+        "rule": "no-useless-assignment",
+        "decision": "enforced-zero-baseline",
+        "observedDiagnostics": 0,
+        "observedAffectedFiles": 0,
+        "evidence": "The current source has no useless assignments, so the recommended rule remains enabled while the evidence probe guards the measured zero."
+      }
+    ],
+    "noGrowth": {
+      "mechanism": "merge-base-only-shrinking-exact-diagnostic-baseline",
+      "command": "node scripts/test-eslint-debt-policy.mjs && node scripts/probe-eslint-debt.mjs",
+      "policy": "Root-level and scripts tooling keep every recommended rule enabled. Theme source excludes only the two measured legacy rules; all 37 path, rule, message, full lexical owner, full-file AST path with array ordinals, and normalized diagnostic-context fingerprints must match exactly and may only shrink relative to the merge base. All other recommended diagnostics fail CI."
+    },
+    "inlineConfiguration": {
+      "decision": "forbidden",
+      "mechanism": "linterOptions.noInlineConfig",
+      "proofCommand": "node scripts/test-eslint-policy.mjs",
+      "policy": "Source comments cannot disable or reconfigure ESLint rules. The executable proof loads the real project configuration and confirms a used no-undef directive neither suppresses nor downgrades the severity-2 diagnostic."
+    },
+    "removalCondition": "Remove an exclusion after an intentional theme cleanup makes its exact diagnostic count reach zero without changing the Press theme contract.",
+    "diagnosticBaseline": {
+      "file": "scripts/eslint-debt-baseline.json",
+      "decision": "exact-owner-context-fingerprint-baseline-with-zero-growth",
+      "initialDiagnostics": 37,
+      "identity": "path, rule, messageId, message, full lexical owner, full-file AST path with array ordinals, normalized diagnostic-context fingerprint, and duplicate occurrence",
+      "bootstrap": "The initial baseline must be a subset of diagnostics independently recomputed from the exact merge-base theme source; a same-count owner or context swap is forbidden."
+    }
+  },
+  "prettier": {
+    "baseline": {
+      "file": "scripts/prettier-baseline.json",
+      "initialFiles": 10
+    },
+    "excludedGeneratedFiles": ["theme-release.example.json", "theme-release.json", "theme/theme.json"],
+    "noGrowth": {
+      "mechanism": "merge-base-shrinking-file-baseline",
+      "baseRefEnvironmentVariable": "CODE_QUALITY_BASE_REF",
+      "headShaEnvironmentVariable": "CODE_QUALITY_HEAD_SHA",
+      "policy": "New candidate files must pass Prettier. A changed legacy file must be formatted and removed from the baseline; only exact-content renames may transfer baseline ownership."
+    }
+  },
+  "htmlSinks": {
+    "decision": "reviewed-exact-fingerprint-baseline-with-zero-growth",
+    "policyFile": "scripts/html-sink-policy.json",
+    "scope": "theme/**/*.js and theme/**/*.mjs",
+    "policy": "Every known HTML write or parser sink is classified by path, full lexical owner, full-file AST path with array ordinals, kind, normalized semantic AST fingerprint, disposition, and rationale. The first policy must be a subset of sinks independently recomputed from the exact merge-base theme source; after that, approved keys may only shrink and established wrapper names cannot be removed or renamed. Opaque computed assignment/call properties, wrapper and native sink aliases, binds, calls, exports, callbacks, destructured document references, and dynamic parser MIME values fail closed. Reflect and Object helper aliases, bind/call/apply invocation forms, descriptor-extracted HTML setters, opaque properties or payloads, const or spread Object.assign payloads, defineProperty, and defineProperties HTML-property writes are explicit sinks."
+  }
+}
