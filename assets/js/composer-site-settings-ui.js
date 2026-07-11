@@ -1,14 +1,14 @@
-import { createComposerSiteSettingsControls } from './composer-site-settings-controls.js?v=press-system-v3.4.138';
-import { createComposerSiteSettingsConfigGrids } from './composer-site-settings-config-grids.js?v=press-system-v3.4.138';
-import { createComposerSiteSettingsLinkList } from './composer-site-settings-link-list.js?v=press-system-v3.4.138';
-import { createComposerSiteSettingsLocalizedFields } from './composer-site-settings-localized-fields.js?v=press-system-v3.4.138';
-import { createComposerSiteSettingsRepoSection } from './composer-site-settings-repo-section.js?v=press-system-v3.4.138';
-import { createComposerSiteSettingsSchema } from './composer-site-settings-schema.js?v=press-system-v3.4.138';
-import { createComposerSiteSettingsSingleGrids } from './composer-site-settings-single-grids.js?v=press-system-v3.4.138';
+import { createComposerSiteSettingsControls } from './composer-site-settings-controls.js?v=press-system-v3.4.139';
+import { createComposerSiteSettingsConfigGrids } from './composer-site-settings-config-grids.js?v=press-system-v3.4.139';
+import { createComposerSiteSettingsLinkList } from './composer-site-settings-link-list.js?v=press-system-v3.4.139';
+import { createComposerSiteSettingsLocalizedFields } from './composer-site-settings-localized-fields.js?v=press-system-v3.4.139';
+import { createComposerSiteSettingsRepoSection } from './composer-site-settings-repo-section.js?v=press-system-v3.4.139';
+import { createComposerSiteSettingsSchema } from './composer-site-settings-schema.js?v=press-system-v3.4.139';
+import { createComposerSiteSettingsSingleGrids } from './composer-site-settings-single-grids.js?v=press-system-v3.4.139';
 import {
   cleanupComposerSiteSettingsSectionNav,
   createComposerSiteSettingsSectionNav
-} from './composer-site-settings-section-nav.js?v=press-system-v3.4.138';
+} from './composer-site-settings-section-nav.js?v=press-system-v3.4.139';
 
 export function createComposerSiteSettingsUi(options = {}) {
   const noop = () => {};

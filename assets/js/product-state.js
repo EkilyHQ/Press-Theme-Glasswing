@@ -1,5 +1,5 @@
-import { buildConnectStatusUrl, CONNECT_PRODUCT_STATE_PATH } from './connect-status.js?v=press-system-v3.4.138';
-import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.138';
+import { buildConnectStatusUrl, CONNECT_PRODUCT_STATE_PATH } from './connect-status.js?v=press-system-v3.4.139';
+import { PRESS_GITHUB_PROVIDER } from './provider-adapters.js?v=press-system-v3.4.139';
 
 export const PRODUCT_STATE_URL = PRESS_GITHUB_PROVIDER.productStateUrl;
 

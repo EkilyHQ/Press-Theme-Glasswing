@@ -1,4 +1,4 @@
-import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.138';
+import { EDITOR_SHELL_IDS, EDITOR_SHELL_SELECTORS } from './editor-shell-contract.js?v=press-system-v3.4.139';
 
 export function isComposerSystemMode(value) {
   return value === 'composer' || value === 'themes' || value === 'updates' || value === 'sync';
