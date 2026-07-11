@@ -24,7 +24,12 @@ const HTML_CALL_PROPERTIES = new Map([
   ['setHTMLUnsafe', 'setHTMLUnsafe-call']
 ]);
 const NATIVE_CALLABLE_HTML_SINKS = new Set([...HTML_CALL_PROPERTIES.keys(), 'parseFromString']);
+const DOCUMENT_REFERENCE_PROPERTIES = new Set(['contentDocument', 'document', 'ownerDocument']);
 const REFLECTED_HTML_PROPERTIES = new Set(HTML_ASSIGNMENT_PROPERTIES.keys());
+const REFLECTION_HELPERS = new Map([
+  ['Object', new Set(['assign', 'defineProperties', 'defineProperty'])],
+  ['Reflect', new Set(['get', 'set'])]
+]);
 const ALLOWED_DISPOSITIONS = new Set([
   'controlled-detached-parser',
   'empty-clear',
@@ -63,12 +68,31 @@ function memberPropertyName(node, resolveIdentifier = null) {
   return current.computed ? staticString(current.property, resolveIdentifier) || '' : '';
 }
 
-function isDocumentReference(node) {
+function resolveConstExpression(node, resolveIdentifier, seen = new Set()) {
+  const current = unwrap(node);
+  if (current?.type !== 'Identifier' || !resolveIdentifier) return current;
+  const binding = resolveIdentifier(current);
+  if (!binding || seen.has(binding)) return current;
+  const nextSeen = new Set(seen);
+  nextSeen.add(binding);
+  return resolveConstExpression(binding.init, resolveIdentifier, nextSeen);
+}
+
+function isDocumentReference(node, resolveIdentifier = null, resolveDocumentBinding = null, seen = new Set()) {
   const current = unwrap(node);
   if (!current) return false;
-  if (current.type === 'Identifier') return /^(?:doc|document|documentRef)$/u.test(current.name);
+  if (current.type === 'Identifier') {
+    if (/^(?:doc|document|documentRef)$/u.test(current.name)) return true;
+    if (resolveDocumentBinding?.(current)) return true;
+    if (!resolveIdentifier) return false;
+    const binding = resolveIdentifier(current);
+    if (!binding || seen.has(binding)) return false;
+    const nextSeen = new Set(seen);
+    nextSeen.add(binding);
+    return isDocumentReference(binding.init, resolveIdentifier, resolveDocumentBinding, nextSeen);
+  }
   if (current.type !== 'MemberExpression') return false;
-  return memberPropertyName(current) === 'document';
+  return DOCUMENT_REFERENCE_PROPERTIES.has(memberPropertyName(current, resolveIdentifier));
 }
 
 function objectPropertyName(property, resolveIdentifier) {
@@ -78,13 +102,17 @@ function objectPropertyName(property, resolveIdentifier) {
   return staticString(property.key, resolveIdentifier) || '';
 }
 
-function fingerprint(filePath, kind, source) {
+function fingerprint(filePath, owner, context, kind, source) {
   const normalizedSource = source.replace(/\r\n?/gu, '\n');
-  return `sha256:${createHash('sha256').update(`${filePath}\0${kind}\0${normalizedSource}`).digest('hex')}`;
+  return `sha256:${createHash('sha256')
+    .update(`${filePath}\0${owner}\0${context}\0${kind}\0${normalizedSource}`)
+    .digest('hex')}`;
 }
 
 function inventoryKey(record) {
-  return [record.path, record.kind, record.fingerprint, String(record.occurrence)].join('|');
+  return [record.path, record.owner, record.context, record.kind, record.fingerprint, String(record.occurrence)].join(
+    '|'
+  );
 }
 
 function gitText(args) {
@@ -149,13 +177,17 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
     create(context) {
       const sourceCode = context.sourceCode;
       const recordedOccurrences = new Set();
-      const resolveIdentifier = (identifier) => {
+      const findVariable = (identifier) => {
         let scope = sourceCode.getScope(identifier);
         let variable = null;
         while (scope && !variable) {
           variable = scope.set.get(identifier.name) || null;
           scope = scope.upper;
         }
+        return variable;
+      };
+      const resolveIdentifier = (identifier) => {
+        const variable = findVariable(identifier);
         if (!variable || variable.defs.length !== 1) return null;
         const definition = variable.defs[0];
         if (
@@ -169,14 +201,129 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
         if (variable.references.some((reference) => reference.isWrite() && !reference.init)) return null;
         return definition.node;
       };
-      const record = (node, kind) => {
-        const occurrenceKey = `${node.range[0]}:${node.range[1]}:${kind}`;
+      const documentBindingProperty = (identifier) => {
+        const variable = findVariable(identifier);
+        if (!variable) return '';
+        for (const binding of variable.identifiers) {
+          if (binding.name !== identifier.name) continue;
+          const ancestors = sourceCode.getAncestors(binding);
+          for (let index = ancestors.length - 1; index >= 0; index -= 1) {
+            const property = ancestors[index];
+            if (property.type !== 'Property' || ancestors[index - 1]?.type !== 'ObjectPattern') continue;
+            return objectPropertyName(property, resolveIdentifier);
+          }
+        }
+        return '';
+      };
+      const isDocumentNode = (node) =>
+        isDocumentReference(node, resolveIdentifier, (identifier) =>
+          DOCUMENT_REFERENCE_PROPERTIES.has(documentBindingProperty(identifier))
+        );
+      const astPathFor = (node, ancestors = sourceCode.getAncestors(node)) => {
+        const chain = [...ancestors, node];
+        const segments = [];
+        for (let pathIndex = 0; pathIndex < chain.length - 1; pathIndex += 1) {
+          const parent = chain[pathIndex];
+          const child = chain[pathIndex + 1];
+          const visitorKeys = sourceCode.visitorKeys[parent.type] || [];
+          let segment = child.type;
+          for (const key of visitorKeys) {
+            const value = parent[key];
+            if (value === child) {
+              segment = key;
+              break;
+            }
+            if (Array.isArray(value)) {
+              const childIndex = value.indexOf(child);
+              if (childIndex >= 0) {
+                segment = `${key}[${childIndex}]`;
+                break;
+              }
+            }
+          }
+          segments.push(segment);
+        }
+        return segments.join('/');
+      };
+      const ownerContext = (node) => {
+        const ancestors = sourceCode.getAncestors(node);
+        for (let index = ancestors.length - 1; index >= 0; index -= 1) {
+          const candidate = ancestors[index];
+          if (!['ArrowFunctionExpression', 'FunctionDeclaration', 'FunctionExpression'].includes(candidate.type)) {
+            continue;
+          }
+          const labels = [];
+          for (let ownerIndex = 0; ownerIndex <= index; ownerIndex += 1) {
+            const ownerNode = ancestors[ownerIndex];
+            if (ownerNode.type === 'ClassDeclaration') {
+              labels.push(`class:${ownerNode.id?.name || '<anonymous>'}`);
+            } else if (ownerNode.type === 'FunctionDeclaration') {
+              labels.push(`function:${ownerNode.id?.name || '<anonymous>'}`);
+            } else if (ownerNode.type === 'VariableDeclarator') {
+              labels.push(`variable:${sourceCode.getText(ownerNode.id).replace(/\s+/gu, ' ').trim()}`);
+            } else if (ownerNode.type === 'AssignmentExpression') {
+              labels.push(`assignment:${sourceCode.getText(ownerNode.left).replace(/\s+/gu, ' ').trim()}`);
+            } else if (ownerNode.type === 'Property') {
+              labels.push(`property:${objectPropertyName(ownerNode, resolveIdentifier) || '(computed)'}`);
+            } else if (ownerNode.type === 'MethodDefinition') {
+              labels.push(`method:${objectPropertyName(ownerNode, resolveIdentifier) || '(computed)'}`);
+            }
+          }
+          if (candidate.type !== 'FunctionDeclaration' && labels.length === 0) {
+            const parent = ancestors[index - 1];
+            if (parent?.type === 'CallExpression') {
+              labels.push(
+                `callback:${sourceCode.getText(parent.callee).replace(/\s+/gu, ' ').trim()}#${parent.arguments.indexOf(candidate) + 1}`
+              );
+            } else {
+              labels.push(`anonymous:${candidate.type}`);
+            }
+          }
+          const owner = labels.join('/') || 'program';
+          return {
+            owner,
+            context: `${owner}@path:${astPathFor(node, ancestors)}`
+          };
+        }
+        return { owner: 'program', context: `program@path:${astPathFor(node, ancestors)}` };
+      };
+      const canonicalNodeSource = (node) => {
+        const literalValues = new Map();
+        const visit = (current) => {
+          if (!current || typeof current.type !== 'string') return;
+          if (current.type === 'Literal') {
+            const value = current.regex
+              ? `/${current.regex.pattern}/${current.regex.flags}`
+              : current.bigint || JSON.stringify(current.value);
+            literalValues.set(current.range[0], String(value));
+          }
+          for (const key of sourceCode.visitorKeys[current.type] || []) {
+            const child = current[key];
+            if (Array.isArray(child)) child.forEach(visit);
+            else visit(child);
+          }
+        };
+        visit(node);
+        return sourceCode
+          .getTokens(node)
+          .map((token) =>
+            literalValues.has(token.range[0])
+              ? `Literal:${literalValues.get(token.range[0])}`
+              : `${token.type}:${token.value}`
+          )
+          .join('\u001f');
+      };
+      const record = (node, kind, { identityNode = node, sourceText = canonicalNodeSource(node) } = {}) => {
+        const occurrenceKey = `${node.range[0]}:${node.range[1]}:${identityNode.range[0]}:${identityNode.range[1]}:${kind}`;
         if (recordedOccurrences.has(occurrenceKey)) return;
         recordedOccurrences.add(occurrenceKey);
+        const { owner, context: ownerLocation } = ownerContext(node);
         rawFindings.push({
           path: filePath,
+          owner,
+          context: ownerLocation,
           kind,
-          source: sourceCode.getText(node),
+          source: sourceText,
           start: node.range[0],
           line: node.loc.start.line,
           column: node.loc.start.column + 1
@@ -229,14 +376,190 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
         const parent = ancestors[index];
         return parent?.type === 'CallExpression' && unwrap(parent.callee) === node;
       };
+      const patternHasCallableUse = (property) => {
+        const binding =
+          property.value?.type === 'Identifier'
+            ? property.value
+            : property.value?.type === 'AssignmentPattern' && property.value.left?.type === 'Identifier'
+              ? property.value.left
+              : null;
+        if (!binding) return true;
+        const variable = findVariable(binding);
+        if (!variable) return true;
+        return variable.references.some((reference) => {
+          if (reference.init) return false;
+          const identifier = reference.identifier;
+          const parent = sourceCode.getAncestors(identifier).at(-1);
+          if (parent?.type === 'CallExpression') return true;
+          if (
+            parent?.type === 'MemberExpression' &&
+            parent.object === identifier &&
+            ['apply', 'bind', 'call'].includes(memberPropertyName(parent, resolveIdentifier))
+          ) {
+            return true;
+          }
+          if (parent?.type === 'VariableDeclarator' && parent.init === identifier) return true;
+          if (parent?.type === 'AssignmentExpression' && parent.right === identifier) return true;
+          if (parent?.type === 'ReturnStatement' || parent?.type === 'ExportDefaultDeclaration') return true;
+          return parent?.type === 'Property' && parent.value === identifier;
+        });
+      };
+      const isGlobalReference = (node, globalName) => {
+        const current = resolveConstExpression(node, resolveIdentifier);
+        if (current?.type === 'Identifier') return current.name === globalName;
+        return current?.type === 'MemberExpression' && memberPropertyName(current, resolveIdentifier) === globalName;
+      };
+      const resolveCallableBinding = (node, seen = new Set()) => {
+        const current = unwrap(node);
+        if (current?.type === 'Identifier') {
+          const binding = resolveIdentifier(current);
+          if (binding && !seen.has(binding)) {
+            const nextSeen = new Set(seen);
+            nextSeen.add(binding);
+            return resolveCallableBinding(binding.init, nextSeen);
+          }
+        }
+        if (current?.type === 'CallExpression' && memberPropertyName(current.callee, resolveIdentifier) === 'bind') {
+          const bindMember = unwrap(current.callee);
+          const target = resolveCallableBinding(bindMember.object, seen);
+          return {
+            boundArguments: [...target.boundArguments, ...current.arguments.slice(1)],
+            callee: target.callee
+          };
+        }
+        return { boundArguments: [], callee: current };
+      };
+      const resolveCallableExpression = (node) => resolveCallableBinding(node).callee;
+      const destructuredGlobalMethod = (identifier, objectName, methodName) => {
+        const variable = findVariable(identifier);
+        if (!variable || variable.defs.length !== 1) return false;
+        const definition = variable.defs[0];
+        if (
+          definition.type !== 'Variable' ||
+          definition.parent?.kind !== 'const' ||
+          definition.node?.id?.type !== 'ObjectPattern' ||
+          !isGlobalReference(definition.node.init, objectName)
+        ) {
+          return false;
+        }
+        return definition.node.id.properties.some((property) => {
+          if (property.type !== 'Property' || objectPropertyName(property, resolveIdentifier) !== methodName) {
+            return false;
+          }
+          const local = property.value?.type === 'AssignmentPattern' ? property.value.left : property.value;
+          return local?.type === 'Identifier' && local.name === identifier.name;
+        });
+      };
       const isGlobalMethod = (callee, objectName, methodName) => {
-        const member = unwrap(callee);
+        const direct = unwrap(callee);
+        if (direct?.type === 'Identifier' && destructuredGlobalMethod(direct, objectName, methodName)) return true;
+        const member = resolveCallableExpression(direct);
         if (member?.type !== 'MemberExpression' || memberPropertyName(member, resolveIdentifier) !== methodName) {
           return false;
         }
-        const object = unwrap(member.object);
-        if (object?.type === 'Identifier') return object.name === objectName;
-        return object?.type === 'MemberExpression' && memberPropertyName(object, resolveIdentifier) === objectName;
+        return isGlobalReference(member.object, objectName);
+      };
+      const globalObjectName = (node) => {
+        for (const objectName of REFLECTION_HELPERS.keys()) {
+          if (isGlobalReference(node, objectName)) return objectName;
+        }
+        return '';
+      };
+      const reflectionHelperName = (node) => {
+        const current = unwrap(node);
+        if (current?.type !== 'MemberExpression') return '';
+        const objectName = globalObjectName(current.object);
+        const methodName = memberPropertyName(current, resolveIdentifier);
+        return objectName && REFLECTION_HELPERS.get(objectName)?.has(methodName) ? `${objectName}.${methodName}` : '';
+      };
+      const reflectionMethodName = (callee) => {
+        for (const [objectName, methods] of REFLECTION_HELPERS) {
+          for (const methodName of methods) {
+            if (isGlobalMethod(callee, objectName, methodName)) return `${objectName}.${methodName}`;
+          }
+        }
+        return '';
+      };
+      const normalizeReflectionCall = (node) => {
+        const originalCallee = unwrap(node.callee);
+        if (originalCallee?.type !== 'MemberExpression') {
+          const binding = resolveCallableBinding(originalCallee);
+          return {
+            arguments: [...binding.boundArguments, ...node.arguments],
+            callee: binding.callee,
+            form: 'direct',
+            helperName: reflectionMethodName(binding.callee)
+          };
+        }
+        const form = memberPropertyName(originalCallee, resolveIdentifier);
+        if (form !== 'bind' && form !== 'call' && form !== 'apply') {
+          const binding = resolveCallableBinding(originalCallee);
+          return {
+            arguments: [...binding.boundArguments, ...node.arguments],
+            callee: binding.callee,
+            form: 'direct',
+            helperName: reflectionMethodName(binding.callee)
+          };
+        }
+        const binding = resolveCallableBinding(originalCallee.object);
+        const helperCallee = binding.callee;
+        const helperName = reflectionMethodName(helperCallee);
+        if (!helperName) return { arguments: node.arguments, callee: originalCallee, form: 'direct', helperName: '' };
+        if (form === 'bind') {
+          return {
+            arguments: [...binding.boundArguments, ...node.arguments.slice(1)],
+            callee: helperCallee,
+            form,
+            helperName
+          };
+        }
+        if (form === 'call') {
+          return {
+            arguments: [...binding.boundArguments, ...node.arguments.slice(1)],
+            callee: helperCallee,
+            form,
+            helperName
+          };
+        }
+        const argumentArray = resolveConstExpression(node.arguments[1], resolveIdentifier);
+        if (argumentArray?.type === 'ArrayExpression' && argumentArray.elements.every((element) => element)) {
+          return {
+            arguments: [...binding.boundArguments, ...argumentArray.elements],
+            callee: helperCallee,
+            form,
+            helperName
+          };
+        }
+        return { arguments: [], callee: helperCallee, form: 'opaque-apply', helperName };
+      };
+      const destructuredSource = (node) => {
+        const ancestors = sourceCode.getAncestors(node);
+        if (ancestors.at(-1)?.type !== 'ObjectPattern') return null;
+        const container = ancestors.at(-2);
+        if (container?.type === 'VariableDeclarator' && container.id === ancestors.at(-1)) return container.init;
+        if (container?.type === 'AssignmentExpression' && container.left === ancestors.at(-1)) {
+          return container.right;
+        }
+        return null;
+      };
+      const analyzeReflectedObject = (node, seen = new Set()) => {
+        const object = resolveConstExpression(node, resolveIdentifier);
+        if (!object || seen.has(object)) return { opaque: [], properties: [] };
+        if (object.type !== 'ObjectExpression') return { opaque: [object], properties: [] };
+        const nextSeen = new Set(seen);
+        nextSeen.add(object);
+        const opaque = [];
+        const properties = [];
+        for (const property of object.properties) {
+          if (property.type === 'SpreadElement') {
+            const nested = analyzeReflectedObject(property.argument, nextSeen);
+            opaque.push(...nested.opaque);
+            properties.push(...nested.properties);
+          } else {
+            properties.push(property);
+          }
+        }
+        return { opaque, properties };
       };
       return {
         Identifier(node) {
@@ -249,16 +572,44 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
         },
         Property(node) {
           const ancestors = sourceCode.getAncestors(node);
-          if (ancestors.at(-1)?.type !== 'ObjectPattern') return;
+          const pattern = ancestors.at(-1);
+          if (pattern?.type !== 'ObjectPattern') return;
           const property = objectPropertyName(node, resolveIdentifier);
+          if (property === 'html' && !patternHasCallableUse(node)) return;
           if (NATIVE_CALLABLE_HTML_SINKS.has(property)) {
             record(node, `html-native-sink-indirect-reference:${property}`);
+          }
+          const sourceObject = destructuredSource(node);
+          const reflectionObject = globalObjectName(sourceObject);
+          if (reflectionObject && REFLECTION_HELPERS.get(reflectionObject)?.has(property)) {
+            record(node, `html-reflection-helper-indirect-reference:${reflectionObject}.${property}`);
+          }
+          const declarator = ancestors.at(-2);
+          if (
+            (property === 'write' || property === 'writeln') &&
+            declarator?.type === 'VariableDeclarator' &&
+            isDocumentNode(declarator.init)
+          ) {
+            record(node, `html-native-sink-indirect-reference:document.${property}`);
           }
         },
         MemberExpression(node) {
           const property = memberPropertyName(node, resolveIdentifier);
-          if (!NATIVE_CALLABLE_HTML_SINKS.has(property) || isDirectMemberCall(node)) return;
-          record(node, `html-native-sink-indirect-reference:${property}`);
+          if (
+            (property === 'write' || property === 'writeln') &&
+            isDocumentNode(node.object) &&
+            !isDirectMemberCall(node)
+          ) {
+            record(node, `html-native-sink-indirect-reference:document.${property}`);
+            return;
+          }
+          if (NATIVE_CALLABLE_HTML_SINKS.has(property) && !isDirectMemberCall(node)) {
+            record(node, `html-native-sink-indirect-reference:${property}`);
+          }
+          const helperName = reflectionHelperName(node);
+          if (helperName && !isDirectMemberCall(node)) {
+            record(node, `html-reflection-helper-indirect-reference:${helperName}`);
+          }
         },
         AssignmentExpression(node) {
           const left = unwrap(node.left);
@@ -269,42 +620,97 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
         CallExpression(node) {
           const callee = unwrap(node.callee);
           if (callee?.type === 'Identifier' && wrapperSet.has(callee.name)) {
-            calls.push({ node, name: callee.name, sourceCode });
+            calls.push({ node, name: callee.name, ...ownerContext(node), source: canonicalNodeSource(node) });
           }
-          if (callee?.type !== 'MemberExpression') return;
           const property = memberPropertyName(callee, resolveIdentifier);
           const directKind = HTML_CALL_PROPERTIES.get(property);
           if (directKind) record(node, directKind);
-          if (isGlobalMethod(callee, 'Reflect', 'set')) {
-            const reflectedProperty = staticString(node.arguments[1], resolveIdentifier);
-            if (REFLECTED_HTML_PROPERTIES.has(reflectedProperty)) {
+          const reflectionCall = normalizeReflectionCall(node);
+          if (reflectionCall.helperName && reflectionCall.form !== 'direct') {
+            record(node, `html-reflection-helper-${reflectionCall.form}:${reflectionCall.helperName}`);
+          }
+          if (isGlobalMethod(reflectionCall.callee, 'Reflect', 'set') && reflectionCall.arguments.length >= 2) {
+            const reflectedProperty = staticString(reflectionCall.arguments[1], resolveIdentifier);
+            if (reflectedProperty === null) record(node, 'Reflect.set-unproven-property');
+            else if (REFLECTED_HTML_PROPERTIES.has(reflectedProperty)) {
               record(node, `Reflect.set-${reflectedProperty}`);
             }
           }
-          if (isGlobalMethod(callee, 'Reflect', 'get')) {
-            const reflectedProperty = staticString(node.arguments[1], resolveIdentifier);
-            if (NATIVE_CALLABLE_HTML_SINKS.has(reflectedProperty)) {
+          if (isGlobalMethod(reflectionCall.callee, 'Reflect', 'get') && reflectionCall.arguments.length >= 2) {
+            const reflectedProperty = staticString(reflectionCall.arguments[1], resolveIdentifier);
+            if (reflectedProperty === null) record(node, 'Reflect.get-unproven-property');
+            else if (NATIVE_CALLABLE_HTML_SINKS.has(reflectedProperty)) {
               record(node, `html-native-sink-indirect-reference:${reflectedProperty}`);
             }
+            if (
+              (reflectedProperty === 'write' || reflectedProperty === 'writeln') &&
+              isDocumentNode(reflectionCall.arguments[0])
+            ) {
+              record(node, `html-native-sink-indirect-reference:document.${reflectedProperty}`);
+            }
           }
-          if (isGlobalMethod(callee, 'Object', 'assign')) {
-            for (const argument of node.arguments.slice(1)) {
-              if (argument?.type !== 'ObjectExpression') continue;
-              for (const reflectedProperty of argument.properties) {
+          if (isGlobalMethod(reflectionCall.callee, 'Object', 'assign')) {
+            for (const argument of reflectionCall.arguments.slice(1)) {
+              const analysis = analyzeReflectedObject(argument);
+              for (const opaque of analysis.opaque) {
+                record(node, 'Object.assign-unproven-payload', {
+                  identityNode: opaque,
+                  sourceText: `${canonicalNodeSource(node)}\0opaque:${canonicalNodeSource(opaque)}`
+                });
+              }
+              for (const reflectedProperty of analysis.properties) {
                 const reflectedName = objectPropertyName(reflectedProperty, resolveIdentifier);
-                if (REFLECTED_HTML_PROPERTIES.has(reflectedName)) {
-                  record(reflectedProperty, `Object.assign-${reflectedName}`);
+                if (!reflectedName) {
+                  record(node, 'Object.assign-unproven-property', {
+                    identityNode: reflectedProperty,
+                    sourceText: `${canonicalNodeSource(node)}\0property:${canonicalNodeSource(reflectedProperty)}`
+                  });
+                } else if (REFLECTED_HTML_PROPERTIES.has(reflectedName)) {
+                  record(node, `Object.assign-${reflectedName}`, {
+                    identityNode: reflectedProperty,
+                    sourceText: `${canonicalNodeSource(node)}\0property:${canonicalNodeSource(reflectedProperty)}`
+                  });
                 }
               }
             }
           }
-          if (isGlobalMethod(callee, 'Object', 'defineProperty')) {
-            const reflectedProperty = staticString(node.arguments[1], resolveIdentifier);
-            if (REFLECTED_HTML_PROPERTIES.has(reflectedProperty)) {
+          if (
+            isGlobalMethod(reflectionCall.callee, 'Object', 'defineProperty') &&
+            reflectionCall.arguments.length >= 2
+          ) {
+            const reflectedProperty = staticString(reflectionCall.arguments[1], resolveIdentifier);
+            if (reflectedProperty === null) record(node, 'Object.defineProperty-unproven-property');
+            else if (REFLECTED_HTML_PROPERTIES.has(reflectedProperty)) {
               record(node, `Object.defineProperty-${reflectedProperty}`);
             }
           }
-          if ((property === 'write' || property === 'writeln') && isDocumentReference(callee.object)) {
+          if (
+            isGlobalMethod(reflectionCall.callee, 'Object', 'defineProperties') &&
+            reflectionCall.arguments.length >= 2
+          ) {
+            const analysis = analyzeReflectedObject(reflectionCall.arguments[1]);
+            for (const opaque of analysis.opaque) {
+              record(node, 'Object.defineProperties-unproven-descriptors', {
+                identityNode: opaque,
+                sourceText: `${canonicalNodeSource(node)}\0opaque:${canonicalNodeSource(opaque)}`
+              });
+            }
+            for (const reflectedProperty of analysis.properties) {
+              const reflectedName = objectPropertyName(reflectedProperty, resolveIdentifier);
+              if (!reflectedName) {
+                record(node, 'Object.defineProperties-unproven-property', {
+                  identityNode: reflectedProperty,
+                  sourceText: `${canonicalNodeSource(node)}\0property:${canonicalNodeSource(reflectedProperty)}`
+                });
+              } else if (REFLECTED_HTML_PROPERTIES.has(reflectedName)) {
+                record(node, `Object.defineProperties-${reflectedName}`, {
+                  identityNode: reflectedProperty,
+                  sourceText: `${canonicalNodeSource(node)}\0property:${canonicalNodeSource(reflectedProperty)}`
+                });
+              }
+            }
+          }
+          if ((property === 'write' || property === 'writeln') && isDocumentNode(callee?.object)) {
             record(node, 'document-write-call');
           }
           if (
@@ -319,11 +725,12 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
           ) {
             record(node, 'setAttributeNS-srcdoc-call');
           }
-          if (
-            property === 'parseFromString' &&
-            staticString(node.arguments[1], resolveIdentifier)?.trim().toLowerCase() === 'text/html'
-          ) {
-            record(node, 'DOMParser-text-html-call');
+          if (property === 'parseFromString') {
+            const parserMime = staticString(node.arguments[1], resolveIdentifier);
+            if (parserMime === null) record(node, 'DOMParser-unproven-mime-call');
+            else if (parserMime.trim().toLowerCase() === 'text/html') {
+              record(node, 'DOMParser-text-html-call');
+            }
           }
           if (
             property === 'execCommand' &&
@@ -341,6 +748,10 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
     [
       {
         files: ['**/*.{js,mjs}'],
+        linterOptions: {
+          noInlineConfig: true,
+          reportUnusedDisableDirectives: 'off'
+        },
         languageOptions: {
           ecmaVersion: 'latest',
           parserOptions: { range: true, loc: true },
@@ -352,17 +763,27 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
     ],
     { filename: filePath }
   );
-  if (messages.length > 0) {
-    const details = messages
+  const unexpectedMessages = messages.filter(
+    (message) =>
+      !(
+        message.ruleId === null &&
+        message.severity === 1 &&
+        /has no effect because you have 'noInlineConfig' setting/u.test(message.message)
+      )
+  );
+  if (unexpectedMessages.length > 0) {
+    const details = unexpectedMessages
       .map((message) => `${filePath}:${message.line}:${message.column}: ${message.message}`)
       .join('\n');
     throw new Error(`HTML sink scanner could not parse source:\n${details}`);
   }
-  for (const { node, name, sourceCode } of calls) {
+  for (const { node, name, owner, context, source: findingSource } of calls) {
     rawFindings.push({
       path: filePath,
+      owner,
+      context,
       kind: `html-wrapper-call:${name}`,
-      source: sourceCode.getText(node),
+      source: findingSource,
       start: node.range[0],
       line: node.loc.start.line,
       column: node.loc.start.column + 1
@@ -376,12 +797,14 @@ export function scanJavaScriptSource({ filePath, source, wrapperNames = [] }) {
   rawFindings.sort((left, right) => left.start - right.start || left.kind.localeCompare(right.kind));
   const occurrences = new Map();
   return rawFindings.map((finding) => {
-    const digest = fingerprint(finding.path, finding.kind, finding.source);
-    const identity = `${finding.path}|${finding.kind}|${digest}`;
+    const digest = fingerprint(finding.path, finding.owner, finding.context, finding.kind, finding.source);
+    const identity = `${finding.path}|${finding.owner}|${finding.context}|${finding.kind}|${digest}`;
     const occurrence = (occurrences.get(identity) || 0) + 1;
     occurrences.set(identity, occurrence);
     return {
       path: finding.path,
+      owner: finding.owner,
+      context: finding.context,
       kind: finding.kind,
       fingerprint: digest,
       occurrence,
@@ -421,6 +844,27 @@ export async function scanRepository({ wrappers = [] } = {}) {
   return inventory.sort((left, right) => inventoryKey(left).localeCompare(inventoryKey(right)));
 }
 
+export function scanRepositoryAtRef(ref, { wrappers = [] } = {}) {
+  const wrapperNames = wrappers.map(({ name }) => name);
+  const paths = execFileSync('git', ['ls-tree', '-r', '--name-only', '-z', ref, '--', 'theme'], {
+    cwd: REPO_ROOT,
+    maxBuffer: 16 * 1024 * 1024
+  })
+    .toString('utf8')
+    .split('\0')
+    .filter((filePath) => /\.(?:js|mjs)$/u.test(filePath))
+    .sort();
+  const inventory = [];
+  for (const filePath of paths) {
+    const source = execFileSync('git', ['show', `${ref}:${filePath}`], {
+      cwd: REPO_ROOT,
+      maxBuffer: 16 * 1024 * 1024
+    }).toString('utf8');
+    inventory.push(...scanJavaScriptSource({ filePath, source, wrapperNames }));
+  }
+  return inventory.sort((left, right) => inventoryKey(left).localeCompare(inventoryKey(right)));
+}
+
 function countKinds(records) {
   const counts = {};
   for (const record of records) counts[record.kind] = (counts[record.kind] || 0) + 1;
@@ -449,10 +893,18 @@ export function verifyInventory(actual, policy) {
   }
   const approvedKeys = approved.map(inventoryKey);
   if (new Set(approvedKeys).size !== approvedKeys.length) errors.push('policy approved entries must be unique');
-  if (JSON.stringify([...approvedKeys].sort()) !== JSON.stringify(approvedKeys)) {
-    errors.push('policy approved entries must be sorted by path, kind, fingerprint, and occurrence');
+  if (
+    JSON.stringify([...approvedKeys].sort((left, right) => left.localeCompare(right))) !== JSON.stringify(approvedKeys)
+  ) {
+    errors.push('policy approved entries must be sorted by path, owner, context, kind, fingerprint, and occurrence');
   }
   for (const record of approved) {
+    if (typeof record.owner !== 'string' || record.owner.length === 0) {
+      errors.push(`owner must identify the reviewed sink context for ${inventoryKey(record)}`);
+    }
+    if (typeof record.context !== 'string' || !record.context.includes('@path:')) {
+      errors.push(`context must pin the sink within its reviewed owner for ${inventoryKey(record)}`);
+    }
     if (!ALLOWED_DISPOSITIONS.has(record.disposition)) {
       errors.push(`unsupported disposition for ${inventoryKey(record)}: ${record.disposition || '(missing)'}`);
     }
@@ -505,6 +957,20 @@ export function verifyPolicyTransition(basePolicy, headPolicy) {
   return errors.sort();
 }
 
+export function verifyBootstrapPolicy(baseInventory, headPolicy) {
+  if (!Array.isArray(headPolicy?.approved)) return ['head policy approved must be an array'];
+  const baseKeys = new Set(baseInventory.map(inventoryKey));
+  const errors = [];
+  for (const record of headPolicy.approved) {
+    const key = inventoryKey(record);
+    if (!baseKeys.has(key)) errors.push(`HTML sink bootstrap growth is forbidden: ${key}`);
+  }
+  if (headPolicy.approved.length > baseInventory.length) {
+    errors.push(`HTML sink bootstrap count grew from ${baseInventory.length} to ${headPolicy.approved.length}`);
+  }
+  return errors.sort();
+}
+
 async function main() {
   const policy = JSON.parse(await readFile(POLICY_PATH, 'utf8'));
   const inventory = await scanRepository({ wrappers: policy.wrappers });
@@ -518,6 +984,9 @@ async function main() {
     const basePolicy = loadPolicyAtRef(comparison.base);
     errors.push(...verifyPolicyTransition(basePolicy, policy));
     if (!basePolicy) {
+      errors.push(
+        ...verifyBootstrapPolicy(scanRepositoryAtRef(comparison.base, { wrappers: policy.wrappers }), policy)
+      );
       process.stdout.write(`Bootstrapping HTML sink policy from ${comparison.base}; no merge-base policy exists.\n`);
     }
   }

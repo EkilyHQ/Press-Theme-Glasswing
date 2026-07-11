@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "decision": "exact-owner-context-fingerprint-baseline-with-zero-growth",
+  "rules": ["no-empty", "no-unused-vars", "no-useless-assignment"],
+  "expectedCounts": {
+    "no-empty": 15,
+    "no-unused-vars": 22,
+    "no-useless-assignment": 0
+  },
+  "diagnostics": [
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:getContentRoot",
+      "ownerPath": "body[22]/body/body[0]/handler/body",
+      "fingerprint": "sha256:607956a9feafb91279cb9d672dd7c6dc56cababd93937884d94a9b33e2d3f11f",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:getFirstBodyImageSource",
+      "ownerPath": "body[27]/body/body[3]/consequent/body[0]/handler/body",
+      "fingerprint": "sha256:8a95e459cd3df705b147c18a729ac7eb6abe941d5aa2e631257748f2df12a6c6",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:renderPost",
+      "ownerPath": "body[39]/body/body[8]/handler/body",
+      "fingerprint": "sha256:c3ef394dcb5016efe955c6bdf41523c5053e6fe09411aa221b13c4f318eb030c",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:setChromeHidden",
+      "ownerPath": "body[10]/body/body[1]/handler/body",
+      "fingerprint": "sha256:5ad6c5f0114390d53a5de42882686533554bbf8af5f31f7ab0637c9440b28eeb",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:setChromeHidden",
+      "ownerPath": "body[10]/body/body[2]/handler/body",
+      "fingerprint": "sha256:1babd291a872b7f235596c609a47eca52bb473caeb6b1fb78d80dd0c863422a2",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:setupFooter/callback:button.addEventListener('click')#2",
+      "ownerPath": "body[55]/body/body[9]/consequent/body[1]/expression/arguments[1]/body/body[0]/handler/body/body[0]/handler/body",
+      "fingerprint": "sha256:fe4cc89980472923bca3af1c5bca876ff5a9daec39ea7f208a22b48719c231a2",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:setupThemeControls",
+      "ownerPath": "body[53]/body/body[6]/handler/body",
+      "fingerprint": "sha256:dc9de041092211b42dc0308e17f1a6e730cc8c6e21167d74793e9a6cb3a2af4c",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:setupThemeControls",
+      "ownerPath": "body[53]/body/body[7]/handler/body",
+      "fingerprint": "sha256:567621a303ca6d77818aaf78d3b90a4f704c8fb3e9ef04ce2c29a79b8d48669e",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[0]/handler/body",
+      "fingerprint": "sha256:c1a02ae704ffee26153ce8006ee2295ed98b7e5da9fbb22ca03725f99bc3c46d",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[1]/handler/body",
+      "fingerprint": "sha256:dcb54072c9133f1118abd296f9b86f1b8ff74c8df9965c6ebee026bc1d336d15",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[2]/handler/body",
+      "fingerprint": "sha256:6cc7409e3fdadce70cc7cd692cf37ebf001ac0713f0246b393a1b7f8d4d5983f",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[1]/handler/body",
+      "fingerprint": "sha256:b7af55d11562c639270b6c96144fa430fcc773526ae80db3cd61f6f486672d02",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[2]/handler/body",
+      "fingerprint": "sha256:d0d0ba44ae41c13a7f7b8af6d6229a1f790c30263575ca40c88f774a937f6731",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[3]/handler/body",
+      "fingerprint": "sha256:cec645442abd4aa9fc306734890cc793d5047984efca8b9a82150f46d715ae09",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-empty",
+      "messageId": "unexpected",
+      "message": "Empty block statement.",
+      "owner": "function:updateSearchChrome",
+      "ownerPath": "body[47]/body/body[3]/consequent/body[1]/handler/body",
+      "fingerprint": "sha256:38c6547eb779aab38bb49a14492b8ae810f1f33a6deb95d0bee1f9aec5fce2e8",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'REGION_NAMES' is assigned a value but never used.",
+      "owner": "<module>",
+      "ownerPath": "body[3]/declarations[0]/id",
+      "fingerprint": "sha256:672b10fdac65a76f9987b234e5f42d87f7bee1dc2e6a4c997f6e335e18fe213d",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:formatDate",
+      "ownerPath": "body[20]/body/body[4]/handler/param",
+      "fingerprint": "sha256:75570f606480f601ffaba7ddfb1ff63c668282d5f754990dc948834f42fe776e",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:getContentRoot",
+      "ownerPath": "body[22]/body/body[0]/handler/param",
+      "fingerprint": "sha256:3885a9ec85eebf806e825e4cbd496d27ac76f5e6fc7ef608892a1c6db3e9b89c",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:getFirstBodyImageSource",
+      "ownerPath": "body[27]/body/body[3]/consequent/body[0]/handler/param",
+      "fingerprint": "sha256:287cd74035130c34df849ceb62c7f8adb2c02f108083a66060de799b911bbef7",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:getRouteHref",
+      "ownerPath": "body[9]/body/body[2]/handler/param",
+      "fingerprint": "sha256:1bc22d259f52f82de09ca1a62c32a8b28c012b1dbec726bbc37353745798f4f1",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:getUrlPage",
+      "ownerPath": "body[23]/body/body[0]/handler/param",
+      "fingerprint": "sha256:ae2157d075c3d17b49405b0dadd2ff7cc3c4ce7213f81b67c0664aecb7e911e9",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:normalizeMediaSource",
+      "ownerPath": "body[28]/body/body[5]/handler/param",
+      "fingerprint": "sha256:3d81da025f551e7e629f413c3e2b76aa472396a7a9755d81452fd46f0e5ccd1e",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:renderPost",
+      "ownerPath": "body[39]/body/body[8]/handler/param",
+      "fingerprint": "sha256:07dfd0719ff2b4c85ff547d1cc91c18b403dca89ee3570ed16a7a829f7d90688",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:setChromeHidden",
+      "ownerPath": "body[10]/body/body[1]/handler/param",
+      "fingerprint": "sha256:479e10279cfc4cae66693279f2663e23ec00bfc3aa662f206ba6edb5a578d138",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:setChromeHidden",
+      "ownerPath": "body[10]/body/body[2]/handler/param",
+      "fingerprint": "sha256:7ba6096b9bb51a7d5cda6c77557c563f3acdca3c9d0fc90ff10c5eef5367a701",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:setupFooter/callback:button.addEventListener('click')#2",
+      "ownerPath": "body[55]/body/body[9]/consequent/body[1]/expression/arguments[1]/body/body[0]/handler/param",
+      "fingerprint": "sha256:9564e7279f34a7fe8427bdb9a7a12383ddd629b96a77dc154f9642c15d97e1d9",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:setupThemeControls",
+      "ownerPath": "body[53]/body/body[6]/handler/param",
+      "fingerprint": "sha256:fa72889a6f94e6d1b60e273aa48e5f1fa2b8d0afce91a195650e0edc3868c55c",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:setupThemeControls",
+      "ownerPath": "body[53]/body/body[7]/handler/param",
+      "fingerprint": "sha256:abb26470c2ea17fd51dcb0a12ea24b011829ef2b3635c747b7ebd232b3e65745",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[0]/handler/param",
+      "fingerprint": "sha256:90b77c39147e3f6f0021fa11bbbef039f604bf309e9bcd641babad9c575fd294",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[1]/handler/param",
+      "fingerprint": "sha256:a9b859511dee4401946a6ecd220c96c0dbc844d83a7b594b0325de25dc645326",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[0]/consequent/body[2]/handler/param",
+      "fingerprint": "sha256:ac11954d9da5850957a9aae06c72afeab8902914ac5aa473c705dad59d755910",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[1]/handler/param",
+      "fingerprint": "sha256:4ed3c1d369c61b48021b981193a48402519872c8f2a5658be3c9e0b660f505c4",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[2]/handler/param",
+      "fingerprint": "sha256:045e859c8665761e2e05152ba468a16e7c096060e2a7957a336f247db730d1a5",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateHomeLinks/callback:activeShell.querySelectorAll().forEach()#1",
+      "ownerPath": "body[46]/body/body[2]/expression/arguments[0]/body/body[3]/handler/param",
+      "fingerprint": "sha256:d4e2d88b58f77b3699b1ff16ceef54b1729d744147e66b1a100b8ac9baaea9c3",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'_' is defined but never used.",
+      "owner": "function:updateSearchChrome",
+      "ownerPath": "body[47]/body/body[3]/consequent/body[1]/handler/param",
+      "fingerprint": "sha256:5fadc6e5d270fbfa5e584cee78a115b2901de1c249cddea60446622d920c0644",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'__' is defined but never used.",
+      "owner": "function:setupFooter/callback:button.addEventListener('click')#2",
+      "ownerPath": "body[55]/body/body[9]/consequent/body[1]/expression/arguments[1]/body/body[0]/handler/body/body[0]/handler/param",
+      "fingerprint": "sha256:973a3b468f70e4a23da1bae5a72441c9d050e3b9f5d29c0278ed6e54c03bcb46",
+      "occurrence": 1
+    },
+    {
+      "path": "theme/modules/glasswing.js",
+      "rule": "no-unused-vars",
+      "messageId": "unusedVar",
+      "message": "'brand' is assigned a value but never used.",
+      "owner": "function:mount",
+      "ownerPath": "body[63]/declaration/body/body[9]/declarations[0]/id",
+      "fingerprint": "sha256:b6ce5e1d094f08bea252fa2cc1e93ca90b7df477afebf1f70e1c403636adaf34",
+      "occurrence": 1
+    }
+  ]
+}

@@ -12,6 +12,7 @@ const EXPECTED_DEV_DEPENDENCIES = {
   prettier: '3.9.4'
 };
 const EXPECTED_DISABLED_RULES = ['no-empty', 'no-unused-vars'];
+const EXPECTED_MEASURED_RULES = ['no-empty', 'no-unused-vars', 'no-useless-assignment'];
 const EXPECTED_FORMAT_EXCLUSIONS = ['theme-release.example.json', 'theme-release.json', 'theme/theme.json'];
 
 function read(relativePath) {
@@ -40,6 +41,7 @@ for (const version of Object.values(packageJson.devDependencies)) {
   assert.match(version, /^\d+\.\d+\.\d+$/u, 'quality dependency versions must be exact');
 }
 assert.equal(packageJson.scripts?.lint, 'eslint . --max-warnings 0');
+assert.equal(packageJson.scripts?.['lint:debt-policy'], 'node scripts/test-eslint-debt-policy.mjs');
 assert.equal(packageJson.scripts?.['lint:debt-probe'], 'node scripts/probe-eslint-debt.mjs');
 assert.equal(packageJson.scripts?.['lint:policy'], 'node scripts/test-eslint-policy.mjs');
 assert.equal(packageJson.scripts?.['format:check'], 'node scripts/check-format.mjs');
@@ -49,7 +51,7 @@ assert.equal(
 );
 assert.equal(
   packageJson.scripts?.quality,
-  'node scripts/test-code-quality-config.mjs && npm run lint:policy && npm run lint && npm run lint:debt-probe && npm run format:check && npm run security:html-sinks'
+  'node scripts/test-code-quality-config.mjs && npm run lint:policy && npm run lint && npm run lint:debt-policy && npm run lint:debt-probe && npm run format:check && npm run security:html-sinks'
 );
 
 const packageLock = readJson('package-lock.json');
@@ -125,7 +127,16 @@ assert.deepEqual(
 for (const record of policy.eslint.measuredRules) {
   assert.ok(record.evidence.length >= 32, `${record.rule} must retain reviewable evidence`);
 }
-assert.equal(policy.eslint?.noGrowth?.mechanism, 'zero-baseline');
+assert.equal(policy.eslint?.noGrowth?.mechanism, 'merge-base-only-shrinking-exact-diagnostic-baseline');
+assert.deepEqual(policy.eslint?.diagnosticBaseline, {
+  file: 'scripts/eslint-debt-baseline.json',
+  decision: 'exact-owner-context-fingerprint-baseline-with-zero-growth',
+  initialDiagnostics: 37,
+  identity:
+    'path, rule, messageId, message, full lexical owner, full-file AST path with array ordinals, normalized diagnostic-context fingerprint, and duplicate occurrence',
+  bootstrap:
+    'The initial baseline must be a subset of diagnostics independently recomputed from the exact merge-base theme source; a same-count owner or context swap is forbidden.'
+});
 assert.deepEqual(policy.eslint?.inlineConfiguration, {
   decision: 'forbidden',
   mechanism: 'linterOptions.noInlineConfig',
@@ -143,6 +154,50 @@ for (const token of [
 ]) {
   assert.ok(eslintPolicyTest.includes(token), `ESLint policy proof must retain ${token}`);
 }
+const eslintDebtProbe = read('scripts/probe-eslint-debt.mjs');
+assert.match(eslintDebtProbe, /noInlineConfig:\s*true/u, 'the debt probe must make inline directives inert');
+assert.match(eslintDebtProbe, /has no effect because you have 'noInlineConfig' setting/u);
+for (const token of [
+  'contextFor',
+  'ownerFor',
+  'ownerPathFor',
+  'scanRepositoryAtRef',
+  'loadBaselineAtRef',
+  'ESLint debt baseline growth is forbidden',
+  'ESLint debt bootstrap growth is forbidden'
+]) {
+  assert.ok(eslintDebtProbe.includes(token), `ESLint exact-debt probe must retain ${token}`);
+}
+const eslintDebtPolicyTest = read('scripts/test-eslint-debt-policy.mjs');
+for (const token of ['aggregate rule counts', 'verifyBaselineTransition', 'verifyBootstrapBaseline', 'only shrink']) {
+  assert.ok(eslintDebtPolicyTest.includes(token), `ESLint debt adversarial proof must retain ${token}`);
+}
+const eslintDebtBaseline = readJson('scripts/eslint-debt-baseline.json');
+assert.equal(eslintDebtBaseline.schemaVersion, 1);
+assert.equal(eslintDebtBaseline.decision, 'exact-owner-context-fingerprint-baseline-with-zero-growth');
+assert.deepEqual(eslintDebtBaseline.rules, EXPECTED_MEASURED_RULES);
+assert.deepEqual(eslintDebtBaseline.expectedCounts, {
+  'no-empty': 15,
+  'no-unused-vars': 22,
+  'no-useless-assignment': 0
+});
+assert.equal(eslintDebtBaseline.diagnostics.length, 37);
+for (const diagnostic of eslintDebtBaseline.diagnostics) {
+  assert.ok(typeof diagnostic.ownerPath === 'string' && diagnostic.ownerPath.length > 0);
+}
+const eslintDebtKeys = eslintDebtBaseline.diagnostics.map((diagnostic) =>
+  [
+    diagnostic.path,
+    diagnostic.rule,
+    diagnostic.messageId,
+    diagnostic.message,
+    diagnostic.owner,
+    diagnostic.ownerPath,
+    diagnostic.fingerprint,
+    String(diagnostic.occurrence)
+  ].join('|')
+);
+assert.deepEqual(eslintDebtKeys, [...eslintDebtKeys].sort(), 'exact ESLint debt identities must stay sorted');
 assert.equal(policy.prettier?.baseline?.file, 'scripts/prettier-baseline.json');
 assert.equal(policy.prettier?.baseline?.initialFiles, 10);
 assert.deepEqual(policy.prettier?.excludedGeneratedFiles, EXPECTED_FORMAT_EXCLUSIONS);
@@ -219,6 +274,17 @@ assert.deepEqual(htmlPolicy.expectedKinds, {
   'innerHTML-write': 10
 });
 assert.equal(htmlPolicy.approved.length, 16, 'all direct writes and reviewed wrapper calls must remain classified');
+for (const approved of htmlPolicy.approved) {
+  assert.ok(
+    typeof approved.owner === 'string' && approved.owner.length > 0,
+    'every approved sink must retain owner context'
+  );
+  assert.equal(
+    approved.context.startsWith(`${approved.owner}@path:`),
+    true,
+    'every approved sink must retain a full-file AST path'
+  );
+}
 assert.deepEqual(
   htmlPolicy.wrappers.map(({ name }) => name),
   ['setHtml']
@@ -227,12 +293,33 @@ const htmlSinkCheck = read('scripts/check-html-sink-policy.mjs');
 assert.match(htmlSinkCheck, /gitText\(\[['"]merge-base['"], baseTip, head\]\)/u);
 assert.match(htmlSinkCheck, /CODE_QUALITY_HEAD_SHA/u);
 assert.match(htmlSinkCheck, /loadPolicyAtRef\(comparison\.base\)/u);
+assert.match(htmlSinkCheck, /scanRepositoryAtRef/u);
+assert.match(htmlSinkCheck, /verifyBootstrapPolicy/u);
+assert.match(htmlSinkCheck, /HTML sink bootstrap growth is forbidden/u);
 assert.match(htmlSinkCheck, /HTML sink baseline growth is forbidden/u);
 assert.match(htmlSinkCheck, /html-wrapper-indirect-reference/u);
 assert.match(htmlSinkCheck, /html-native-sink-indirect-reference/u);
 assert.match(htmlSinkCheck, /Reflect\.set-/u);
 assert.match(htmlSinkCheck, /Object\.assign-/u);
 assert.match(htmlSinkCheck, /Object\.defineProperty-/u);
+assert.match(htmlSinkCheck, /Object\.defineProperties-/u);
+assert.match(htmlSinkCheck, /DOMParser-unproven-mime-call/u);
+assert.match(htmlSinkCheck, /contentDocument/u);
+assert.match(htmlSinkCheck, /ownerDocument/u);
+assert.match(htmlSinkCheck, /resolveConstExpression/u);
+assert.match(htmlSinkCheck, /documentBindingProperty/u);
+assert.match(htmlSinkCheck, /astPathFor/u);
+assert.match(htmlSinkCheck, /canonicalNodeSource/u);
+assert.match(htmlSinkCheck, /identityNode/u);
+assert.match(htmlSinkCheck, /normalizeReflectionCall/u);
+assert.match(htmlSinkCheck, /opaque-apply/u);
+assert.match(htmlSinkCheck, /unproven-payload/u);
+assert.match(htmlSinkCheck, /unproven-descriptors/u);
+assert.match(htmlSinkCheck, /unproven-property/u);
+assert.match(htmlSinkCheck, /noInlineConfig:\s*true/u);
+assert.match(htmlSinkCheck, /has no effect because you have 'noInlineConfig' setting/u);
+assert.match(htmlSinkCheck, /finding\.owner/u);
+assert.match(htmlSinkCheck, /finding\.context/u);
 assert.match(htmlSinkCheck, /HTML sink wrapper removal or rename is forbidden/u);
 
 const workflow = read('.github/workflows/code-quality.yml');
