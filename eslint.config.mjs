@@ -14,7 +14,7 @@ export default [
     }
   },
   {
-    files: ['scripts/**/*.js'],
+    files: ['*.js', 'scripts/**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'commonjs',
@@ -23,7 +23,7 @@ export default [
     rules: RECOMMENDED_RULES
   },
   {
-    files: ['scripts/**/*.mjs'],
+    files: ['*.mjs', 'scripts/**/*.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

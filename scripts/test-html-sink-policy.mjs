@@ -142,6 +142,35 @@ assert.deepEqual(
   'direct native HTML sink calls must retain their existing classifications without indirect-reference duplicates'
 );
 
+const opaqueComputedSinks = scanJavaScriptSource({
+  filePath: 'theme/modules/opaque-computed-sinks.js',
+  source: `
+    export function render(element, property, method, markup) {
+      element[property] = markup;
+      element[method](markup);
+      element['innerHTML'] = markup;
+      element['insertAdjacentHTML']('beforeend', markup);
+    }
+  `
+});
+assert.deepEqual(
+  opaqueComputedSinks.map(({ kind }) => kind),
+  ['html-assignment-unproven-property', 'html-call-unproven-property', 'innerHTML-write', 'insertAdjacentHTML-call'],
+  'opaque computed write and call properties must fail closed while static computed sink names retain exact kinds'
+);
+const safeComputedProperties = scanJavaScriptSource({
+  filePath: 'theme/modules/safe-computed-properties.js',
+  source: `
+    export function render(element, text) {
+      element['textContent'] = text;
+      element['focus']();
+      element.textContent = text;
+      element.focus();
+    }
+  `
+});
+assert.deepEqual(safeComputedProperties, [], 'statically safe computed and direct properties must remain clean');
+
 const indirectNativeReferences = scanJavaScriptSource({
   filePath: 'theme/modules/indirect-native.js',
   source: `
@@ -323,6 +352,63 @@ assert.deepEqual(
   ].sort(),
   'opaque reflection properties, payloads, and descriptors must fail closed while statically safe properties stay clean'
 );
+
+const descriptorSetterLookups = scanJavaScriptSource({
+  filePath: 'theme/modules/descriptor-setters.js',
+  source: `
+    export function write(element, markup, property) {
+      Object.getOwnPropertyDescriptor(Element.prototype, 'innerHTML').set.call(element, markup);
+      const outerDescriptor = Object.getOwnPropertyDescriptor(Element.prototype, 'outerHTML');
+      outerDescriptor.set.call(element, markup);
+      Object.getOwnPropertyDescriptor(Element.prototype, property);
+      Reflect.getOwnPropertyDescriptor(Element.prototype, 'srcdoc').set.call(element, markup);
+      Object.getOwnPropertyDescriptor(Element.prototype, 'textContent').set.call(element, markup);
+    }
+  `
+});
+assert.deepEqual(
+  descriptorSetterLookups.map(({ kind }) => kind).sort(),
+  [
+    'Object.getOwnPropertyDescriptor-innerHTML-setter-reference',
+    'Object.getOwnPropertyDescriptor-outerHTML-setter-reference',
+    'Object.getOwnPropertyDescriptor-unproven-property',
+    'Reflect.getOwnPropertyDescriptor-srcdoc-setter-reference'
+  ].sort(),
+  'descriptor-extracted HTML setters and opaque descriptor properties must be classified while a safe static property stays clean'
+);
+const descriptorHelperForms = scanJavaScriptSource({
+  filePath: 'theme/modules/descriptor-helper-forms.js',
+  source: `
+    const getDescriptor = Object.getOwnPropertyDescriptor;
+    export function capture(target, markup) {
+      getDescriptor(target, 'innerHTML');
+      Object.getOwnPropertyDescriptor.call(Object, target, 'outerHTML');
+      Object.getOwnPropertyDescriptor.apply(Object, [target, 'srcdoc']);
+      Reflect.get(Object, 'getOwnPropertyDescriptor')(target, 'innerHTML');
+    }
+  `
+});
+for (const expectedKind of [
+  'Object.getOwnPropertyDescriptor-innerHTML-setter-reference',
+  'Object.getOwnPropertyDescriptor-outerHTML-setter-reference',
+  'Object.getOwnPropertyDescriptor-srcdoc-setter-reference',
+  'html-reflection-helper-apply:Object.getOwnPropertyDescriptor',
+  'html-reflection-helper-call:Object.getOwnPropertyDescriptor',
+  'html-reflection-helper-indirect-reference:Object.getOwnPropertyDescriptor'
+]) {
+  assert.ok(
+    descriptorHelperForms.some(({ kind }) => kind === expectedKind),
+    `descriptor helper aliases and invocation forms must retain ${expectedKind}`
+  );
+}
+const safeDescriptorLookups = scanJavaScriptSource({
+  filePath: 'theme/modules/safe-descriptor-lookups.js',
+  source: `
+    Object.getOwnPropertyDescriptor(Element.prototype, 'textContent');
+    Reflect.getOwnPropertyDescriptor(Element.prototype, 'className');
+  `
+});
+assert.deepEqual(safeDescriptorLookups, [], 'safe static descriptor properties must remain outside the sink inventory');
 
 const aliasedReflectiveWrites = scanJavaScriptSource({
   filePath: 'theme/modules/aliased-reflective-writes.js',
@@ -598,7 +684,11 @@ const shadowedAlias = scanJavaScriptSource({
     }
   `
 });
-assert.deepEqual(shadowedAlias, [], 'an opaque parameter must shadow an unrelated safe-looking constant binding');
+assert.deepEqual(
+  shadowedAlias.map(({ kind }) => kind),
+  ['html-assignment-unproven-property'],
+  'an opaque parameter must shadow an unrelated constant binding and fail closed as a computed assignment'
+);
 
 const indirectWrapperReferences = scanJavaScriptSource({
   filePath: 'theme/modules/wrapper-alias.js',

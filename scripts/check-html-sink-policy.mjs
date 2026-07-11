@@ -27,13 +27,14 @@ const NATIVE_CALLABLE_HTML_SINKS = new Set([...HTML_CALL_PROPERTIES.keys(), 'par
 const DOCUMENT_REFERENCE_PROPERTIES = new Set(['contentDocument', 'document', 'ownerDocument']);
 const REFLECTED_HTML_PROPERTIES = new Set(HTML_ASSIGNMENT_PROPERTIES.keys());
 const REFLECTION_HELPERS = new Map([
-  ['Object', new Set(['assign', 'defineProperties', 'defineProperty'])],
-  ['Reflect', new Set(['get', 'set'])]
+  ['Object', new Set(['assign', 'defineProperties', 'defineProperty', 'getOwnPropertyDescriptor'])],
+  ['Reflect', new Set(['get', 'getOwnPropertyDescriptor', 'set'])]
 ]);
 const ALLOWED_DISPOSITIONS = new Set([
   'controlled-detached-parser',
   'empty-clear',
   'escaped-theme-template',
+  'non-dom-data-write',
   'press-renderer-output',
   'static-theme-template',
   'trusted-wrapper-call'
@@ -739,6 +740,9 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
           const property = memberPropertyName(left, resolveIdentifier);
           const kind = HTML_ASSIGNMENT_PROPERTIES.get(property);
           if (kind) record(node, kind);
+          else if (left?.type === 'MemberExpression' && left.computed && !property) {
+            record(node, 'html-assignment-unproven-property');
+          }
         },
         CallExpression(node) {
           const callee = unwrap(node.callee);
@@ -748,6 +752,9 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
           const property = memberPropertyName(callee, resolveIdentifier);
           const directKind = HTML_CALL_PROPERTIES.get(property);
           if (directKind) record(node, directKind);
+          else if (callee?.type === 'MemberExpression' && callee.computed && !property) {
+            record(node, 'html-call-unproven-property');
+          }
           const reflectionCall = normalizeReflectionCall(node);
           if (reflectionCall.helperName && reflectionCall.form !== 'direct') {
             record(node, `html-reflection-helper-${reflectionCall.form}:${reflectionCall.helperName}`);
@@ -829,6 +836,19 @@ function parseJavaScript({ filePath, source, wrapperNames }) {
                   sourceText: `${canonicalNodeSource(node)}\0property:${canonicalNodeSource(reflectedProperty)}`
                 });
               }
+            }
+          }
+          if (
+            ['Object.getOwnPropertyDescriptor', 'Reflect.getOwnPropertyDescriptor'].includes(
+              reflectionCall.helperName
+            ) &&
+            reflectionCall.arguments.length >= 2
+          ) {
+            const reflectedProperty = staticString(reflectionCall.arguments[1], resolveIdentifier);
+            if (reflectedProperty === null) {
+              record(node, `${reflectionCall.helperName}-unproven-property`);
+            } else if (REFLECTED_HTML_PROPERTIES.has(reflectedProperty)) {
+              record(node, `${reflectionCall.helperName}-${reflectedProperty}-setter-reference`);
             }
           }
           if ((property === 'write' || property === 'writeln') && isDocumentNode(callee?.object)) {

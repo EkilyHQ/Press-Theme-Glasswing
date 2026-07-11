@@ -7,6 +7,8 @@ const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..');
 const eslint = new ESLint({ cwd: REPO_ROOT });
 const probePath = path.join(REPO_ROOT, 'scripts', 'fixtures', 'eslint-policy', 'inline-disable-probe.mjs');
+const rootModuleProbePath = path.join(REPO_ROOT, 'root-policy-probe.mjs');
+const rootCommonProbePath = path.join(REPO_ROOT, 'root-policy-probe.js');
 
 const projectConfig = await eslint.calculateConfigForFile(probePath);
 assert.equal(
@@ -14,6 +16,26 @@ assert.equal(
   true,
   'the real project config must reject inline directives'
 );
+const rootConfig = await eslint.calculateConfigForFile(path.join(REPO_ROOT, 'eslint.config.mjs'));
+assert.equal(
+  rootConfig.rules?.['no-unused-vars']?.[0],
+  2,
+  'root-level ESM tooling, including eslint.config.mjs, must receive recommended rules'
+);
+const [rootModuleDebt] = await eslint.lintText(`export const ready = true;\nconst unusedRootTooling = 1;\n`, {
+  filePath: rootModuleProbePath
+});
+assert.equal(
+  rootModuleDebt.messages.filter(({ ruleId, severity }) => ruleId === 'no-unused-vars' && severity === 2).length,
+  1,
+  'root-level .mjs tooling debt must fail the recommended-rule gate'
+);
+const [rootCommonClean] = await eslint.lintText(
+  `module.exports = function add(left, right) { return left + right; };\n`,
+  { filePath: rootCommonProbePath }
+);
+assert.equal(rootCommonClean.errorCount, 0, 'root-level CommonJS tooling must receive Node globals');
+assert.equal(rootCommonClean.warningCount, 0, 'clean root-level CommonJS tooling must retain zero warnings');
 
 const [disabledResult] = await eslint.lintText(
   `

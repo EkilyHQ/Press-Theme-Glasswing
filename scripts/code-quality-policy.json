@@ -29,7 +29,7 @@
     "noGrowth": {
       "mechanism": "merge-base-only-shrinking-exact-diagnostic-baseline",
       "command": "node scripts/test-eslint-debt-policy.mjs && node scripts/probe-eslint-debt.mjs",
-      "policy": "Repository tooling keeps every recommended rule enabled. Theme source excludes only the two measured legacy rules; all 37 path, rule, message, full lexical owner, full-file AST path with array ordinals, and normalized diagnostic-context fingerprints must match exactly and may only shrink relative to the merge base. All other recommended diagnostics fail CI."
+      "policy": "Root-level and scripts tooling keep every recommended rule enabled. Theme source excludes only the two measured legacy rules; all 37 path, rule, message, full lexical owner, full-file AST path with array ordinals, and normalized diagnostic-context fingerprints must match exactly and may only shrink relative to the merge base. All other recommended diagnostics fail CI."
     },
     "inlineConfiguration": {
       "decision": "forbidden",
@@ -63,6 +63,6 @@
     "decision": "reviewed-exact-fingerprint-baseline-with-zero-growth",
     "policyFile": "scripts/html-sink-policy.json",
     "scope": "theme/**/*.js and theme/**/*.mjs",
-    "policy": "Every known HTML write or parser sink is classified by path, full lexical owner, full-file AST path with array ordinals, kind, normalized semantic AST fingerprint, disposition, and rationale. The first policy must be a subset of sinks independently recomputed from the exact merge-base theme source; after that, approved keys may only shrink and established wrapper names cannot be removed or renamed. Wrapper and native sink aliases, binds, calls, exports, callbacks, destructured document references, assignment/declaration document aliases, and dynamic parser MIME values fail closed. Reflect and Object helper aliases, Reflect.get helper retrieval, bind/call/apply invocation forms, opaque properties or payloads, const or spread Object.assign payloads, defineProperty, and defineProperties HTML-property writes are explicit sinks."
+    "policy": "Every known HTML write or parser sink is classified by path, full lexical owner, full-file AST path with array ordinals, kind, normalized semantic AST fingerprint, disposition, and rationale. The first policy must be a subset of sinks independently recomputed from the exact merge-base theme source; after that, approved keys may only shrink and established wrapper names cannot be removed or renamed. Opaque computed assignment/call properties, wrapper and native sink aliases, binds, calls, exports, callbacks, destructured document references, and dynamic parser MIME values fail closed. Reflect and Object helper aliases, bind/call/apply invocation forms, descriptor-extracted HTML setters, opaque properties or payloads, const or spread Object.assign payloads, defineProperty, and defineProperties HTML-property writes are explicit sinks."
   }
 }
